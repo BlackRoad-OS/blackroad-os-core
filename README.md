@@ -1,62 +1,54 @@
-# BlackRoad OS — Core
-The primary BlackRoad OS runtime — identity, desktop environment, UI engine, and state manager.
+# BlackRoad OS — Core API
 
-## Overview
-BlackRoad OS Core provides the foundational runtime for the entire BlackRoad ecosystem. It manages identity, global state, UI layout, deterministic rendering, session logic, multi-agent embedding hooks, and the Pocket OS environment. All system components — Prism, Operator, API, and Web — interface with Core.
+The canonical backend for BlackRoad OS. The core API exposes identity and ledger primitives, powers the desktop/runtime experiences, and coordinates with supporting services (UI, operator, and web clients).
 
-## Structured Table
+## What it does
+- Hosts the HTTP API surface for the BlackRoad OS runtime and ledger.
+- Provides health/version metadata for orchestration and deployment checks.
+- Connects to Postgres (required) and Redis (optional) for persistence and caching.
 
-| Field | Value |
-| --- | --- |
-| **Purpose** | OS runtime, identity, UI, session, global state |
-| **Depends On** | API Gateway, Operator Engine |
-| **Used By** | Prism Console, Web Client |
-| **Owner** | Alexa + Cece (Core Engineering Group) |
-| **Status** | Active — foundational |
+## HTTP surface
+- `GET /` → simple welcome payload for sanity checks.
+- `GET /health` → liveness response `{ status: "ok", service: "core" }`.
+- `GET /version` → build metadata `{ version, commit, env }`.
 
-## Roadmap
+## Running locally
+1. **Prerequisites:** Node.js 20+, Postgres, optional Redis.
+2. **Install dependencies:**
+   ```bash
+   npm ci
+   ```
+3. **Set environment:**
+   - Required: `DATABASE_URL`, `PUBLIC_CORE_URL` (only enforced outside development), `CORE_PORT` (or `PORT`), `NODE_ENV` (defaults to `development`).
+   - Optional: `REDIS_URL`, `COMMIT_SHA` (or `GIT_COMMIT_SHA`/`RAILWAY_GIT_COMMIT_SHA`).
+4. **Run the server:**
+   ```bash
+   npm run dev
+   ```
+   The API listens on `CORE_PORT` (falls back to `PORT` or `3000`).
 
-Columns:
-- Backlog
-- In Architecture
-- In Dev
-- Testing
-- Release Ready
-- Shipped
+> Migrations are not provided in this repository; point `DATABASE_URL` at the target Postgres instance provisioned for your environment.
 
-Sample tasks:
-- Deterministic UI layout engine
-- Pocket OS container template
-- Identity/session handshake
-- Operator dispatch integration
-- Agent viewport layer
+## Building & production start
+```bash
+npm run build
+npm run start
+```
 
-## Deployment & Environments
+## Deployment
+- **Platform:** Railway service `core-api` defined in `railway.json` (build: `npm run build`, start: `npm run start`, health: `/health`).
+- **Automation:** GitHub Actions workflow `.github/workflows/core-deploy.yaml` triggers on pushes to `main`, installs dependencies, runs tests/build, deploys via Railway CLI (`RAILWAY_TOKEN` and `RAILWAY_PROJECT_ID` secrets), and verifies `/health`.
 
-This repository hosts the **core backend API** (`core-api`) for BlackRoad OS and is deployed via Railway.
+## Environment variables
+| Name | Required | Purpose |
+| --- | --- | --- |
+| `CORE_PORT` / `PORT` | Yes (one of them) | HTTP port for the service |
+| `DATABASE_URL` | Yes | Postgres connection string |
+| `PUBLIC_CORE_URL` | Yes (non-development) | Public base URL for the core API |
+| `REDIS_URL` | No | Redis connection string |
+| `NODE_ENV` | No | Runtime environment (`development` default) |
+| `COMMIT_SHA` / `GIT_COMMIT_SHA` / `RAILWAY_GIT_COMMIT_SHA` | No | Build commit reported by `/version` |
 
-- **Railway project**: `blackroad-os-core` (ID `602cb63b-6c98-4032-9362-64b7a90f7d94`)
-- **Service name**: `core-api`
-- **Environments**:
-  - `dev` → core development Railway environment
-  - `staging` → https://staging.core.blackroad.systems
-  - `prod` → https://core.blackroad.systems
-
-### Backing services
-- `core-db` (Postgres) → `DATABASE_URL`
-- `core-cache` (Redis, optional) → `REDIS_URL`
-
-### Required environment variables
-- `NODE_ENV` (development | staging | production)
-- `PORT` (HTTP port, respects Railway-assigned port)
-- `DATABASE_URL` (Postgres connection string)
-- `REDIS_URL` (Redis connection string, optional)
-- `PUBLIC_BASE_URL` (public-facing base URL for this API)
-
-### Deploying
-Deployment is automated via GitHub Actions (`deploy-core.yml`) and targets Railway using the `RAILWAY_TOKEN` secret. Branches map to environments as follows:
-- `dev` branch → `dev` environment
-- `staging` branch → `staging` environment
-- `main` branch → `prod` environment
-
-Builds run `npm ci && npm run build`, and the service starts with `npm run start`. Health checks are performed against the `/health` endpoint after staging and production deploys.
+## Manual checks
+- `curl http://localhost:3000/health` → expect `{ "status": "ok", "service": "core" }`.
+- `curl http://localhost:3000/version` → expect version metadata with resolved environment and commit.

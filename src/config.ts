@@ -1,20 +1,23 @@
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
 import dotenv from 'dotenv';
 
-// Load environment variables from .env file in development
 dotenv.config();
 
-type Environment = 'development' | 'staging' | 'production' | string;
+type AppEnvironment = 'development' | 'staging' | 'production' | string;
 
-type Config = {
-  env: Environment;
+export type AppConfig = {
+  env: AppEnvironment;
   port: number;
-  dbUrl: string;
+  databaseUrl: string;
   redisUrl?: string;
-  publicBaseUrl?: string;
-  appVersion: string;
+  publicCoreUrl?: string;
+  version: string;
+  commit: string;
 };
+
+const env: AppEnvironment = process.env.NODE_ENV || 'development';
+const isDev = env === 'development';
 
 function loadPackageVersion(): string {
   try {
@@ -23,87 +26,83 @@ function loadPackageVersion(): string {
     const pkg = JSON.parse(pkgRaw) as { version?: string };
     return pkg.version ?? '0.0.0';
   } catch (error) {
+    console.warn('Unable to read package version', error);
     return '0.0.0';
   }
 }
 
-const env = (process.env.NODE_ENV as Environment) || 'development';
-const isDev = env === 'development';
+function parsePort(): number {
+  const raw = process.env.CORE_PORT ?? process.env.PORT ?? '3000';
+  const port = Number(raw);
 
-// Validate PORT
-const port = Number(process.env.PORT ?? 3000);
+  if (!Number.isInteger(port) || port <= 0) {
+    throw new Error(`CORE_PORT/PORT must be a positive integer, received: ${raw}`);
+  }
 
-if (!Number.isFinite(port) || port <= 0) {
-  throw new Error(`PORT must be a positive integer, got: ${process.env.PORT}`);
+  return port;
 }
 
-// Helper to require environment variables with detailed error messages
 function requireEnv(name: string, description?: string): string {
   const value = process.env[name];
+
   if (!value) {
     if (isDev) {
-      console.warn(
-        `Warning: ${name} is not set. ${description || 'This may cause issues.'}`
-      );
+      console.warn(`Warning: ${name} is not set. ${description ?? ''}`.trim());
       return '';
     }
+
     throw new Error(
-      `Configuration error: ${name} is required in ${env} environment.\n` +
-      `${description ? `Description: ${description}\n` : ''}` +
-      `Please set this environment variable and restart the application.`
+      `Configuration error: ${name} is required in ${env} environment.` +
+        (description ? `\n${description}` : '')
     );
   }
+
   return value;
 }
 
-// Helper to validate URLs
-function validateUrl(url: string, name: string): void {
-  if (!url) return;
+function validateUrl(value: string, name: string): void {
+  if (!value) return;
   try {
-    new URL(url);
+    new URL(value);
   } catch (error) {
-    throw new Error(
-      `Configuration error: ${name} must be a valid URL, got: ${url}`
-    );
+    throw new Error(`Configuration error: ${name} must be a valid URL. Received: ${value}`);
   }
 }
 
-// Build configuration with validation
-const dbUrl = requireEnv(
-  'DATABASE_URL',
-  'PostgreSQL connection string (e.g., postgresql://user:pass@host:port/db)'
-);
+const databaseUrl = requireEnv('DATABASE_URL', 'PostgreSQL connection string');
+const publicCoreUrl = process.env.PUBLIC_CORE_URL || '';
+const redisUrl = process.env.REDIS_URL || undefined;
 
-const publicBaseUrl = requireEnv(
-  'PUBLIC_BASE_URL',
-  'Public-facing base URL for this API (e.g., https://core.blackroad.systems)'
-);
-
-// Validate URLs
-validateUrl(dbUrl, 'DATABASE_URL');
-validateUrl(publicBaseUrl, 'PUBLIC_BASE_URL');
-if (process.env.REDIS_URL) {
-  validateUrl(process.env.REDIS_URL, 'REDIS_URL');
+validateUrl(databaseUrl, 'DATABASE_URL');
+validateUrl(publicCoreUrl, 'PUBLIC_CORE_URL');
+if (redisUrl) {
+  validateUrl(redisUrl, 'REDIS_URL');
 }
 
-const config: Config = {
+const config: AppConfig = {
   env,
-  port,
-  dbUrl,
-  redisUrl: process.env.REDIS_URL,
-  publicBaseUrl,
-  appVersion: loadPackageVersion(),
+  port: parsePort(),
+  databaseUrl,
+  redisUrl,
+  publicCoreUrl,
+  version: loadPackageVersion(),
+  commit:
+    process.env.COMMIT_SHA ||
+    process.env.RAILWAY_GIT_COMMIT_SHA ||
+    process.env.GIT_COMMIT_SHA ||
+    'unknown',
 };
 
-// Log configuration summary in development
 if (isDev) {
-  console.log('Configuration loaded:');
-  console.log(`  Environment: ${config.env}`);
-  console.log(`  Port: ${config.port}`);
-  console.log(`  Database: ${config.dbUrl ? '✓ configured' : '✗ not configured'}`);
-  console.log(`  Redis: ${config.redisUrl ? '✓ configured' : '✗ not configured'}`);
-  console.log(`  Public URL: ${config.publicBaseUrl}`);
-  console.log(`  Version: ${config.appVersion}`);
+  console.log('Configuration loaded:', {
+    env: config.env,
+    port: config.port,
+    databaseUrl: config.databaseUrl ? 'configured' : 'missing',
+    redisUrl: config.redisUrl ? 'configured' : 'missing',
+    publicCoreUrl: config.publicCoreUrl || 'missing',
+    version: config.version,
+    commit: config.commit,
+  });
 }
 
 export default config;

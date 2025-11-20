@@ -4,12 +4,12 @@ import config from './config';
 let pool: Pool | null = null;
 
 function getPool(): Pool {
-  if (!config.dbUrl) {
+  if (!config.databaseUrl) {
     throw new Error('DATABASE_URL is not configured');
   }
 
   if (!pool) {
-    pool = new Pool({ connectionString: config.dbUrl });
+    pool = new Pool({ connectionString: config.databaseUrl });
     pool.on('error', (error: Error) => {
       console.error('Unexpected Postgres error', error);
     });
