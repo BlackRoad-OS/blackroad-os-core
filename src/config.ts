@@ -32,7 +32,7 @@ function loadPackageVersion(): string {
 }
 
 function parsePort(): number {
-  const raw = process.env.CORE_PORT ?? process.env.PORT ?? '3000';
+  const raw = process.env.CORE_PORT ?? process.env.PORT ?? '8080';
   const port = Number(raw);
 
   if (!Number.isInteger(port) || port <= 0) {

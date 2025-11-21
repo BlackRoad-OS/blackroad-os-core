@@ -1,54 +1,65 @@
-# BlackRoad OS — Core API
+# BlackRoad OS – Core Service
 
-The canonical backend for BlackRoad OS. The core API exposes identity and ledger primitives, powers the desktop/runtime experiences, and coordinates with supporting services (UI, operator, and web clients).
+The Core service is the backbone of BlackRoad OS, exposing foundational metadata endpoints and providing orchestration hooks for other OS components.
 
-## What it does
-- Hosts the HTTP API surface for the BlackRoad OS runtime and ledger.
-- Provides health/version metadata for orchestration and deployment checks.
-- Connects to Postgres (required) and Redis (optional) for persistence and caching.
+## Standard API Endpoints
+- `GET /health` → Liveness payload `{ ok: true, service: "core", ts: <ISO timestamp> }`
+- `GET /info` → Service metadata `{ name, id, version, time, env }`
+- `GET /version` → Version payload `{ version, service }`
+- `GET /debug/env` → Safe environment snapshot for debugging
 
-## HTTP surface
-- `GET /` → simple welcome payload for sanity checks.
-- `GET /health` → liveness response `{ status: "ok", service: "core" }`.
-- `GET /version` → build metadata `{ version, commit, env }`.
-
-## Running locally
-1. **Prerequisites:** Node.js 20+, Postgres, optional Redis.
+## Local Development
+1. **Prerequisites:** Node.js 18+, npm, PostgreSQL, optional Redis.
 2. **Install dependencies:**
    ```bash
-   npm ci
+   npm install
    ```
-3. **Set environment:**
-   - Required: `DATABASE_URL`, `PUBLIC_CORE_URL` (only enforced outside development), `CORE_PORT` (or `PORT`), `NODE_ENV` (defaults to `development`).
-   - Optional: `REDIS_URL`, `COMMIT_SHA` (or `GIT_COMMIT_SHA`/`RAILWAY_GIT_COMMIT_SHA`).
-4. **Run the server:**
+3. **Configure environment:** copy `.env.example` to `.env` and adjust values (at minimum `DATABASE_URL`).
+4. **Run in development mode:**
    ```bash
    npm run dev
    ```
-   The API listens on `CORE_PORT` (falls back to `PORT` or `3000`).
+   The server listens on `CORE_PORT`/`PORT` (default `8080`).
 
-> Migrations are not provided in this repository; point `DATABASE_URL` at the target Postgres instance provisioned for your environment.
-
-## Building & production start
+## Build and Start
 ```bash
 npm run build
-npm run start
+npm start
 ```
 
-## Deployment
-- **Platform:** Railway service `core-api` defined in `railway.json` (build: `npm run build`, start: `npm run start`, health: `/health`).
-- **Automation:** GitHub Actions workflow `.github/workflows/core-deploy.yaml` triggers on pushes to `main`, installs dependencies, runs tests/build, deploys via Railway CLI (`RAILWAY_TOKEN` and `RAILWAY_PROJECT_ID` secrets), and verifies `/health`.
+## Testing
+```bash
+npm test
+```
+The Jest suite covers health and info endpoints.
 
-## Environment variables
-| Name | Required | Purpose |
+## Deployment (Railway)
+Railway uses the commands defined in `railway.json`:
+- Build: `npm install && npm run build`
+- Start: `npm start`
+- Service port: `8080`
+- Healthcheck: `/health`
+
+## Environment Variables
+| Name | Purpose | Default |
 | --- | --- | --- |
-| `CORE_PORT` / `PORT` | Yes (one of them) | HTTP port for the service |
-| `DATABASE_URL` | Yes | Postgres connection string |
-| `PUBLIC_CORE_URL` | Yes (non-development) | Public base URL for the core API |
-| `REDIS_URL` | No | Redis connection string |
-| `NODE_ENV` | No | Runtime environment (`development` default) |
-| `COMMIT_SHA` / `GIT_COMMIT_SHA` / `RAILWAY_GIT_COMMIT_SHA` | No | Build commit reported by `/version` |
+| `NODE_ENV` | Runtime environment | `development` |
+| `CORE_PORT` / `PORT` | HTTP port | `8080` |
+| `DATABASE_URL` | PostgreSQL connection string | (none) |
+| `REDIS_URL` | Redis connection string | (unset) |
+| `PUBLIC_CORE_URL` | Public core URL used by clients | (unset) |
+| `SERVICE_BASE_URL` | Base URL exposed by this service | `https://core.blackroad.systems` |
+| `OS_ROOT` | BlackRoad OS root URL | `https://blackroad.systems` |
+| `LOG_LEVEL` | Logging level hint | `info` |
+| `COMMIT_SHA` | Optional commit identifier for logs | (unset) |
 
-## Manual checks
-- `curl http://localhost:3000/health` → expect `{ "status": "ok", "service": "core" }`.
-- `curl http://localhost:3000/version` → expect version metadata with resolved environment and commit.
+## Project Structure
+- `src/index.ts` – server entrypoint
+- `src/server.ts` – Express app factory and middleware wiring
+- `src/routes/` – HTTP route handlers
+- `src/config/` – service constants
+- `src/db.ts` / `src/redis.ts` – database and cache clients
+- `tests/` – Jest test suite
+
+## Containerization
+The provided `Dockerfile` builds and runs the service using a multi-stage Node 18 Alpine image, exposing port `8080` and running `npm start` in the runtime stage.
