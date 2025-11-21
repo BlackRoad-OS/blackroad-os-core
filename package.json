@@ -1,31 +1,22 @@
 {
   "name": "blackroad-os-core",
   "version": "0.1.0",
-  "description": "Core API for BlackRoad OS",
+  "description": "Backend scaffold for the BlackRoad OS Core service",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node src/index.ts",
-    "build": "tsc",
     "start": "node dist/index.js",
-    "test": "jest"
+    "build": "tsc",
+    "dev": "ts-node-dev src/index.ts"
   },
   "dependencies": {
-    "dotenv": "^17.2.3",
-    "express": "^4.19.2",
-    "ioredis": "^5.4.1",
-    "pg": "^8.11.5"
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "@types/jest": "^29.5.12",
-    "@types/node": "^20.11.30",
-    "@types/pg": "^8.15.6",
-    "@types/supertest": "^2.0.16",
-    "jest": "^29.7.0",
-    "supertest": "^6.3.3",
-    "ts-jest": "^29.1.2",
+    "@types/node": "^22.1.0",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.3"
   }
 }
