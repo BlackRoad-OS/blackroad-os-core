@@ -1,4 +1,5 @@
 name: Deploy core-api
+name: Deploy core-api to Railway
 
 on:
   push:
@@ -49,3 +50,76 @@ jobs:
           elif [ "${{ steps.env.outputs.env_name }}" = "prod" ]; then
             curl -f https://core.blackroad.systems/health
           fi
+    name: Deploy core-api
+    runs-on: ubuntu-latest
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Determine environment
+        id: env
+        run: |
+          branch="${GITHUB_REF##*/}"
+          case "$branch" in
+            dev)
+              echo "railway_env=dev" >> "$GITHUB_OUTPUT"
+              ;;
+            staging)
+              echo "railway_env=staging" >> "$GITHUB_OUTPUT"
+              ;;
+            main)
+              echo "railway_env=prod" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "Unsupported branch: $branch" >&2
+              exit 1
+              ;;
+          esac
+
+      - name: Install Railway CLI
+        run: |
+          curl -fsSL https://railway.app/install.sh | sh
+          echo "$HOME/.railway/bin" >> $GITHUB_PATH
+
+      - name: Deploy core-api
+        env:
+          RAILWAY_ENV: ${{ steps.env.outputs.railway_env }}
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then
+            echo "RAILWAY_TOKEN is required" >&2
+            exit 1
+          fi
+
+          PROJECT_ID=${RAILWAY_PROJECT_ID:-blackroad-core}
+
+          railway login --token "$RAILWAY_TOKEN"
+          railway use --project "$PROJECT_ID" --environment "$RAILWAY_ENV" --service core-api
+          railway up
+
+      - name: Post-deploy health check
+        env:
+          RAILWAY_ENV: ${{ steps.env.outputs.railway_env }}
+        run: |
+          PROJECT_ID=${RAILWAY_PROJECT_ID:-blackroad-core}
+          BASE_URL=$(railway variables --project "$PROJECT_ID" --environment "$RAILWAY_ENV" --json | jq -r '.PUBLIC_BASE_URL // empty')
+
+          if [ -z "$BASE_URL" ]; then
+            case "$RAILWAY_ENV" in
+              dev)
+                echo "PUBLIC_BASE_URL not set for dev; please configure it in Railway." >&2
+                exit 1
+                ;;
+              staging)
+                BASE_URL="https://staging.core.blackroad.systems"
+                ;;
+              prod)
+                BASE_URL="https://core.blackroad.systems"
+                ;;
+            esac
+          fi
+
+          echo "Health checking $BASE_URL/health"
+          curl --fail --retry 6 --retry-delay 10 --max-time 10 "$BASE_URL/health"
