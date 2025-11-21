@@ -21,4 +21,3 @@ app.use('/ledger', ledgerRouter);
 app.set('port', PORT);
 
 export default app;
-export { app };
