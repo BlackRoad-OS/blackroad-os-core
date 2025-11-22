@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse
 from . import cache, db
 from .config import configure_logging, settings
 from .routes import health as health_route
+from .routes import verification as verification_route
 from .routes import version as version_route
 
 configure_logging()
@@ -55,6 +56,7 @@ async def root() -> dict[str, Any]:
 
 app.include_router(health_route.router)
 app.include_router(version_route.router)
+app.include_router(verification_route.router)
 
 
 if __name__ == "__main__":
