@@ -13,8 +13,6 @@ systemRouter.get('/health', (_req, res) => {
   res.json({
     status: 'ok',
     service: serviceName,
-    uptime_seconds: uptimeSeconds,
-    timestamp,
   });
 });
 
