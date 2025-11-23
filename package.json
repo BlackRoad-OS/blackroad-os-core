@@ -5,9 +5,9 @@
   "main": "dist/server.js",
   "license": "MIT",
   "scripts": {
-    "dev": "tsx src/server.ts",
-    "build": "tsc -p tsconfig.json",
-    "start": "node dist/server.js",
+    "dev": "ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
     "lint": "eslint ."
   },
   "engines": {
@@ -23,6 +23,7 @@
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "eslint": "^8.57.0",
+    "ts-node": "^10.9.2",
     "tsx": "^4.16.2",
     "typescript": "^5.6.0"
   }
