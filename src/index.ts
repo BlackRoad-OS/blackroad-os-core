@@ -21,3 +21,16 @@ export * from "./lucidia/validation";
 
 export * from "./utils/time";
 export * from "./utils/hashing";
+
+// Service Registry
+export * from "./services/types";
+export * from "./services/registry";
+export * from "./services/helpers";
+
+// Config
+export * from "./config/types";
+export * from "./config/loader";
+
+// Logging
+export * from "./logging/types";
+export * from "./logging/logger";

@@ -7,7 +7,8 @@
     "dev": "pnpm turbo dev",
     "build": "pnpm turbo run build",
     "lint": "pnpm turbo run lint",
-    "test": "pnpm turbo run test",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "postbuild": "pnpm turbo run postbuild"
   },
   "packageManager": "pnpm@8.15.8",
@@ -17,6 +18,7 @@
     "prettier": "^3.3.2",
     "turbo": "^2.0.8",
     "tsx": "^4.16.2",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.2",
+    "vitest": "^2.0.5"
   }
 }
