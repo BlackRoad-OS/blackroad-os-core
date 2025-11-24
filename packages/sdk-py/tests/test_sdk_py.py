@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from blackroad_core import Catalog, RoleGuard
+from blackroad_core import Agent, Catalog, RoleGuard
 
 FIXTURE = Path(__file__).parent / "fixtures" / "catalog.json"
 
@@ -22,3 +22,23 @@ def test_org_chart_svg_snapshot():
     svg = catalog.generate_org_chart_svg()
     assert "<svg" in svg
     assert "Alice" in svg
+
+
+def test_org_chart_svg_xss_protection():
+    """Test that XSS injection attempts are properly escaped."""
+    malicious_agent = Agent(
+        id="xss1",
+        name="</text><script>alert('xss')</script>",
+        role="<img src=x onerror=alert('xss')>"
+    )
+    catalog = Catalog(agents=[malicious_agent])
+    svg = catalog.generate_org_chart_svg()
+    
+    # Verify that dangerous characters are escaped
+    assert "&lt;" in svg  # < is escaped to &lt;
+    assert "&gt;" in svg  # > is escaped to &gt;
+    assert "<script>" not in svg  # Raw script tags should not appear
+    assert "<img" not in svg  # Raw img tags should not appear
+    # The entire malicious string should be escaped and rendered as plain text
+    assert "&lt;/text&gt;&lt;script&gt;" in svg
+    assert "&lt;img src=x onerror=alert(" in svg

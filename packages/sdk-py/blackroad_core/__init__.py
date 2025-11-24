@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import html
 import json
 import os
 from pathlib import Path
@@ -42,8 +43,11 @@ class Catalog(BaseModel):
         nodes = []
         for idx, agent in enumerate(self.agents):
             y = 40 + idx * 40
+            # Sanitize user-controlled data to prevent XSS attacks
+            safe_name = html.escape(agent.name)
+            safe_role = html.escape(agent.role)
             nodes.append(
-                f"<g id='{agent.id}'><rect x='10' y='{y}' width='240' height='30' fill='#0f172a' rx='4'/><text x='20' y='{y + 20}' fill='#e2e8f0'>{agent.name} ({agent.role})</text></g>"
+                f"<g id='{agent.id}'><rect x='10' y='{y}' width='240' height='30' fill='#0f172a' rx='4'/><text x='20' y='{y + 20}' fill='#e2e8f0'>{safe_name} ({safe_role})</text></g>"
             )
         height = 40 + len(self.agents) * 40
         return f"<svg xmlns='http://www.w3.org/2000/svg' width='260' height='{height}'>" + "".join(nodes) + "</svg>"
