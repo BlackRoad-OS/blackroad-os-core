@@ -10,7 +10,7 @@ def test_load_catalog_file(monkeypatch):
     assert len(catalog.agents) == 2
 
 
-def test_role_guard(monkeypatch):
+def test_role_guard():
     policy_path = Path(__file__).parents[3] / "policy" / "role_matrix.yaml"
     guard = RoleGuard(["viewer"], policy_path=str(policy_path))
     assert guard.can_perform("read", "catalog") is True
