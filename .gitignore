@@ -14,3 +14,7 @@ coverage
 /tmp
 /apps/web/.vercel
 /apps/web/public/sig.beacon.json
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
