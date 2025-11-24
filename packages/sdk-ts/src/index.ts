@@ -75,7 +75,14 @@ export class RoleGuard {
     return data ?? {};
   }
 
+  /**
+   * Checks if the current roles can perform the given action on the resource.
+   * Both `action` and `resource` must NOT contain colons, as colons are used as separators in policy keys.
+   */
   canPerform(action: string, resource: string): boolean {
+    if (action.includes(":") || resource.includes(":")) {
+      throw new Error("Action and resource must not contain ':' characters.");
+    }
     const check = `${action}:${resource}`;
     return this.roles.some((role) => this.policy[role]?.includes(check));
   }
