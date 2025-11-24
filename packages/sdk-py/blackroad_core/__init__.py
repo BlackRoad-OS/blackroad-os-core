@@ -64,9 +64,9 @@ class RoleGuard:
         return yaml.safe_load(self.policy_path.read_text()) or {}
 
     def can_perform(self, action: str, resource: str) -> bool:
-        # Interference Truth Engine: Validate action/resource for policy check integrity
+        # Validate that action and resource don't contain separators used in policy keys
         if ":" in action or ":" in resource:
-            raise ValueError("action and resource must not contain ':' characters")
+            raise ValueError("Action and resource parameters must not contain colon characters as they are used as separators in policy keys")
         check = f"{action}:{resource}"
         return any(check in (self.policy.get(role) or []) for role in self.roles)
 
