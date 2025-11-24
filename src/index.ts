@@ -16,5 +16,8 @@ export * from "./agents/agentBase";
 export * from "./jobs/jobTypes";
 export * from "./jobs/jobLifecycle";
 
+export * from "./lucidia/lucidiaTypes";
+export * from "./lucidia/validation";
+
 export * from "./utils/time";
 export * from "./utils/hashing";
