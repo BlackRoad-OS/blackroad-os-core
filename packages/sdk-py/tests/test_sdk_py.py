@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 from blackroad_core import Catalog, RoleGuard
