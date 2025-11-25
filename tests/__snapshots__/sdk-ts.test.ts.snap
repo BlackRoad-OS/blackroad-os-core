@@ -1,0 +1,6 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`sdk-ts renders org chart svg snapshot 1`] = `
+"<svg xmlns="http://www.w3.org/2000/svg" width="260" height="120"><g id="a1"><rect x="10" y="40" width="240" height="30" fill="#0f172a" rx="4"/><text x="20" y="60" fill="#e2e8f0">Alice (admin)</text></g>
+<g id="a2"><rect x="10" y="80" width="240" height="30" fill="#0f172a" rx="4"/><text x="20" y="100" fill="#e2e8f0">Bob (viewer)</text></g></svg>"
+`;
