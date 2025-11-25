@@ -47,6 +47,12 @@ class Catalog(BaseModel):
             safe_role = html.escape(agent.role)
             nodes.append(
                 f"<g id='{agent.id}'><rect x='10' y='{y}' width='240' height='30' fill='#0f172a' rx='4'/><text x='20' y='{y + 20}' fill='#e2e8f0'>{safe_name} ({safe_role})</text></g>"
+            # Sanitize user-controlled data to prevent XSS attacks
+            safe_id = html.escape(agent.id, quote=True)
+            safe_name = html.escape(agent.name)
+            safe_role = html.escape(agent.role)
+            nodes.append(
+                f"<g id='{safe_id}'><rect x='10' y='{y}' width='240' height='30' fill='#0f172a' rx='4'/><text x='20' y='{y + 20}' fill='#e2e8f0'>{safe_name} ({safe_role})</text></g>"
             )
         height = 40 + len(self.agents) * 40
         return f"<svg xmlns='http://www.w3.org/2000/svg' width='260' height='{height}'>" + "".join(nodes) + "</svg>"

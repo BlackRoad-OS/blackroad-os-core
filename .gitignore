@@ -18,3 +18,5 @@ __pycache__
 *.pyc
 poetry.lock
 package-lock.json
+*.pyo
+.pytest_cache
