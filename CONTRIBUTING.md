@@ -95,6 +95,14 @@ We maintain a clean branch structure:
 - Head branches are automatically deleted after PR merge
 - Stale branches (inactive > 30 days) will be archived
 
+> **Why 50 branches?** This limit helps maintain repository health by:
+> - Keeping the branch list navigable and manageable
+> - Encouraging timely completion and merging of features
+> - Reducing cognitive overhead for contributors
+> - Ensuring CI/CD resources aren't spread across too many branches
+>
+> When approaching this limit, maintainers will reach out to archive stale branches.
+
 ### Naming Conventions
 
 Use descriptive branch names with prefixes:

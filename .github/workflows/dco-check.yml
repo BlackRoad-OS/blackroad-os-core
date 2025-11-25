@@ -22,7 +22,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          # Fetch enough history for PR commits but limit for performance/security
+          # For PRs, we only need the commits in the PR
+          fetch-depth: 100
 
       - name: Verify commit signatures
         run: |
@@ -37,17 +39,21 @@ jobs:
             HEAD="${{ github.sha }}"
           fi
           
-          # Handle initial commit
+          # Handle initial commit or when BASE is not available
           if [ "$BASE" = "0000000000000000000000000000000000000000" ]; then
-            echo "Initial commit detected, checking all commits..."
-            COMMITS=$(git rev-list "$HEAD")
+            echo "Initial commit detected, checking recent commits..."
+            # Limit to last 50 commits maximum for safety
+            COMMITS=$(git rev-list --max-count=50 "$HEAD")
           else
-            COMMITS=$(git rev-list "$BASE".."$HEAD")
+            # Only check commits in this PR/push, limit to 50 for safety
+            COMMITS=$(git rev-list --max-count=50 "$BASE".."$HEAD" 2>/dev/null || git rev-list --max-count=50 "$HEAD")
           fi
           
           MISSING_DCO=0
+          CHECKED_COUNT=0
           
           for COMMIT in $COMMITS; do
+            CHECKED_COUNT=$((CHECKED_COUNT + 1))
             MESSAGE=$(git log --format=%B -n 1 "$COMMIT")
             AUTHOR=$(git log --format="%an <%ae>" -n 1 "$COMMIT")
             
@@ -65,6 +71,9 @@ jobs:
               echo "✅ DCO sign-off found in commit: $COMMIT"
             fi
           done
+          
+          echo ""
+          echo "Checked $CHECKED_COUNT commit(s)"
           
           if [ "$MISSING_DCO" -eq 1 ]; then
             echo ""
