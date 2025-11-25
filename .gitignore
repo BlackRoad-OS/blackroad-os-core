@@ -20,3 +20,4 @@ poetry.lock
 package-lock.json
 *.pyo
 .pytest_cache
+pnpm-lock.yaml
