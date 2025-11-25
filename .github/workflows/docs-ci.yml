@@ -16,6 +16,9 @@ on:
       - 'CONTRIBUTING.md'
       - 'RELEASES.md'
 
+permissions:
+  contents: read
+
 jobs:
   docs:
     name: Validate Documentation
