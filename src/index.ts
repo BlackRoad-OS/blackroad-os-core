@@ -34,3 +34,18 @@ export * from "./config/loader";
 // Logging
 export * from "./logging/types";
 export * from "./logging/logger";
+
+// Session & State Management
+export * from "./session/sessionTypes";
+
+// Permissions & Roles
+export * from "./permissions/permissionTypes";
+
+// Desktop Shell Types
+export * from "./desktop/desktopTypes";
+
+// Cross-App Context
+export * from "./context/contextTypes";
+
+// Canonical Constants
+export * from "./constants";
