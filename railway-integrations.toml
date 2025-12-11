@@ -1,0 +1,19 @@
+# ============================================================================
+# BlackRoad OS - Integrations Hub Railway Configuration
+# Copyright (c) 2025 BlackRoad OS, Inc. / Alexa Louise Amundson
+# All Rights Reserved.
+# ============================================================================
+
+[build]
+builder = "NIXPACKS"
+buildCommand = "pip install -r requirements-integrations.txt"
+
+[deploy]
+startCommand = "uvicorn blackroad-integrations-hub:app --host 0.0.0.0 --port ${PORT:-9510}"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[healthcheck]
+path = "/health"
+timeout = 30
+interval = 60
