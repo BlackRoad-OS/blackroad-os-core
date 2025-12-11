@@ -47,31 +47,20 @@ jobs:
         run: |
           python -c "
           from blackroad_integrations_hub import app
-          from fastapi.testclient import TestClient
 
-          client = TestClient(app)
+          # Test with Flask test client
+          with app.test_client() as client:
+              # Test health
+              response = client.get('/api/health')
+              assert response.status_code == 200
+              assert response.json['ok'] == True
 
-          # Test health
-          response = client.get('/health')
-          assert response.status_code == 200
-          assert response.json()['ok'] == True
-
-          # Test integrations list
-          response = client.get('/api/integrations/list')
-          assert response.status_code == 200
-          assert response.json()['total_available'] == 19
+              # Test integrations list
+              response = client.get('/api/integrations/list')
+              assert response.status_code == 200
+              assert response.json['total_available'] == 19
 
           print('✅ All tests passed')
-          "
-
-      - name: Test API schema
-        run: |
-          python -c "
-          from blackroad_integrations_hub import app
-          schema = app.openapi()
-          assert schema['info']['title'] == 'BlackRoad Integrations Hub'
-          assert len(schema['paths']) >= 15
-          print(f\"✅ OpenAPI schema valid: {len(schema['paths'])} endpoints\")
           "
 
       - name: Upload test results
