@@ -1,0 +1,459 @@
+{
+  "backends": [
+    {
+      "domain": "blackroad.io",
+      "backend_id": "blackroad-io",
+      "services": [
+        "api",
+        "auth",
+        "websocket"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:56:32.298229",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-io/api_service.py",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-io/auth_service.py",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-io/websocket_service.py",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-io/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-io/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-io/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroad.io",
+      "backend_id": "blackroad-io",
+      "services": [
+        "api",
+        "auth",
+        "db",
+        "cache",
+        "websocket"
+      ],
+      "integrations": [
+        "canva",
+        "stripe",
+        "clerk"
+      ],
+      "created": "2025-12-11T13:58:33.538492",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-io/api_service.py",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-io/auth_service.py",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-io/db_service.py",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-io/cache_service.py",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-io/websocket_service.py",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-io/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-io/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-io/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroad.network",
+      "backend_id": "blackroad-network",
+      "services": [
+        "api",
+        "mesh",
+        "p2p",
+        "websocket"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:33.736832",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-network/api_service.py",
+        null,
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-network/websocket_service.py",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-network/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-network/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-network/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroad.systems",
+      "backend_id": "blackroad-systems",
+      "services": [
+        "api",
+        "monitoring",
+        "health"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:34.105935",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-systems/api_service.py",
+        null,
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-systems/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-systems/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-systems/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroadai.com",
+      "backend_id": "blackroadai-com",
+      "services": [
+        "api",
+        "llm",
+        "rag"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:35.512204",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroadai-com/api_service.py",
+        null,
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/blackroadai-com/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroadai-com/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroadai-com/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "lucidia.earth",
+      "backend_id": "lucidia-earth",
+      "services": [
+        "api",
+        "agents",
+        "quantum"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:36.659797",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/lucidia-earth/api_service.py",
+        null,
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/lucidia-earth/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/lucidia-earth/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/lucidia-earth/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "lucidiastud.io",
+      "backend_id": "lucidiastud-io",
+      "services": [
+        "api",
+        "creative"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:36.984946",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/lucidiastud-io/api_service.py",
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/lucidiastud-io/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/lucidiastud-io/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/lucidiastud-io/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "lucidiaqi.com",
+      "backend_id": "lucidiaqi-com",
+      "services": [
+        "api",
+        "identity",
+        "did"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:37.238133",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/lucidiaqi-com/api_service.py",
+        null,
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/lucidiaqi-com/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/lucidiaqi-com/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/lucidiaqi-com/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "aliceqi.com",
+      "backend_id": "aliceqi-com",
+      "services": [
+        "api",
+        "personal"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:37.389629",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/aliceqi-com/api_service.py",
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/aliceqi-com/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/aliceqi-com/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/aliceqi-com/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroad-inc.us",
+      "backend_id": "blackroad-inc-us",
+      "services": [
+        "api",
+        "corporate"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:37.527800",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-inc-us/api_service.py",
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-inc-us/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-inc-us/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-inc-us/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroad.me",
+      "backend_id": "blackroad-me",
+      "services": [
+        "api",
+        "personal"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:37.665860",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-me/api_service.py",
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-me/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-me/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-me/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroadquantum.com",
+      "backend_id": "blackroadquantum-com",
+      "services": [
+        "api",
+        "quantum",
+        "ml"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:37.801948",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroadquantum-com/api_service.py",
+        null,
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/blackroadquantum-com/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroadquantum-com/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroadquantum-com/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroadagents.com",
+      "backend_id": "blackroadagents-com",
+      "services": [
+        "api",
+        "agents",
+        "registry"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:37.928284",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroadagents-com/api_service.py",
+        null,
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/blackroadagents-com/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroadagents-com/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroadagents-com/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroad.dev",
+      "backend_id": "blackroad-dev",
+      "services": [
+        "api",
+        "developer",
+        "docs"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:38.089046",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-dev/api_service.py",
+        null,
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-dev/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-dev/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-dev/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroad.cloud",
+      "backend_id": "blackroad-cloud",
+      "services": [
+        "api",
+        "infrastructure"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:38.234659",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-cloud/api_service.py",
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-cloud/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-cloud/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-cloud/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroad.tech",
+      "backend_id": "blackroad-tech",
+      "services": [
+        "api",
+        "technology"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:38.361085",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-tech/api_service.py",
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-tech/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-tech/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-tech/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroad.digital",
+      "backend_id": "blackroad-digital",
+      "services": [
+        "api",
+        "digital",
+        "web3"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:38.495453",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-digital/api_service.py",
+        null,
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-digital/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-digital/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-digital/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroad.ventures",
+      "backend_id": "blackroad-ventures",
+      "services": [
+        "api",
+        "investment"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:38.675696",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-ventures/api_service.py",
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-ventures/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-ventures/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-ventures/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroad.capital",
+      "backend_id": "blackroad-capital",
+      "services": [
+        "api",
+        "finance"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:39.033046",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-capital/api_service.py",
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-capital/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-capital/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-capital/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroad.fund",
+      "backend_id": "blackroad-fund",
+      "services": [
+        "api",
+        "crowdfunding",
+        "dao"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:39.452245",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-fund/api_service.py",
+        null,
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-fund/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-fund/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-fund/docker-compose.yml"
+      ],
+      "status": "created"
+    },
+    {
+      "domain": "blackroad.dao",
+      "backend_id": "blackroad-dao",
+      "services": [
+        "api",
+        "governance",
+        "voting"
+      ],
+      "integrations": [
+        "canva"
+      ],
+      "created": "2025-12-11T13:58:39.721859",
+      "files": [
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-dao/api_service.py",
+        null,
+        null,
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-dao/railway.toml",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-dao/cloudflare-worker.js",
+        "/Users/alexa/blackroad-sandbox/backends/blackroad-dao/docker-compose.yml"
+      ],
+      "status": "created"
+    }
+  ],
+  "last_updated": "2025-12-11T13:58:39.721880"
+}
