@@ -116,6 +116,7 @@ jobs:
           railway up --service console-server --detach || echo "Service deployment triggered"
           railway up --service terminal-server --detach || echo "Service deployment triggered"
           railway up --service ws-server --detach || echo "Service deployment triggered"
+          railway up --service realtime-dev --detach || echo "Service deployment triggered"
 
           echo "✅ Layer 3 Part 3 deployment triggered"
 
@@ -151,6 +152,7 @@ jobs:
           echo "  ✅ console-server"
           echo "  ✅ terminal-server"
           echo "  ✅ ws-server"
+          echo "  ✅ realtime-dev (NEW - No More Push/Pull!)"
           echo ""
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "Next: Check Railway dashboard for deployment status"
@@ -162,5 +164,5 @@ jobs:
           echo "![Railway Deployment](https://img.shields.io/badge/Railway-Deployed-success?logo=railway)" > DEPLOYMENT_STATUS.md
           echo "" >> DEPLOYMENT_STATUS.md
           echo "**Last Deployed**: $(date)" >> DEPLOYMENT_STATUS.md
-          echo "**Services**: 21" >> DEPLOYMENT_STATUS.md
+          echo "**Services**: 22 (including Real-Time Dev Sync!)" >> DEPLOYMENT_STATUS.md
           echo "**Status**: ✅ All services deployed" >> DEPLOYMENT_STATUS.md

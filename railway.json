@@ -240,6 +240,20 @@
         "PYTHONUNBUFFERED": "1",
         "BLACKROAD_ENV": "production"
       }
+    },
+    {
+      "name": "realtime-dev",
+      "startCommand": "python3 blackroad-realtime-dev.py",
+      "healthcheckPath": "/api/health",
+      "healthcheckTimeout": 300,
+      "env": {
+        "PORT": "9950",
+        "PYTHONUNBUFFERED": "1",
+        "BLACKROAD_ENV": "production",
+        "WORKSPACE_ROOT": "/app",
+        "COMPLIANCE_MODE": "false",
+        "AUTO_COMMIT_INTERVAL": "300"
+      }
     }
   ]
 }
