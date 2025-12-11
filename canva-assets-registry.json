@@ -1,0 +1,677 @@
+{
+  "assets": [
+    {
+      "domain": "blackroad.io",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-2064",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-2064.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:42.497866"
+    },
+    {
+      "domain": "blackroad.io",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-1725",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-1725.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:42.497888"
+    },
+    {
+      "domain": "blackroad.io",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-1174",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-1174.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:42.497893"
+    },
+    {
+      "domain": "blackroad.io",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-555",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-555.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:42.497897"
+    },
+    {
+      "domain": "blackroad.io",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-4999",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-4999.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.888339"
+    },
+    {
+      "domain": "blackroad.io",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-156",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-156.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.888364"
+    },
+    {
+      "domain": "blackroad.io",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-6673",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-6673.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.888369"
+    },
+    {
+      "domain": "blackroad.io",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-7326",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-7326.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.888373"
+    },
+    {
+      "domain": "blackroad.network",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-4673",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-4673.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.888655"
+    },
+    {
+      "domain": "blackroad.network",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-53",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-53.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.888660"
+    },
+    {
+      "domain": "blackroad.network",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-883",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-883.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.888664"
+    },
+    {
+      "domain": "blackroad.network",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-6223",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-6223.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.888667"
+    },
+    {
+      "domain": "blackroad.systems",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-9299",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-9299.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.888886"
+    },
+    {
+      "domain": "blackroad.systems",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-1381",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-1381.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.888891"
+    },
+    {
+      "domain": "blackroad.systems",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-8467",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-8467.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.888894"
+    },
+    {
+      "domain": "blackroad.systems",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-8746",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-8746.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.888898"
+    },
+    {
+      "domain": "blackroadai.com",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-1661",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-1661.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.889153"
+    },
+    {
+      "domain": "blackroadai.com",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-5231",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-5231.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.889157"
+    },
+    {
+      "domain": "blackroadai.com",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-4313",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-4313.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.889160"
+    },
+    {
+      "domain": "blackroadai.com",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-54",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-54.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.889164"
+    },
+    {
+      "domain": "lucidia.earth",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-3947",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-3947.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.889408"
+    },
+    {
+      "domain": "lucidia.earth",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-2393",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-2393.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.889411"
+    },
+    {
+      "domain": "lucidia.earth",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-2416",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-2416.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.889414"
+    },
+    {
+      "domain": "lucidia.earth",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-9676",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-9676.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.889417"
+    },
+    {
+      "domain": "lucidiastud.io",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-5424",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-5424.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.889937"
+    },
+    {
+      "domain": "lucidiastud.io",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-6992",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-6992.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.889942"
+    },
+    {
+      "domain": "lucidiastud.io",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-3049",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-3049.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.889946"
+    },
+    {
+      "domain": "lucidiastud.io",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-3064",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-3064.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.889950"
+    },
+    {
+      "domain": "lucidiaqi.com",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-8142",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-8142.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.890688"
+    },
+    {
+      "domain": "lucidiaqi.com",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-539",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-539.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.890696"
+    },
+    {
+      "domain": "lucidiaqi.com",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-767",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-767.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.890700"
+    },
+    {
+      "domain": "lucidiaqi.com",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-1712",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-1712.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.890703"
+    },
+    {
+      "domain": "aliceqi.com",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-9388",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-9388.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.891130"
+    },
+    {
+      "domain": "aliceqi.com",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-4410",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-4410.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.891137"
+    },
+    {
+      "domain": "aliceqi.com",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-1992",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-1992.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.891142"
+    },
+    {
+      "domain": "aliceqi.com",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-330",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-330.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.891146"
+    },
+    {
+      "domain": "blackroad-inc.us",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-8308",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-8308.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.891578"
+    },
+    {
+      "domain": "blackroad-inc.us",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-947",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-947.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.891582"
+    },
+    {
+      "domain": "blackroad-inc.us",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-5292",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-5292.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.891586"
+    },
+    {
+      "domain": "blackroad-inc.us",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-9876",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-9876.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.891589"
+    },
+    {
+      "domain": "blackroad.me",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-4165",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-4165.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.892002"
+    },
+    {
+      "domain": "blackroad.me",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-6508",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-6508.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.892006"
+    },
+    {
+      "domain": "blackroad.me",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-7219",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-7219.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.892017"
+    },
+    {
+      "domain": "blackroad.me",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-8794",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-8794.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.892020"
+    },
+    {
+      "domain": "blackroadquantum.com",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-1828",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-1828.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.892636"
+    },
+    {
+      "domain": "blackroadquantum.com",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-4746",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-4746.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.892642"
+    },
+    {
+      "domain": "blackroadquantum.com",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-4819",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-4819.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.892645"
+    },
+    {
+      "domain": "blackroadquantum.com",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-3281",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-3281.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.892648"
+    },
+    {
+      "domain": "blackroadagents.com",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-303",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-303.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.893031"
+    },
+    {
+      "domain": "blackroadagents.com",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-4272",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-4272.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.893035"
+    },
+    {
+      "domain": "blackroadagents.com",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-1583",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-1583.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.893038"
+    },
+    {
+      "domain": "blackroadagents.com",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-2447",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-2447.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.893041"
+    },
+    {
+      "domain": "blackroad.dev",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-4602",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-4602.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.893580"
+    },
+    {
+      "domain": "blackroad.dev",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-1976",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-1976.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.893587"
+    },
+    {
+      "domain": "blackroad.dev",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-6072",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-6072.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.893590"
+    },
+    {
+      "domain": "blackroad.dev",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-6160",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-6160.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.893594"
+    },
+    {
+      "domain": "blackroad.cloud",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-3269",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-3269.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.895242"
+    },
+    {
+      "domain": "blackroad.cloud",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-1846",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-1846.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.895270"
+    },
+    {
+      "domain": "blackroad.cloud",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-3689",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-3689.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.895281"
+    },
+    {
+      "domain": "blackroad.cloud",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-4792",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-4792.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.895290"
+    },
+    {
+      "domain": "blackroad.tech",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-5922",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-5922.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.896427"
+    },
+    {
+      "domain": "blackroad.tech",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-1920",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-1920.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.896435"
+    },
+    {
+      "domain": "blackroad.tech",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-8973",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-8973.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.896438"
+    },
+    {
+      "domain": "blackroad.tech",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-2205",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-2205.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.896442"
+    },
+    {
+      "domain": "blackroad.digital",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-8564",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-8564.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.897074"
+    },
+    {
+      "domain": "blackroad.digital",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-8049",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-8049.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.897082"
+    },
+    {
+      "domain": "blackroad.digital",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-9792",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-9792.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.897085"
+    },
+    {
+      "domain": "blackroad.digital",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-5198",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-5198.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.897089"
+    },
+    {
+      "domain": "blackroad.ventures",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-1982",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-1982.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.897987"
+    },
+    {
+      "domain": "blackroad.ventures",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-8694",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-8694.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.897994"
+    },
+    {
+      "domain": "blackroad.ventures",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-3085",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-3085.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.897997"
+    },
+    {
+      "domain": "blackroad.ventures",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-9581",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-9581.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.898000"
+    },
+    {
+      "domain": "blackroad.capital",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-2038",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-2038.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.899402"
+    },
+    {
+      "domain": "blackroad.capital",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-5254",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-5254.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.899431"
+    },
+    {
+      "domain": "blackroad.capital",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-6709",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-6709.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.899441"
+    },
+    {
+      "domain": "blackroad.capital",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-282",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-282.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.899451"
+    },
+    {
+      "domain": "blackroad.fund",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-3368",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-3368.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.901134"
+    },
+    {
+      "domain": "blackroad.fund",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-139",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-139.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.901146"
+    },
+    {
+      "domain": "blackroad.fund",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-4201",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-4201.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.901149"
+    },
+    {
+      "domain": "blackroad.fund",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-8396",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-8396.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.901153"
+    },
+    {
+      "domain": "blackroad.dao",
+      "asset_type": "social_card",
+      "design_id": "mock-design-socialmedia-6960",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-6960.png",
+      "dimensions": "1200x630",
+      "created": "2025-12-11T14:05:54.901742"
+    },
+    {
+      "domain": "blackroad.dao",
+      "asset_type": "github_banner",
+      "design_id": "mock-design-socialmedia-2991",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-2991.png",
+      "dimensions": "1280x640",
+      "created": "2025-12-11T14:05:54.901759"
+    },
+    {
+      "domain": "blackroad.dao",
+      "asset_type": "api_docs_header",
+      "design_id": "mock-design-socialmedia-9705",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-9705.png",
+      "dimensions": "1920x400",
+      "created": "2025-12-11T14:05:54.901763"
+    },
+    {
+      "domain": "blackroad.dao",
+      "asset_type": "hero_image",
+      "design_id": "mock-design-socialmedia-9631",
+      "export_url": "https://mock-canva-export.com/mock-design-socialmedia-9631.png",
+      "dimensions": "1920x1080",
+      "created": "2025-12-11T14:05:54.901766"
+    }
+  ],
+  "generated": "2025-12-11T14:05:54.901768"
+}
