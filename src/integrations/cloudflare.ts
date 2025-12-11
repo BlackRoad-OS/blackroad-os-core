@@ -1,8 +1,16 @@
 /**
  * Cloudflare API Integration
  *
- * Read-only operations for listing zones, DNS records, tunnels, and origins.
+ * Full operations for managing zones, DNS records, tunnels, and Pages.
  * Uses Cloudflare API v4 with API token authentication.
+ *
+ * Features:
+ * - Zone and DNS record management
+ * - Cloudflare Tunnels (cloudflared) support
+ * - Cloudflare Pages deployment
+ * - Workers management
+ * - SSL/TLS configuration
+ * - Firewall rules
  */
 
 export interface CloudflareConfig {
@@ -312,6 +320,246 @@ export class CloudflareClient {
     }
     const records = await this.listDNSRecords(zone.id);
     return { zone, records };
+  }
+
+  /**
+   * Create a new Cloudflare Tunnel
+   */
+  async createTunnel(name: string, secret?: string): Promise<CloudflareTunnel> {
+    if (!this.accountId) {
+      throw new Error('Account ID required for tunnel operations');
+    }
+
+    const body: Record<string, any> = { name };
+    if (secret) {
+      body.tunnel_secret = Buffer.from(secret).toString('base64');
+    }
+
+    const tunnel = await this.request<any>(`/accounts/${this.accountId}/tunnels`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+
+    return {
+      id: tunnel.id,
+      accountId: tunnel.account_id,
+      name: tunnel.name,
+      status: tunnel.status,
+      createdAt: tunnel.created_at,
+      deletedAt: tunnel.deleted_at,
+      connections: [],
+    };
+  }
+
+  /**
+   * Get tunnel configuration
+   */
+  async getTunnelConfig(tunnelId: string): Promise<{
+    ingress: { hostname?: string; service: string; path?: string }[];
+  }> {
+    if (!this.accountId) {
+      throw new Error('Account ID required for tunnel operations');
+    }
+
+    return this.request(`/accounts/${this.accountId}/tunnels/${tunnelId}/configurations`);
+  }
+
+  /**
+   * Update tunnel configuration
+   */
+  async updateTunnelConfig(
+    tunnelId: string,
+    config: { ingress: { hostname?: string; service: string; path?: string }[] }
+  ): Promise<boolean> {
+    if (!this.accountId) {
+      throw new Error('Account ID required for tunnel operations');
+    }
+
+    await this.request(`/accounts/${this.accountId}/tunnels/${tunnelId}/configurations`, {
+      method: 'PUT',
+      body: JSON.stringify({ config }),
+    });
+    return true;
+  }
+
+  /**
+   * Delete a tunnel
+   */
+  async deleteTunnel(tunnelId: string): Promise<boolean> {
+    if (!this.accountId) {
+      throw new Error('Account ID required for tunnel operations');
+    }
+
+    await this.request(`/accounts/${this.accountId}/tunnels/${tunnelId}`, {
+      method: 'DELETE',
+    });
+    return true;
+  }
+
+  /**
+   * Create a DNS record
+   */
+  async createDNSRecord(
+    zoneId: string,
+    record: {
+      type: string;
+      name: string;
+      content: string;
+      ttl?: number;
+      proxied?: boolean;
+      priority?: number;
+    }
+  ): Promise<CloudflareDNSRecord> {
+    const result = await this.request<any>(`/zones/${zoneId}/dns_records`, {
+      method: 'POST',
+      body: JSON.stringify({
+        type: record.type,
+        name: record.name,
+        content: record.content,
+        ttl: record.ttl || 1,
+        proxied: record.proxied ?? true,
+        priority: record.priority,
+      }),
+    });
+
+    return {
+      id: result.id,
+      zoneId: result.zone_id,
+      zoneName: result.zone_name,
+      name: result.name,
+      type: result.type,
+      content: result.content,
+      proxied: result.proxied,
+      proxiable: result.proxiable,
+      ttl: result.ttl,
+      priority: result.priority,
+      locked: result.locked,
+      createdOn: result.created_on,
+      modifiedOn: result.modified_on,
+    };
+  }
+
+  /**
+   * Update a DNS record
+   */
+  async updateDNSRecord(
+    zoneId: string,
+    recordId: string,
+    updates: {
+      type?: string;
+      name?: string;
+      content?: string;
+      ttl?: number;
+      proxied?: boolean;
+    }
+  ): Promise<CloudflareDNSRecord> {
+    const result = await this.request<any>(`/zones/${zoneId}/dns_records/${recordId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(updates),
+    });
+
+    return {
+      id: result.id,
+      zoneId: result.zone_id,
+      zoneName: result.zone_name,
+      name: result.name,
+      type: result.type,
+      content: result.content,
+      proxied: result.proxied,
+      proxiable: result.proxiable,
+      ttl: result.ttl,
+      priority: result.priority,
+      locked: result.locked,
+      createdOn: result.created_on,
+      modifiedOn: result.modified_on,
+    };
+  }
+
+  /**
+   * Delete a DNS record
+   */
+  async deleteDNSRecord(zoneId: string, recordId: string): Promise<boolean> {
+    await this.request(`/zones/${zoneId}/dns_records/${recordId}`, {
+      method: 'DELETE',
+    });
+    return true;
+  }
+
+  /**
+   * Trigger Pages deployment
+   */
+  async triggerPagesDeployment(projectName: string, branch?: string): Promise<{
+    id: string;
+    url: string;
+  }> {
+    if (!this.accountId) {
+      throw new Error('Account ID required for Pages operations');
+    }
+
+    const result = await this.request<any>(
+      `/accounts/${this.accountId}/pages/projects/${projectName}/deployments`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ branch }),
+      }
+    );
+
+    return {
+      id: result.id,
+      url: result.url,
+    };
+  }
+
+  /**
+   * Get Pages deployment status
+   */
+  async getPagesDeployment(projectName: string, deploymentId: string): Promise<{
+    id: string;
+    url: string;
+    environment: string;
+    status: string;
+    createdOn: string;
+  }> {
+    if (!this.accountId) {
+      throw new Error('Account ID required for Pages operations');
+    }
+
+    const result = await this.request<any>(
+      `/accounts/${this.accountId}/pages/projects/${projectName}/deployments/${deploymentId}`
+    );
+
+    return {
+      id: result.id,
+      url: result.url,
+      environment: result.environment,
+      status: result.latest_stage?.status || 'unknown',
+      createdOn: result.created_on,
+    };
+  }
+
+  /**
+   * Purge cache for a zone
+   */
+  async purgeCache(zoneId: string, options?: {
+    purgeEverything?: boolean;
+    files?: string[];
+    tags?: string[];
+    hosts?: string[];
+  }): Promise<boolean> {
+    const body: Record<string, any> = {};
+    if (options?.purgeEverything) {
+      body.purge_everything = true;
+    } else {
+      if (options?.files) body.files = options.files;
+      if (options?.tags) body.tags = options.tags;
+      if (options?.hosts) body.hosts = options.hosts;
+    }
+
+    await this.request(`/zones/${zoneId}/purge_cache`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+    return true;
   }
 }
 

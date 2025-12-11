@@ -1,12 +1,20 @@
 /**
  * Railway API Integration
  *
- * Read-only operations for listing services, deployments, and health status.
+ * Full operations for managing services, deployments, and health status.
  * Uses Railway's GraphQL API.
+ *
+ * Features:
+ * - List and manage projects, services, deployments
+ * - Trigger deployments and redeploys
+ * - Environment variable management
+ * - Health monitoring
+ * - Webhook integration
  */
 
 export interface RailwayConfig {
   apiToken: string;
+  teamId?: string;
 }
 
 export interface RailwayProject {
@@ -425,6 +433,149 @@ export class RailwayClient {
         return 'unknown';
     }
   }
+
+  /**
+   * Trigger a new deployment for a service
+   */
+  async triggerDeployment(serviceId: string, environmentId: string): Promise<{ id: string }> {
+    const query = `
+      mutation($serviceId: String!, $environmentId: String!) {
+        deploymentTrigger(input: { serviceId: $serviceId, environmentId: $environmentId }) {
+          id
+        }
+      }
+    `;
+    const result = await this.gql<{ deploymentTrigger: { id: string } }>(query, {
+      serviceId,
+      environmentId,
+    });
+    return result.deploymentTrigger;
+  }
+
+  /**
+   * Redeploy the latest deployment
+   */
+  async redeployService(deploymentId: string): Promise<{ id: string }> {
+    const query = `
+      mutation($deploymentId: String!) {
+        deploymentRedeploy(id: $deploymentId) {
+          id
+        }
+      }
+    `;
+    const result = await this.gql<{ deploymentRedeploy: { id: string } }>(query, {
+      deploymentId,
+    });
+    return result.deploymentRedeploy;
+  }
+
+  /**
+   * Get environment variables for a service
+   */
+  async getVariables(serviceId: string, environmentId: string): Promise<Record<string, string>> {
+    const query = `
+      query($serviceId: String!, $environmentId: String!) {
+        variables(serviceId: $serviceId, environmentId: $environmentId)
+      }
+    `;
+    const result = await this.gql<{ variables: Record<string, string> }>(query, {
+      serviceId,
+      environmentId,
+    });
+    return result.variables;
+  }
+
+  /**
+   * Set environment variables for a service
+   */
+  async setVariables(
+    serviceId: string,
+    environmentId: string,
+    variables: Record<string, string>
+  ): Promise<boolean> {
+    const query = `
+      mutation($serviceId: String!, $environmentId: String!, $variables: Json!) {
+        variablesUpsert(input: { serviceId: $serviceId, environmentId: $environmentId, variables: $variables })
+      }
+    `;
+    await this.gql<{ variablesUpsert: boolean }>(query, {
+      serviceId,
+      environmentId,
+      variables,
+    });
+    return true;
+  }
+
+  /**
+   * Restart a service
+   */
+  async restartService(serviceId: string, environmentId: string): Promise<boolean> {
+    const query = `
+      mutation($serviceId: String!, $environmentId: String!) {
+        serviceInstanceRedeploy(serviceId: $serviceId, environmentId: $environmentId)
+      }
+    `;
+    await this.gql<{ serviceInstanceRedeploy: boolean }>(query, {
+      serviceId,
+      environmentId,
+    });
+    return true;
+  }
+
+  /**
+   * Get deployment logs
+   */
+  async getDeploymentLogs(deploymentId: string, limit = 100): Promise<string[]> {
+    const query = `
+      query($deploymentId: String!, $limit: Int!) {
+        deploymentLogs(deploymentId: $deploymentId, limit: $limit) {
+          message
+          timestamp
+        }
+      }
+    `;
+    const result = await this.gql<{ deploymentLogs: { message: string; timestamp: string }[] }>(
+      query,
+      { deploymentId, limit }
+    );
+    return result.deploymentLogs.map((log) => `[${log.timestamp}] ${log.message}`);
+  }
+
+  /**
+   * Check service health via HTTP endpoint
+   */
+  async checkServiceHealth(url: string, timeout = 5000): Promise<{
+    healthy: boolean;
+    statusCode?: number;
+    responseTime?: number;
+    error?: string;
+  }> {
+    const startTime = Date.now();
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+      const response = await fetch(url, {
+        method: 'GET',
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+      const responseTime = Date.now() - startTime;
+
+      return {
+        healthy: response.ok,
+        statusCode: response.status,
+        responseTime,
+      };
+    } catch (error) {
+      return {
+        healthy: false,
+        responseTime: Date.now() - startTime,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  }
 }
 
 /**
@@ -435,5 +586,8 @@ export function createRailwayClient(): RailwayClient {
   if (!apiToken) {
     throw new Error('RAILWAY_TOKEN environment variable is required');
   }
-  return new RailwayClient({ apiToken });
+  return new RailwayClient({
+    apiToken,
+    teamId: process.env.RAILWAY_TEAM_ID,
+  });
 }
