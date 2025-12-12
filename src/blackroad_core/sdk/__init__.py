@@ -7,6 +7,8 @@ Client SDK for interacting with the BlackRoad OS API and agent runtime.
 from dataclasses import dataclass
 from typing import Any, Optional
 import os
+import aiohttp
+import asyncio
 
 
 @dataclass
@@ -67,6 +69,42 @@ class BlackRoadClient:
             await self._session.close()
             self._session = None
 
+    async def _get_session(self) -> aiohttp.ClientSession:
+        """Get or create HTTP session."""
+        if self._session is None:
+            headers = {}
+            if self.config.api_key:
+                headers["Authorization"] = f"Bearer {self.config.api_key}"
+            if self.config.org_id:
+                headers["X-Org-ID"] = self.config.org_id
+
+            timeout = aiohttp.ClientTimeout(total=self.config.timeout)
+            self._session = aiohttp.ClientSession(
+                headers=headers,
+                timeout=timeout
+            )
+        return self._session
+
+    async def _request(
+        self,
+        method: str,
+        endpoint: str,
+        **kwargs
+    ) -> Any:
+        """Make HTTP request with retries."""
+        session = await self._get_session()
+        url = f"{self.config.api_url}/{endpoint.lstrip('/')}"
+
+        for attempt in range(self.config.retry_count):
+            try:
+                async with session.request(method, url, **kwargs) as response:
+                    response.raise_for_status()
+                    return await response.json()
+            except aiohttp.ClientError as e:
+                if attempt == self.config.retry_count - 1:
+                    raise
+                await asyncio.sleep(2 ** attempt)
+
     # Placeholder methods - to be implemented
     @property
     def agents(self) -> "AgentsAPI":
@@ -97,11 +135,12 @@ class AgentsAPI:
 
     async def list(self, **filters) -> list[dict[str, Any]]:
         """List agents."""
-        raise NotImplementedError("TODO: Implement API call")
+        params = {k: v for k, v in filters.items() if v is not None}
+        return await self.client._request("GET", "/v1/agents", params=params)
 
     async def get(self, agent_id: str) -> dict[str, Any]:
         """Get agent by ID."""
-        raise NotImplementedError("TODO: Implement API call")
+        return await self.client._request("GET", f"/v1/agents/{agent_id}")
 
     async def run(
         self,
@@ -110,15 +149,16 @@ class AgentsAPI:
         **options,
     ) -> dict[str, Any]:
         """Run an agent with input."""
-        raise NotImplementedError("TODO: Implement API call")
+        payload = {"input": input, **options}
+        return await self.client._request("POST", f"/v1/agents/{agent_id}/run", json=payload)
 
     async def pause(self, agent_id: str) -> dict[str, Any]:
         """Pause an agent."""
-        raise NotImplementedError("TODO: Implement API call")
+        return await self.client._request("POST", f"/v1/agents/{agent_id}/pause")
 
     async def resume(self, agent_id: str) -> dict[str, Any]:
         """Resume a paused agent."""
-        raise NotImplementedError("TODO: Implement API call")
+        return await self.client._request("POST", f"/v1/agents/{agent_id}/resume")
 
 
 class JobsAPI:
@@ -129,19 +169,20 @@ class JobsAPI:
 
     async def list(self, **filters) -> list[dict[str, Any]]:
         """List jobs."""
-        raise NotImplementedError("TODO: Implement API call")
+        params = {k: v for k, v in filters.items() if v is not None}
+        return await self.client._request("GET", "/v1/jobs", params=params)
 
     async def get(self, job_id: str) -> dict[str, Any]:
         """Get job by ID."""
-        raise NotImplementedError("TODO: Implement API call")
+        return await self.client._request("GET", f"/v1/jobs/{job_id}")
 
     async def cancel(self, job_id: str) -> dict[str, Any]:
         """Cancel a job."""
-        raise NotImplementedError("TODO: Implement API call")
+        return await self.client._request("POST", f"/v1/jobs/{job_id}/cancel")
 
     async def retry(self, job_id: str) -> dict[str, Any]:
         """Retry a failed job."""
-        raise NotImplementedError("TODO: Implement API call")
+        return await self.client._request("POST", f"/v1/jobs/{job_id}/retry")
 
 
 class PacksAPI:
@@ -152,19 +193,19 @@ class PacksAPI:
 
     async def list(self) -> list[dict[str, Any]]:
         """List available packs."""
-        raise NotImplementedError("TODO: Implement API call")
+        return await self.client._request("GET", "/v1/packs")
 
     async def get(self, pack_key: str) -> dict[str, Any]:
         """Get pack by key."""
-        raise NotImplementedError("TODO: Implement API call")
+        return await self.client._request("GET", f"/v1/packs/{pack_key}")
 
     async def install(self, pack_key: str, **options) -> dict[str, Any]:
         """Install a pack for the org."""
-        raise NotImplementedError("TODO: Implement API call")
+        return await self.client._request("POST", f"/v1/packs/{pack_key}/install", json=options)
 
     async def uninstall(self, pack_key: str) -> dict[str, Any]:
         """Uninstall a pack."""
-        raise NotImplementedError("TODO: Implement API call")
+        return await self.client._request("POST", f"/v1/packs/{pack_key}/uninstall")
 
 
 class WorkflowsAPI:
@@ -175,11 +216,11 @@ class WorkflowsAPI:
 
     async def list(self) -> list[dict[str, Any]]:
         """List workflows."""
-        raise NotImplementedError("TODO: Implement API call")
+        return await self.client._request("GET", "/v1/workflows")
 
     async def get(self, workflow_id: str) -> dict[str, Any]:
         """Get workflow by ID."""
-        raise NotImplementedError("TODO: Implement API call")
+        return await self.client._request("GET", f"/v1/workflows/{workflow_id}")
 
     async def run(
         self,
@@ -187,7 +228,8 @@ class WorkflowsAPI:
         input: dict[str, Any],
     ) -> dict[str, Any]:
         """Run a workflow."""
-        raise NotImplementedError("TODO: Implement API call")
+        payload = {"input": input}
+        return await self.client._request("POST", f"/v1/workflows/{workflow_id}/run", json=payload)
 
 
 __all__ = [
