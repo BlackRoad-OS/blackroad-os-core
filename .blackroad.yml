@@ -1,0 +1,16 @@
+identity:
+  name: blackroad-os-core
+  owner: BlackRoad-OS
+  role: core-runtime
+
+branches:
+  main:
+    intent: production
+    canon: true
+  master:
+    intent: historical
+    canon: false
+
+merge_rules:
+  allow_bidirectional: true
+  case_sensitive_paths: enforce
