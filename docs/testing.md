@@ -97,7 +97,7 @@ pnpm test -- --test-name-pattern="health"
 - Fix: Ensure dependencies are installed with `pnpm install` and Node is using the workspace version
 
 **"Test timeout"**
-- Fix: Increase timeout in the specific suite with `vi.setConfig({ testTimeout: 10000 })` or by using `test.setTimeout`
+- Fix: Increase timeout in the specific test or suite using `test.setTimeout(10000)`, `describe('...', () => { ... }, { timeout: 10000 })`, or by passing the `timeout` option to individual tests: `it('...', async () => { ... }, { timeout: 10000 })`. You can also set a global timeout in your `vitest.config.ts` with the `timeout` option.
 
 **"Database connection error"**
 - Fix: Prefer mocking Prisma clients or setting `DATABASE_URL` for integration-style tests
