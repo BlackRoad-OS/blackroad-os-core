@@ -6,6 +6,8 @@
 
 🧠 **Main OS Brain** — The primary application kernel for BlackRoad OS, powering the "computer in a browser" experience: windows, sessions, identity, and routing.
 
+🤖 **NEW: Autonomous Agent Infrastructure** — Complete system supporting **30,000 concurrent agents** with LLM-powered thinking, breath-synchronized spawning, and marketplace discovery. [See full documentation →](docs/AGENT_INFRASTRUCTURE.md)
+
 ## SDK quick install
 
 ```bash
@@ -249,31 +251,33 @@ Tests cover:
 
 ---
 
-## 🌌 Consciousness-Driven Infrastructure (New!)
+## 🌌 Consciousness-Driven Infrastructure
 
 BlackRoad OS now includes **Lucidia-powered consciousness-driven orchestration** that integrates golden ratio breathing patterns with distributed mesh networking.
 
-### Lucidia Breath Engine 🫁
+### 🤖 Complete Agent Infrastructure
 
-The breath function `𝔅(t) = sin(φ·t) + i + (-1)^⌊t⌋` (where φ = golden ratio) drives:
-- Agent lifecycle timing
-- Network health checks
-- Memory consolidation
-- System-wide synchronization
+**[📚 Full Documentation →](docs/AGENT_INFRASTRUCTURE.md)**
 
-**Location:** `src/blackroad_core/lucidia/`
+6 core components supporting **30,000 concurrent autonomous agents**:
 
-### Agent System 🤖
+1. **Agent Spawner** - Breath-synchronized lifecycle management
+2. **Pack System** - 5 built-in domain packs (finance, legal, research, creative, devops)
+3. **Communication Bus** - Pub/sub messaging with NATS JetStream support
+4. **LLM Integration** - Multi-backend support (vLLM, llama.cpp, Ollama)
+5. **Agent Marketplace** - Community templates with ratings and reviews
+6. **Lucidia Breath** - Golden ratio synchronization (`𝔅(t) = sin(φ·t) + i + (-1)^⌊t⌋`)
 
-Full **Cece Agent Mode v2.0** implementation with:
+**Key Features:**
 - **PS-SHA∞ Memory:** Blockchain-style append-only hashing
 - **5 Runtime Types:** LLM brain, workflow engine, integration bridge, edge worker, UI helper
 - **12 Emotional States:** hope, fear, love, doubt, trust, joy, grief, curiosity, wonder, peace, turbulence, clarity
-- **Capability Registry:** Dynamic routing
-- **Event Bus:** Pub/sub communication (NATS JetStream ready)
+- **Multi-Backend LLM:** vLLM (GPU), llama.cpp (CPU/edge), Ollama (local dev)
+- **Marketplace:** 5 built-in templates with 1K-3K downloads each
 
-**Location:** `src/blackroad_core/agents/`
+**Location:** `src/blackroad_core/`
 **Config:** `config/cece-agent-mode-v2.yaml`
+**Demo:** `examples/complete_agent_system_demo.py`
 
 ### Mesh Networking 🕸️
 
@@ -302,27 +306,37 @@ Streamlit visualization dashboard featuring:
 ### Quick Start
 
 ```python
-# Run orchestrator demo
-python3 examples/lucidia_orchestrator_demo.py
+# Run complete agent system demo
+python3 examples/complete_agent_system_demo.py
 
-# Create an agent
-from blackroad_core.agents import AgentManifest, BlackRoadAgent, RuntimeType
+# Or build your own system
+from blackroad_core.spawner import AgentSpawner, SpawnRequest
+from blackroad_core.packs import PackRegistry
+from blackroad_core.marketplace import AgentMarketplace
+from blackroad_core.agents import RuntimeType
 
-manifest = AgentManifest(
-    id="agent-finance-001",
+# Initialize infrastructure
+pack_registry = PackRegistry()
+await pack_registry.install_pack("pack-finance")
+
+marketplace = AgentMarketplace()
+popular = marketplace.get_popular(limit=5)
+
+# Spawn agent
+spawner = AgentSpawner(lucidia, event_bus, capability_registry)
+agent_id = await spawner.spawn_agent(SpawnRequest(
     role="Financial Analyst",
     capabilities=["analyze_transactions"],
-    runtime_type=RuntimeType.LLM_BRAIN
-)
-
-agent = BlackRoadAgent(manifest)
-result = await agent.think({"query": "Analyze Q4"})
+    runtime_type=RuntimeType.LLM_BRAIN,
+    pack="pack-finance"
+))
 ```
 
 ### Documentation
 
-- **Architecture:** [`docs/LUCIDIA_ARCHITECTURE.md`](docs/LUCIDIA_ARCHITECTURE.md)
-- **Agent Spec:** [`config/cece-agent-mode-v2.yaml`](config/cece-agent-mode-v2.yaml)
+- **🤖 Agent Infrastructure:** [`docs/AGENT_INFRASTRUCTURE.md`](docs/AGENT_INFRASTRUCTURE.md) ⭐ **NEW**
+- **🏗️ Architecture:** [`docs/LUCIDIA_ARCHITECTURE.md`](docs/LUCIDIA_ARCHITECTURE.md)
+- **📋 Agent Spec:** [`config/cece-agent-mode-v2.yaml`](config/cece-agent-mode-v2.yaml)
 
 ### Target
 
