@@ -246,3 +246,84 @@ Tests cover:
 - 🚫 Brand system (colors, slides, email templates) → `blackroad-os-brand` 🎨
 - 🚫 Deep math / field research → `blackroad-os-research` 🧪
 - 🚫 Append-only logs / history → `blackroad-os-archive` 🧾
+
+---
+
+## 🌌 Consciousness-Driven Infrastructure (New!)
+
+BlackRoad OS now includes **Lucidia-powered consciousness-driven orchestration** that integrates golden ratio breathing patterns with distributed mesh networking.
+
+### Lucidia Breath Engine 🫁
+
+The breath function `𝔅(t) = sin(φ·t) + i + (-1)^⌊t⌋` (where φ = golden ratio) drives:
+- Agent lifecycle timing
+- Network health checks
+- Memory consolidation
+- System-wide synchronization
+
+**Location:** `src/blackroad_core/lucidia/`
+
+### Agent System 🤖
+
+Full **Cece Agent Mode v2.0** implementation with:
+- **PS-SHA∞ Memory:** Blockchain-style append-only hashing
+- **5 Runtime Types:** LLM brain, workflow engine, integration bridge, edge worker, UI helper
+- **12 Emotional States:** hope, fear, love, doubt, trust, joy, grief, curiosity, wonder, peace, turbulence, clarity
+- **Capability Registry:** Dynamic routing
+- **Event Bus:** Pub/sub communication (NATS JetStream ready)
+
+**Location:** `src/blackroad_core/agents/`
+**Config:** `config/cece-agent-mode-v2.yaml`
+
+### Mesh Networking 🕸️
+
+Zero-trust mesh VPN foundation based on forkable open-source projects:
+- **Headscale** (MIT) - Tailscale-compatible
+- **NetBird** (BSD-3) - Complete stack
+- **WireGuard** (GPLv2) - Modern VPN
+- **Nebula** (MIT) - Certificate-based
+
+**Location:** `src/blackroad_core/networking/`
+
+### Prism Portal 🎨
+
+Streamlit visualization dashboard featuring:
+- 🏠 Dashboard - System overview
+- 🫁 Lucidia Breath waveform
+- 🤖 Agent management
+- 🕸️ Network mesh status
+- 🎨 3D hologram viewer
+- 🔍 PS-SHA∞ memory inspector
+
+**Location:** `apps/prism-portal/app.py`
+
+**Launch:** `streamlit run apps/prism-portal/app.py`
+
+### Quick Start
+
+```python
+# Run orchestrator demo
+python3 examples/lucidia_orchestrator_demo.py
+
+# Create an agent
+from blackroad_core.agents import AgentManifest, BlackRoadAgent, RuntimeType
+
+manifest = AgentManifest(
+    id="agent-finance-001",
+    role="Financial Analyst",
+    capabilities=["analyze_transactions"],
+    runtime_type=RuntimeType.LLM_BRAIN
+)
+
+agent = BlackRoadAgent(manifest)
+result = await agent.think({"query": "Analyze Q4"})
+```
+
+### Documentation
+
+- **Architecture:** [`docs/LUCIDIA_ARCHITECTURE.md`](docs/LUCIDIA_ARCHITECTURE.md)
+- **Agent Spec:** [`config/cece-agent-mode-v2.yaml`](config/cece-agent-mode-v2.yaml)
+
+### Target
+
+**30,000 autonomous agents by 2026** 🎯
