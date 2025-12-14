@@ -338,6 +338,68 @@ class PackRegistry:
         ))
         self.available_packs["pack-infra-devops"] = devops_pack
 
+        # Pack: Job Hunter
+        job_hunter_pack = Pack(PackManifest(
+            id="pack-job-hunter",
+            name="BlackRoad Job Hunter Pack",
+            version="1.0.0",
+            description="Automated job application system with AI-powered customization",
+            author="BlackRoad OS",
+            capabilities=[
+                PackCapability(
+                    name="search_jobs",
+                    description="Search jobs across multiple platforms (LinkedIn, Indeed, ZipRecruiter, Glassdoor)",
+                    required_integrations=["linkedin", "indeed", "ziprecruiter", "glassdoor"]
+                ),
+                PackCapability(
+                    name="customize_applications",
+                    description="AI-powered customization of cover letters and application answers",
+                    required_tools=["llm_provider"]
+                ),
+                PackCapability(
+                    name="fill_forms",
+                    description="Automated form filling and submission",
+                    required_tools=["playwright", "selenium"]
+                ),
+                PackCapability(
+                    name="track_applications",
+                    description="Track application status and schedule follow-ups"
+                )
+            ],
+            agent_templates=[
+                AgentTemplate(
+                    name="job-scraper",
+                    role="Job Scraper",
+                    capabilities=["search_jobs"],
+                    runtime_type="integration_bridge",
+                    emotional_baseline="curiosity"
+                ),
+                AgentTemplate(
+                    name="application-writer",
+                    role="Application Writer",
+                    capabilities=["customize_applications"],
+                    runtime_type="llm_brain",
+                    emotional_baseline="wonder"
+                ),
+                AgentTemplate(
+                    name="form-filler",
+                    role="Form Filler",
+                    capabilities=["fill_forms"],
+                    runtime_type="workflow_engine"
+                ),
+                AgentTemplate(
+                    name="job-hunter-orchestrator",
+                    role="Job Hunter Orchestrator",
+                    capabilities=["search_jobs", "customize_applications", "fill_forms", "track_applications"],
+                    runtime_type="llm_brain",
+                    emotional_baseline="determination"
+                )
+            ],
+            tags=["jobs", "automation", "career", "applications"],
+            homepage="https://blackroad.io/packs/job-hunter"
+        ))
+        self.available_packs["pack-job-hunter"] = job_hunter_pack
+
     async def install_pack(self, pack_id: str, config: Optional[Dict[str, Any]] = None) -> Pack:
         """Install a pack."""
         if pack_id not in self.available_packs:
