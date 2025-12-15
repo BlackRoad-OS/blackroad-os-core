@@ -61,8 +61,8 @@ export default function RoadChainHome() {
             <a href="/wallet" className="border-2 border-road-orange px-8 py-4 rounded-lg font-bold text-lg hover:bg-road-orange hover:border-road-orange transition-all">
               Open Wallet
             </a>
-            <a href="#about" className="border-2 border-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white hover:text-black transition-all">
-              Learn More
+            <a href="/marketplace" className="border-2 border-road-purple px-8 py-4 rounded-lg font-bold text-lg hover:bg-road-purple hover:border-road-purple transition-all">
+              Agent Marketplace
             </a>
           </div>
 

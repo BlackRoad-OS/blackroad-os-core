@@ -197,9 +197,12 @@ app.post('/api/transactions', async (req, res) => {
 
 // Get pending transactions
 app.get('/api/transactions/pending', (req, res) => {
+  const pending = roadchain['pendingTransactions'];
   res.json({
-    count: roadchain['pendingTransactions'].length,
-    transactions: roadchain['pendingTransactions'],
+    count: pending.length,
+    transactions: JSON.parse(JSON.stringify(pending, (key, value) =>
+      typeof value === 'bigint' ? value.toString() : value
+    )),
   });
 });
 
