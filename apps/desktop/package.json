@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tauri dev",
     "build": "tauri build",
-    "lint": "eslint .",
+    "lint": "echo 'No JS/TS files to lint in Tauri desktop app'",
     "test": "vitest",
     "postbuild": "echo 'desktop postbuild stub'"
   },

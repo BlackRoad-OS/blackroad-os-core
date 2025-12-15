@@ -10,6 +10,8 @@ import { createServer } from 'http';
 import RoadChain from './blockchain/core.js';
 import RoadCoin from './blockchain/RoadCoin.js';
 import type { TransferRoadCoin, DeployAgent, RecordThought, AnchorTruth } from './blockchain/core.js';
+import arkhamRouter from './routes/arkham.js';
+import { initArkham } from './services/arkham.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,6 +26,14 @@ app.use(express.json());
 // Initialize blockchain
 const roadchain = new RoadChain();
 const roadcoin = new RoadCoin();
+
+// Initialize Arkham Intelligence (if API key available)
+if (process.env.ARKHAM_API_KEY && process.env.ARKHAM_API_KEY !== 'your-api-key-here') {
+  initArkham({ apiKey: process.env.ARKHAM_API_KEY });
+  console.log('✅ Arkham Intelligence API initialized');
+} else {
+  console.log('⚠️  Arkham API key not set - intelligence features disabled');
+}
 
 // WebSocket for real-time updates
 const server = createServer(app);
@@ -50,6 +60,12 @@ function broadcast(data: any) {
     }
   });
 }
+
+// ============================================================================
+// ARKHAM INTELLIGENCE ROUTES
+// ============================================================================
+
+app.use('/api/arkham', arkhamRouter);
 
 // ============================================================================
 // HEALTH & STATUS
