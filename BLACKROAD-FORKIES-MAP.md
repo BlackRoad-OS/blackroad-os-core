@@ -16,12 +16,13 @@
 6. [Communications](#communications)
 7. [Cloud Infrastructure](#cloud-infrastructure)
 8. [Web & Frontend](#web--frontend)
-9. [Hardware](#hardware)
-10. [GitHub Organizations Map](#github-organizations-map)
-11. [Domain Names](#domain-names)
-12. [IP Address Planes](#ip-address-planes)
-13. [External Integrations](#external-integrations)
-14. [Implementation Status](#implementation-status)
+9. [**Game Engines**](#game-engines) **← NEW**
+10. [Hardware](#hardware)
+11. [GitHub Organizations Map](#github-organizations-map)
+12. [Domain Names](#domain-names)
+13. [IP Address Planes](#ip-address-planes)
+14. [External Integrations](#external-integrations)
+15. [Implementation Status](#implementation-status)
 
 ---
 
@@ -287,6 +288,71 @@
 - Deployment: GitHub Pages + Cloudflare
 
 **GitHub Org**: `BlackRoad-Web`
+
+---
+
+## Game Engines
+
+### Unity/Unreal Alternative (MUST-FORK Priority)
+
+**Current**: Unity (proprietary, runtime fees), Unreal (5% revenue share)
+**Forkable Alternatives**:
+
+| Name | License | Language | Features | BlackRoad Status |
+|------|---------|----------|----------|------------------|
+| **Godot Engine** | MIT | C++/GDScript | Full editor, 2D/3D, exports everywhere | **PRIMARY FORK** ✅ |
+| **Open 3D Engine (O3DE)** | Apache 2.0 | C++ | AAA graphics, large worlds, simulation | **SECONDARY FORK** ✅ |
+| Stride | MIT | C# | Unity-like, editor included | Alternative |
+| Wicked Engine | MIT | C++ | Modern renderer only | Component use |
+| Fyrox | MIT | Rust | Engine + editor | Alternative |
+| Bevy | MIT/Apache 2.0 | Rust | ECS framework | **VOXEL BASE** ✅ |
+
+### BlackRoad Engine Architecture
+
+**Unified Proprietary Engine (based on MIT/Apache forks):**
+
+```
+BlackRoad Engine (Proprietary)
+├─ Godot Fork (MIT) → Base engine, editor, scripting
+├─ O3DE Fork (Apache 2.0) → AAA rendering option
+├─ Custom Voxel Engine (Proprietary) → Minecraft-like worlds
+└─ Custom Simulation Framework (Proprietary) → City builder, life sims
+```
+
+**Capabilities:**
+- ✅ **Realistic Open Worlds** (Zelda, Skyrim, Fortnite) → Godot + O3DE
+- ✅ **Voxel Sandboxes** (Minecraft) → Custom Rust + Bevy engine
+- ✅ **City Builders** (Cities: Skylines) → Custom simulation framework
+- ✅ **Life Sims** (Stardew Valley) → Godot + custom systems
+- ✅ **Massive Multiplayer** (MMO-scale) → All modes support networking
+
+**Why NOT Minetest/Luanti:**
+- ⚠️ LGPL 2.1+ requires sharing engine modifications
+- ✅ Instead: Build custom voxel engine from scratch (100% proprietary)
+
+**License Strategy:**
+- Godot fork: Keep MIT notices, ship proprietary binary ✓
+- O3DE fork: Keep Apache 2.0 notices, ship proprietary ✓
+- Custom code: 100% BlackRoad proprietary ✓
+- Combined product: BlackRoad Proprietary Software License ✓
+
+**Cost Analysis:**
+- **One-time:** $110K-300K (development) OR $0 (DIY)
+- **Monthly:** $35-100 (infrastructure)
+- **vs. Unity Pro:** $2,040/year per seat
+- **vs. Unreal:** 5% gross revenue (millions)
+- **BlackRoad Engine:** $0 revenue share, $0 license fees
+
+**Implementation:**
+- Fork Godot → `BlackRoad-Engine/blackroad-godot`
+- Fork O3DE → `BlackRoad-Engine/blackroad-o3de`
+- Build voxel → `BlackRoad-Engine/blackroad-voxel` (Rust)
+- Build sim → `BlackRoad-Engine/blackroad-sim` (Python)
+
+**Timeline:** 30 days to public beta (see BLACKROAD_ENGINE_30DAY_ROADMAP.md)
+
+**GitHub Org**: `BlackRoad-Engine`
+**Docs**: See BLACKROAD_ENGINE_FORK_MANIFEST.md, BLACKROAD_ENGINE_LICENSE_COMPLIANCE.md, BLACKROAD_ENGINE_QUICK_START.md
 
 ---
 

@@ -1,0 +1,15 @@
+{
+  "generated_at_utc": "2025-12-15T03:37:12.369902+00:00",
+  "valuation": {
+    "btc_usd": "89315.4",
+    "usd_source": "blockchain.info",
+    "priced_at_utc": "2025-12-15T03:32:35.412635+00:00"
+  },
+  "totals": {
+    "btc": "0.00000000",
+    "sats": 0,
+    "usd": "0.00"
+  },
+  "non_zero_addresses": [],
+  "address_balances": []
+}

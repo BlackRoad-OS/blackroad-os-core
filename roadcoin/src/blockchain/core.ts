@@ -181,17 +181,20 @@ export function createThoughtChain(
 // ============================================================================
 
 export function calculateBlockHash(block: Omit<RoadBlock, 'hash'>): string {
-  const data = JSON.stringify({
-    index: block.index,
-    timestamp: block.timestamp,
-    transactions: block.transactions,
-    previousHash: block.previousHash,
-    breathPhase: block.breathPhase,
-    breathValue: block.breathValue,
-    riemann: block.riemann,
-    cascadeHash: block.cascadeHash,
-    validator: block.validator,
-  });
+  const data = JSON.stringify(
+    {
+      index: block.index,
+      timestamp: block.timestamp,
+      transactions: block.transactions,
+      previousHash: block.previousHash,
+      breathPhase: block.breathPhase,
+      breathValue: block.breathValue,
+      riemann: block.riemann,
+      cascadeHash: block.cascadeHash,
+      validator: block.validator,
+    },
+    (key, value) => (typeof value === 'bigint' ? value.toString() : value)
+  );
 
   return createHash('sha256').update(data).digest('hex');
 }
