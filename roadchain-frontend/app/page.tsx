@@ -64,6 +64,9 @@ export default function RoadChainHome() {
             <a href="/marketplace" className="border-2 border-road-purple px-8 py-4 rounded-lg font-bold text-lg hover:bg-road-purple hover:border-road-purple transition-all">
               Agent Marketplace
             </a>
+            <a href="/docs" className="border-2 border-road-blue px-8 py-4 rounded-lg font-bold text-lg hover:bg-road-blue hover:border-road-blue transition-all">
+              Documentation
+            </a>
           </div>
 
           {/* Stats */}
@@ -282,6 +285,7 @@ export default function RoadChainHome() {
 
           <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-400">
             <a href="https://github.com/BlackRoad-OS/blackroad-os-core" className="hover:text-road-orange transition-colors">GitHub</a>
+            <a href="/docs" className="hover:text-road-orange transition-colors">Docs</a>
             <a href="/roadcoin/ROADCOIN_WHITEPAPER.md" className="hover:text-road-orange transition-colors">Whitepaper</a>
             <a href="https://blackroad.io" className="hover:text-road-orange transition-colors">BlackRoad OS</a>
             <a href="https://roadcoin.io" className="hover:text-road-orange transition-colors">RoadCoin</a>
