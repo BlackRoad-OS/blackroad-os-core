@@ -1,0 +1,156 @@
+# LocalAI Model Preload Configuration
+#
+# This file configures which BlackRoad models to load on startup
+# and their specific settings for optimal performance.
+
+models:
+  # BlackRoad-Qwen-72B (Primary - Cloud/Local)
+  - name: blackroad-qwen-72b
+    backend: llama-cpp
+    parameters:
+      model: blackroad-qwen-72b-v1-q4_K_M.gguf
+      context_size: 8192
+      threads: 8
+      gpu_layers: 35
+      batch_size: 512
+      f16: true
+      low_vram: false
+      embeddings: true
+      mirostat: 2
+      mirostat_tau: 5.0
+      mirostat_eta: 0.1
+      temperature: 0.7
+      top_k: 40
+      top_p: 0.9
+      repeat_penalty: 1.1
+    template:
+      chat_message: |
+        <|im_start|>system
+        {{.System}}<|im_end|>
+        <|im_start|>user
+        {{.Input}}<|im_end|>
+        <|im_start|>assistant
+      completion: |
+        {{.Input}}
+      stop_words:
+        - "<|im_end|>"
+        - "<|endoftext|>"
+
+  # BlackRoad-Llama-70B (Secondary - Cloud)
+  - name: blackroad-llama-70b
+    backend: llama-cpp
+    parameters:
+      model: blackroad-llama-70b-v1-q4_K_M.gguf
+      context_size: 8192
+      threads: 8
+      gpu_layers: 35
+      batch_size: 512
+      f16: true
+      temperature: 0.7
+      top_p: 0.9
+      repeat_penalty: 1.1
+    template:
+      chat_message: |
+        <|begin_of_text|><|start_header_id|>system<|end_header_id|>
+        {{.System}}<|eot_id|><|start_header_id|>user<|end_header_id|>
+        {{.Input}}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+      completion: |
+        {{.Input}}
+      stop_words:
+        - "<|eot_id|>"
+        - "<|end_of_text|>"
+
+  # BlackRoad-Mistral-24B (Edge - Low Latency)
+  - name: blackroad-mistral-24b
+    backend: llama-cpp
+    parameters:
+      model: blackroad-mistral-24b-v1-q4_K_M.gguf
+      context_size: 4096
+      threads: 4
+      gpu_layers: 20
+      batch_size: 256
+      f16: true
+      low_vram: true
+      temperature: 0.7
+      top_p: 0.9
+      repeat_penalty: 1.1
+    template:
+      chat_message: |
+        <s>[INST] {{.System}}
+
+        {{.Input}} [/INST]
+      completion: |
+        {{.Input}}
+      stop_words:
+        - "</s>"
+
+  # BlackRoad-Qwen-Coder-32B (Coding Specialist)
+  - name: blackroad-qwen-coder-32b
+    backend: llama-cpp
+    parameters:
+      model: blackroad-qwen-coder-32b-v1-q4_K_M.gguf
+      context_size: 8192
+      threads: 8
+      gpu_layers: 30
+      batch_size: 512
+      f16: true
+      temperature: 0.2  # Lower temperature for code
+      top_p: 0.95
+      repeat_penalty: 1.0
+    template:
+      chat_message: |
+        <|im_start|>system
+        {{.System}}<|im_end|>
+        <|im_start|>user
+        {{.Input}}<|im_end|>
+        <|im_start|>assistant
+      completion: |
+        {{.Input}}
+      stop_words:
+        - "<|im_end|>"
+        - "<|endoftext|>"
+
+  # BlackRoad-DeepSeek-32B (Reasoning Specialist)
+  - name: blackroad-deepseek-32b
+    backend: llama-cpp
+    parameters:
+      model: blackroad-deepseek-32b-v1-q4_K_M.gguf
+      context_size: 8192
+      threads: 8
+      gpu_layers: 30
+      batch_size: 512
+      f16: true
+      temperature: 0.6
+      top_p: 0.9
+      repeat_penalty: 1.1
+    template:
+      chat_message: |
+        <|im_start|>system
+        {{.System}}<|im_end|>
+        <|im_start|>user
+        {{.Input}}<|im_end|>
+        <|im_start|>assistant
+      completion: |
+        {{.Input}}
+      stop_words:
+        - "<|im_end|>"
+
+# Global settings
+settings:
+  default_model: blackroad-qwen-72b
+  log_level: info
+  single_active_backend: false
+  parallel_requests: 4
+  preload_backends:
+    - llama-cpp
+  api_keys:
+    - blackroad-local-dev
+
+# Notes:
+# - Models are quantized to q4_K_M for efficiency (~4-5 bits per weight)
+# - Full precision models available but require more VRAM
+# - Adjust gpu_layers based on available VRAM:
+#   - 24GB: gpu_layers=20-25
+#   - 40GB: gpu_layers=30-35
+#   - 80GB: gpu_layers=40-50
+# - Set low_vram=true for GPUs with <24GB VRAM

@@ -1,0 +1,75 @@
+# Railway Configuration for BlackRoad Model Inference
+#
+# Deploys BlackRoad models to Railway for cloud inference
+# Supports GPU instances for high-performance serving
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "python server.py"
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[[deploy.environmentVariables]]
+name = "MODEL_NAME"
+value = "blackroad-qwen-72b"
+
+[[deploy.environmentVariables]]
+name = "MODEL_PATH"
+value = "/models/blackroad-qwen-72b-v1"
+
+[[deploy.environmentVariables]]
+name = "PORT"
+value = "8000"
+
+[[deploy.environmentVariables]]
+name = "WORKERS"
+value = "2"
+
+[[deploy.environmentVariables]]
+name = "MAX_BATCH_SIZE"
+value = "8"
+
+[[deploy.environmentVariables]]
+name = "GPU_MEMORY_UTILIZATION"
+value = "0.9"
+
+[[deploy.environmentVariables]]
+name = "TENSOR_PARALLEL_SIZE"
+value = "1"
+
+# BlackRoad-specific
+[[deploy.environmentVariables]]
+name = "BLACKROAD_IDENTITY_VALIDATION"
+value = "true"
+
+[[deploy.environmentVariables]]
+name = "BLACKROAD_AUDIT_LOGGING"
+value = "true"
+
+[[deploy.environmentVariables]]
+name = "BLACKROAD_BREATH_SYNC"
+value = "true"
+
+[environments.production]
+variables = { ENVIRONMENT = "production" }
+
+[environments.staging]
+variables = { ENVIRONMENT = "staging" }
+
+# Resource requirements
+[resources]
+# For 70B models: use GPU instances
+# Railway GPU options: A100, H100
+gpu = "nvidia-a100-80gb"
+replicas = 1
+
+# Health check
+[healthcheck]
+path = "/health"
+interval = 30
+timeout = 10
