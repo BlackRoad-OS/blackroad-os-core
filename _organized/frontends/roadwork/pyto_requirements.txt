@@ -1,0 +1,31 @@
+# RoadWork Dependencies for Pyto (iOS)
+# Minimal set that works on iOS Python
+
+# Web Framework
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Email Validation
+email-validator==2.1.0
+
+# Utilities
+python-dotenv==1.0.0
+
+# Database (SQLite - built-in to Python)
+# No additional dependencies needed
+
+# HTTP Requests (lightweight)
+httpx==0.25.2
+
+# Authentication
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# Note: These are NOT available/supported in Pyto:
+# - playwright (browser automation)
+# - celery (requires Redis)
+# - psycopg2-binary (PostgreSQL)
+# - redis
+# - google-api-python-client (too heavy for mobile)
