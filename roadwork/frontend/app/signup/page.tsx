@@ -25,12 +25,39 @@ export default function SignupPage() {
     setError('')
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, {
+      // For paid plans, create Stripe checkout session
+      if (plan !== 'free') {
+        const checkoutResponse = await fetch('/api/create-checkout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            plan,
+            email: formData.email,
+          }),
+        })
+
+        const checkoutData = await checkoutResponse.json()
+
+        if (checkoutData.url) {
+          // Redirect to Stripe checkout
+          window.location.href = checkoutData.url
+          return
+        } else if (checkoutData.error) {
+          setError(checkoutData.error)
+          setLoading(false)
+          return
+        }
+      }
+
+      // For free plan or after successful payment, create account
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://api-roadwork.blackroad.io'}/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, plan }),
       })
 
       const data = await response.json()
