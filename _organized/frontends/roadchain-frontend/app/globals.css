@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #FF6B00 0%, #FF0066 50%, #7700FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.road-gradient {
+  background: linear-gradient(135deg, #FF6B00 0%, #FF0066 50%, #7700FF 100%);
+}
+
+.glow {
+  box-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
+}

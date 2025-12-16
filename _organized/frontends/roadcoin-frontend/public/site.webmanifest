@@ -1,0 +1,21 @@
+{
+  "name": "RoadCoin - Agent Economy Token",
+  "short_name": "RoadCoin",
+  "description": "Utility token for the BlackRoad AI agent ecosystem",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#D600AA",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
