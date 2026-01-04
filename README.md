@@ -584,12 +584,6 @@ python3 -m pip install -e .
 - **Agent System Prompt**: `AGENT_SYSTEM_PROMPT.md`
 - **Service Registry**: `SERVICE_REGISTRY_PROMPT.md`
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-Copyright © 2025 BlackRoad OS, Inc. / Alexa Louise Amundson
-
 ## Support & Contact
 
 - **Issues**: [GitHub Issues](https://github.com/BlackRoad-OS/blackroad-os-core/issues)
@@ -607,3 +601,17 @@ The PS-SHA∞ concept and Lucidia breath synchronization are core innovations of
 ---
 
 **Built with 🖤 by BlackRoad**
+
+## 📜 License
+
+**PROPRIETARY SOFTWARE - NOT OPEN SOURCE**
+
+Copyright © 2025-2026 BlackRoad OS, Inc. All Rights Reserved.
+
+This software is proprietary and confidential. Unauthorized copying, distribution, modification, or use is strictly prohibited.
+
+See [LICENSE](LICENSE) file for full terms.
+
+**This is NOT open source software. All rights reserved by BlackRoad OS, Inc.**
+
+For licensing inquiries: blackroad.systems@gmail.com
