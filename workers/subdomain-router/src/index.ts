@@ -27,6 +27,13 @@ const BRAND = `
     --grad:linear-gradient(135deg,#F5A623 0%,#FF1D6C 38.2%,#9C27B0 61.8%,#2979FF 100%);
     --phi:1.618;
   }
+  [data-theme="light"]{
+    --bg:#fafafa;--fg:#111;--muted:#666;--surface:#fff;--border:#ddd;
+  }
+  [data-theme="light"] .code,[data-theme="light"] .term-body,[data-theme="light"] .term,[data-theme="light"] .term-input{background:#f0f0f0}
+  [data-theme="light"] tr:hover td{background:rgba(0,0,0,.02)}
+  .theme-toggle{background:none;border:1px solid var(--border);border-radius:8px;padding:4px 8px;cursor:pointer;font-size:.85rem;color:var(--muted);transition:all .2s}
+  .theme-toggle:hover{border-color:var(--pink);color:var(--fg)}
   html{background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',system-ui,sans-serif;line-height:1.618}
   body{min-height:100vh;display:flex;flex-direction:column}
   a{color:var(--pink);text-decoration:none;transition:color .2s}
@@ -81,7 +88,7 @@ const BRAND = `
   .link-card{display:block;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:13px;font-size:.85rem;transition:all .2s;text-align:center;color:var(--fg)}
   .link-card:hover{border-color:var(--pink);background:#1a0a10;color:var(--pink)}
   .swatch{width:55px;height:55px;border-radius:8px;display:inline-block;margin-right:8px}
-  @media(max-width:600px){main{padding:34px 13px}.stat-row{flex-direction:column}.grid-3,.grid-4{grid-template-columns:1fr}}
+  @media(max-width:600px){main{padding:34px 13px}.stat-row{flex-direction:column}.grid-3,.grid-4{grid-template-columns:1fr}.term{font-size:.7rem}.term-body{min-height:200px;max-height:50vh;padding:8px 13px}.term-input{padding:8px 13px}pre{font-size:.65rem!important}table{font-size:.75rem}td,th{padding:4px 8px}.gauge{width:55px;height:55px;font-size:.7rem}.hero h1{font-size:1.8rem}.chat-bubble{max-width:90%}.nav-links{gap:13px;font-size:.75rem}nav{padding:8px 13px}}
   @keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
   @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
   @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,29,108,.4)}50%{box-shadow:0 0 0 12px rgba(255,29,108,0)}}
@@ -181,12 +188,13 @@ function page(title: string, subtitle: string, body: string, activeNav?: string)
   <meta name="description" content="${subtitle}">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>B</text></svg>">
   ${BRAND}
+  <script>if(localStorage.getItem('br-theme')==='light')document.documentElement.setAttribute('data-theme','light')</script>
 </head>
 <body>
   <div class="topbar"></div>
   <nav>
     <div class="logo"><span>BLACKROAD</span></div>
-    <div class="nav-links">${nav}</div>
+    <div style="display:flex;align-items:center;gap:13px"><div class="nav-links">${nav}</div><button class="theme-toggle" onclick="(function(){var t=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',t==='dark'?'':'light');localStorage.setItem('br-theme',t)})()">☀/☾</button></div>
   </nav>
   <main>
     <div class="hero">
@@ -434,6 +442,22 @@ export default {
       newResp.headers.set('X-Subdomain', subdomain);
       newResp.headers.set('X-App-Name', app.name);
       newResp.headers.set('X-Powered-By', 'BlackRoad OS');
+
+      // Log analytics to D1 (non-blocking)
+      if (env.DB) {
+        ctx.waitUntil(ensureAnalyticsTable(env.DB).then(() =>
+          env.DB.prepare(
+            'INSERT INTO analytics (subdomain, path, country, ua, ts) VALUES (?, ?, ?, ?, ?)'
+          ).bind(
+            subdomain,
+            url.pathname,
+            request.headers.get('CF-IPCountry') || 'XX',
+            (request.headers.get('User-Agent') || '').substring(0, 200),
+            Date.now()
+          ).run()
+        ).catch(() => {}));
+      }
+
       return newResp;
     } catch (error: any) {
       return htmlResp(page('Error', 'Something went wrong', `
@@ -442,6 +466,19 @@ export default {
     }
   }
 };
+
+// ═══════════════════════════════════════════════════════════
+// ANALYTICS TABLE INIT
+// ═══════════════════════════════════════════════════════════
+
+let analyticsTableReady = false;
+async function ensureAnalyticsTable(db: D1Database): Promise<void> {
+  if (analyticsTableReady) return;
+  await db.prepare(
+    'CREATE TABLE IF NOT EXISTS analytics (id INTEGER PRIMARY KEY AUTOINCREMENT, subdomain TEXT, path TEXT, country TEXT, ua TEXT, ts INTEGER)'
+  ).run();
+  analyticsTableReady = true;
+}
 
 // ═══════════════════════════════════════════════════════════
 // RATE LIMITING
@@ -569,45 +606,29 @@ async function handleProducts(req: Request, env: Env): Promise<Response> {
 // ═══════════════════════════════════════════════════════════
 
 async function handlePitstop(req: Request, env: Env): Promise<Response> {
-  const links: [string, string, string][] = [
-    ['OS', 'https://os.blackroad.io', 'Operating system'],
-    ['AI', 'https://ai.blackroad.io', 'AI platform'],
-    ['Agents', 'https://agents.blackroad.io', 'Agent marketplace'],
-    ['API', 'https://api.blackroad.io', 'API gateway'],
-    ['Docs', 'https://docs.blackroad.io', 'Documentation'],
-    ['Status', 'https://status.blackroad.io', 'System health'],
-    ['Network', 'https://network.blackroad.io', 'Mesh topology'],
-    ['Edge', 'https://edge.blackroad.io', 'Edge compute'],
-    ['Data', 'https://data.blackroad.io', 'Data platform'],
-    ['Design', 'https://design.blackroad.io', 'Design system'],
-    ['Admin', 'https://admin.blackroad.io', 'Admin panel'],
-    ['Dev', 'https://dev.blackroad.io', 'Developer portal'],
-    ['Help', 'https://help.blackroad.io', 'Help center'],
-    ['About', 'https://about.blackroad.io', 'About us'],
-    ['Blog', 'https://blog.blackroad.io', 'Engineering blog'],
-    ['Finance', 'https://finance.blackroad.io', 'Billing'],
-    ['Products', 'https://products.blackroad.io', 'Product catalog'],
-    ['Console', 'https://console.blackroad.io', 'Terminal'],
-    ['Dashboard', 'https://dashboard.blackroad.io', 'Control center'],
-    ['Metrics', 'https://metrics.blackroad.io', 'Performance'],
-    ['Quantum', 'https://quantum.blackroad.io', 'Research'],
-    ['Brand', 'https://brand.blackroad.io', 'Brand assets'],
-    ['Chat', 'https://chat.blackroad.io', 'AI chat'],
-    ['Prism', 'https://prism.blackroad.io', 'Console UI'],
-    ['Marketplace', 'https://marketplace.blackroad.io', 'Templates'],
-    ['Roadmap', 'https://roadmap.blackroad.io', 'Milestones'],
-    ['Changelog', 'https://changelog.blackroad.io', 'Releases'],
-    ['Playground', 'https://playground.blackroad.io', 'API sandbox'],
-    ['Security', 'https://security.blackroad.io', 'Security'],
-    ['Careers', 'https://careers.blackroad.io', 'Jobs'],
-    ['Store', 'https://store.blackroad.io', 'App store'],
-    ['Search', 'https://search.blackroad.io', 'Search'],
-    ['Terminal', 'https://terminal.blackroad.io', 'Full terminal'],
-    ['World', 'https://world.blackroad.io', 'World map'],
-  ];
-  const cards = links.map(([name, url, desc]) => `<a class="link-card" href="${url}" title="${desc}">${name}</a>`).join('');
-  return htmlResp(page('Pitstop', 'Quick-access portal to every BlackRoad service', `
-    <div class="link-grid">${cards}</div>
+  const cats: Record<string, [string,string][]> = {
+    'Platform': [['OS','os'],['Products','products'],['App','app'],['Dashboard','dashboard'],['Console','console'],['Terminal','terminal'],['Admin','admin'],['Control','control'],['Prism','prism']],
+    'AI & Agents': [['AI','ai'],['Agents','agents'],['Chat','chat'],['Algorithms','algorithms'],['Compute','compute'],['Marketplace','marketplace'],['Store','store']],
+    'Named Agents': [['Lucidia','lucidia'],['Alice','alice'],['Octavia','octavia'],['Cipher','cipher'],['Echo','echo'],['Aria','aria'],['Atlas','atlas'],['Cadence','cadence'],['Shellfish','shellfish'],['Nova','nova'],['Ember','ember'],['Phoenix','phoenix'],['Sentinel','sentinel'],['Claude','claude'],['Copilot','copilot'],['ChatGPT','chatgpt'],['Cecilia','cecilia'],['Athena','athena'],['Codex','codex'],['Silas','silas'],['Elias','elias'],['Cadillac','cadillac'],['Persephone','persephone'],['Anastasia','anastasia'],['Ophelia','ophelia'],['Sidian','sidian'],['Cordelia','cordelia']],
+    'Infrastructure': [['Network','network'],['Edge','edge'],['CDN','cdn'],['Hardware','hardware'],['Circuits','circuits'],['World','world'],['Status','status'],['Metrics','metrics'],['Logs','logs']],
+    'Dev Tools': [['API','api'],['Dev','dev'],['CLI','cli'],['Docs','docs'],['Playground','playground'],['Editor','editor'],['IDE','ide'],['Guide','guide'],['Engineering','engineering']],
+    'Data & Identity': [['Data','data'],['Blockchain','blockchain'],['Blocks','blocks'],['Chain','chain'],['Analytics','analytics'],['Events','events'],['Explorer','explorer']],
+    'Regions': [['Asia Pacific','asia'],['Europe','eu'],['Global','global']],
+    'Business': [['Finance','finance'],['Security','security'],['Compliance','compliance'],['Careers','careers'],['HR','hr']],
+    'Info & Brand': [['About','about'],['Blog','blog'],['Help','help'],['Design','design'],['Brand','brand'],['Features','features'],['Roadmap','roadmap'],['Changelog','changelog'],['Quantum','quantum'],['Search','search'],['Staging','staging'],['Assets','assets'],['Demo','demo']],
+  };
+  const total = Object.values(cats).reduce((s, a) => s + a.length, 0);
+  const sections = Object.entries(cats).map(([cat, items]) =>
+    `<div class="section reveal"><h2>${cat} <span style="color:var(--muted);font-size:.85rem;font-weight:400">(${items.length})</span></h2><div class="link-grid">${items.map(([name, sub]) => `<a class="link-card" href="https://${sub}.blackroad.io">${name}</a>`).join('')}</div></div>`
+  ).join('');
+  return htmlResp(page('Pitstop', `Quick-access portal — ${total} services`, `
+    <div class="stat-row">
+      <div class="stat"><div class="number" data-target="${total}">0</div><div class="label">Services</div></div>
+      <div class="stat"><div class="number" data-target="${Object.keys(cats).length}">0</div><div class="label">Categories</div></div>
+      <div class="stat"><div class="number" data-target="100%">0</div><div class="label">Uptime</div></div>
+    </div>
+    <p style="text-align:center;color:var(--muted);margin-bottom:34px">Press <kbd style="padding:2px 6px;border:1px solid var(--border);border-radius:4px;font-size:.8rem">Ctrl+K</kbd> to search</p>
+    ${sections}
   `));
 }
 
@@ -1594,24 +1615,40 @@ async function handleAlgorithms(req: Request, env: Env): Promise<Response> {
 }
 
 async function handleAnalytics(req: Request, env: Env): Promise<Response> {
-  return htmlResp(page('Analytics', 'Usage analytics and BI', `
+  let totalHits = 0;
+  let topSubs: {subdomain: string; cnt: number}[] = [];
+  let topCountries: {country: string; cnt: number}[] = [];
+  let recentCount = 0;
+  const routeCount = Object.keys(SUBDOMAIN_APPS).length;
+
+  if (env.DB) {
+    try {
+      await ensureAnalyticsTable(env.DB);
+      const totR = await env.DB.prepare('SELECT COUNT(*) as c FROM analytics').first<{c:number}>();
+      totalHits = totR?.c || 0;
+      const topR = await env.DB.prepare('SELECT subdomain, COUNT(*) as cnt FROM analytics GROUP BY subdomain ORDER BY cnt DESC LIMIT 10').all<{subdomain:string;cnt:number}>();
+      topSubs = topR.results || [];
+      const cntR = await env.DB.prepare('SELECT country, COUNT(*) as cnt FROM analytics GROUP BY country ORDER BY cnt DESC LIMIT 8').all<{country:string;cnt:number}>();
+      topCountries = cntR.results || [];
+      const hr = await env.DB.prepare('SELECT COUNT(*) as c FROM analytics WHERE ts > ?').bind(Date.now() - 3600000).first<{c:number}>();
+      recentCount = hr?.c || 0;
+    } catch {}
+  }
+
+  const maxHits = topSubs.length > 0 ? topSubs[0].cnt : 1;
+  return htmlResp(page('Analytics', 'Live usage analytics', `
     <div class="stat-row">
-      <div class="stat"><div class="number" data-target="2.4M">0</div><div class="label">Requests/Day</div></div>
-      <div class="stat"><div class="number" data-target="12ms">0</div><div class="label">Avg Latency</div></div>
-      <div class="stat"><div class="number" data-target="99.97%">0</div><div class="label">Success Rate</div></div>
-      <div class="stat"><div class="number" data-target="67">0</div><div class="label">Active Routes</div></div>
-    </div>
-    <div class="section reveal">
-      <h2>Traffic Overview</h2>
-      <div class="grid">
-        <div class="card" style="text-align:center"><div style="font-size:2rem;margin-bottom:8px">📈</div><strong>Requests</strong><p style="color:var(--muted);font-size:.9rem;margin-top:4px">2.4M daily requests across 67 subdomain routes with 12ms median response.</p></div>
-        <div class="card" style="text-align:center"><div style="font-size:2rem;margin-bottom:8px">🌍</div><strong>Geographic</strong><p style="color:var(--muted);font-size:.9rem;margin-top:4px">Traffic from 140+ countries. Top: US (42%), EU (28%), APAC (18%).</p></div>
-        <div class="card" style="text-align:center"><div style="font-size:2rem;margin-bottom:8px">⚡</div><strong>Performance</strong><p style="color:var(--muted);font-size:.9rem;margin-top:4px">P50: 8ms, P95: 45ms, P99: 120ms across all Cloudflare edge locations.</p></div>
-      </div>
+      <div class="stat"><div class="number" data-target="${totalHits.toLocaleString()}">0</div><div class="label">Total Hits</div></div>
+      <div class="stat"><div class="number" data-target="${recentCount.toLocaleString()}">0</div><div class="label">Last Hour</div></div>
+      <div class="stat"><div class="number" data-target="${routeCount}">0</div><div class="label">Active Routes</div></div>
     </div>
     <div class="section reveal">
       <h2>Top Subdomains</h2>
-      ${['os','api','agents','dashboard','docs','ai','console','chat','status','dev'].map((s,i) => `<div style="display:flex;align-items:center;gap:13px;padding:8px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted);width:24px">${i+1}.</span><strong style="flex:1">${s}.blackroad.io</strong><div style="flex:2;height:8px;border-radius:4px;background:var(--surface);overflow:hidden"><div style="height:100%;border-radius:4px;background:var(--pink);width:${100-i*8}%"></div></div><span style="color:var(--muted);font-size:.85rem;width:50px;text-align:right">${Math.round((100-i*8)*2.4/100*10)/10}M</span></div>`).join('')}
+      ${topSubs.length > 0 ? topSubs.map((s,i) => `<div style="display:flex;align-items:center;gap:13px;padding:8px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted);width:24px">${i+1}.</span><strong style="flex:1">${s.subdomain}.blackroad.io</strong><div style="flex:2;height:8px;border-radius:4px;background:var(--surface);overflow:hidden"><div style="height:100%;border-radius:4px;background:var(--pink);width:${Math.round(s.cnt/maxHits*100)}%"></div></div><span style="color:var(--muted);font-size:.85rem;width:60px;text-align:right">${s.cnt.toLocaleString()}</span></div>`).join('') : '<p style="color:var(--muted)">No data yet — analytics will populate as traffic flows.</p>'}
+    </div>
+    <div class="section reveal">
+      <h2>Top Countries</h2>
+      <div class="grid">${topCountries.length > 0 ? topCountries.map(c => `<div class="card" style="text-align:center"><strong style="font-size:1.3rem">${c.country}</strong><p style="color:var(--muted);font-size:.85rem;margin-top:4px">${c.cnt.toLocaleString()} hits</p></div>`).join('') : '<div class="card" style="text-align:center;grid-column:1/-1"><p style="color:var(--muted)">Geographic data will appear as requests come in.</p></div>'}</div>
     </div>
   `));
 }
