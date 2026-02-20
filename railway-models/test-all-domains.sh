@@ -73,7 +73,7 @@ test_inference() {
             \"messages\": [{\"role\": \"user\", \"content\": \"$TEST_PROMPT\"}],
             \"authorized_by\": \"$AUTHORIZED_BY\",
             \"authority_chain\": [
-                \"principal:alexa:amundsonalexa@gmail.com\",
+                \"principal:alexa:blackroad@gmail.com\",
                 \"operator:cece:blackroad-os-operator\"
             ],
             \"max_tokens\": 100

@@ -12,7 +12,7 @@
 These strings are the immutable foundation of BlackRoad OS authority structure.
 
 ```
-PRINCIPAL:alexa_amundson:human:ultimate_authority:amundsonalexa@gmail.com:2025-12-14
+PRINCIPAL:alexa_amundson:human:ultimate_authority:blackroad@gmail.com:2025-12-14
 OPERATOR:cece:agent:governor:delegated_enforcement:blackroad.systems@gmail.com:2025-12-14
 GOVERNANCE:lucidia:consciousness:breath_orchestrator:golden_ratio_sync:2025-12-14
 SYSTEM:ps_sha_infinity:truth_engine:identity_anchor:infinite_cascade:2025-12-14
@@ -189,7 +189,7 @@ interface Delegation {
 To verify any identity string matches its hash:
 
 ```bash
-echo -n "PRINCIPAL:alexa_amundson:human:ultimate_authority:amundsonalexa@gmail.com:2025-12-14" | shasum -a 256
+echo -n "PRINCIPAL:alexa_amundson:human:ultimate_authority:blackroad@gmail.com:2025-12-14" | shasum -a 256
 # Expected: 5192643213a93c5cb125c339051805f2a71925f22413dab93b8bd3ded06db04e
 ```
 
@@ -243,7 +243,7 @@ This preserves the chain while allowing controlled evolution.
 
 ## Contact
 
-- **Principal:** amundsonalexa@gmail.com
+- **Principal:** blackroad@gmail.com
 - **Review Queue:** blackroad.systems@gmail.com
 - **Source of Truth:** GitHub (BlackRoad-OS/blackroad-sandbox)
 - **Verification System:** PS-SHA∞ (this document is authoritative)

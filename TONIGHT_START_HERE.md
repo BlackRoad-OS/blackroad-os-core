@@ -23,7 +23,7 @@ This interactive menu will guide you through everything.
 
 The script will ask you to:
 1. Enter your name: **Alexa Amundson**
-2. Enter your email: **amundsonalexa@gmail.com**
+2. Enter your email: **blackroad@gmail.com**
 3. Create a password: (your choice - remember it!)
 4. Paste your resume: (copy from your resume file and paste)
 
@@ -51,7 +51,7 @@ Choose option 2 from the menu:
 
 ## What's Already Working
 
-✅ **Backend API:** https://applier-api.amundsonalexa.workers.dev
+✅ **Backend API:** https://applier-api.blackroad.workers.dev
    - Stores your account
    - Tracks applications
    - 100% working

@@ -10,7 +10,7 @@
 │ DEPLOYMENT STATUS                                                         │
 ├───────────────────────────────────────────────────────────────────────────┤
 │                                                                           │
-│  ✅ Backend API          https://applier-api.amundsonalexa.workers.dev   │
+│  ✅ Backend API          https://applier-api.blackroad.workers.dev   │
 │     Status: LIVE                                                          │
 │     Uptime: 100%                                                          │
 │     Response: <50ms                                                       │

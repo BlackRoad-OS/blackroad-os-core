@@ -407,7 +407,7 @@ Every component documented here can be replicated by any individual with ~$1,000
 ## 📞 Contact & Support
 
 **Email**: blackroad.systems@gmail.com
-**Primary**: amundsonalexa@gmail.com
+**Primary**: blackroad@gmail.com
 **GitHub**: https://github.com/BlackRoad-OS
 **Review Queue**: Linear or blackroad.systems@gmail.com
 

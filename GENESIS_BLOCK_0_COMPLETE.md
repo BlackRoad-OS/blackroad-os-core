@@ -357,7 +357,7 @@ print(f"Core agents: {len(CORE_AGENTS)}")
 
 ## 📞 Contact
 
-- **Principal:** amundsonalexa@gmail.com
+- **Principal:** blackroad@gmail.com
 - **Review Queue:** blackroad.systems@gmail.com
 - **Source of Truth:** GitHub (BlackRoad-OS/blackroad-sandbox)
 - **Verification System:** PS-SHA∞

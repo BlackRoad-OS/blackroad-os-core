@@ -10,7 +10,7 @@
 
 **Your own job board platform.** Live. Working. Costs nothing.
 
-- ✅ **API:** https://remotejobs-platform.amundsonalexa.workers.dev
+- ✅ **API:** https://remotejobs-platform.blackroad.workers.dev
 - ✅ **Website:** https://cc380da0.remotejobs-platform.pages.dev
 - ✅ **30 REAL jobs** already posted (NVIDIA, OpenAI, xAI, DuckDuckGo, BitMEX, etc.)
 
@@ -208,7 +208,7 @@ Go to the "Post a Job" tab and fill out the form.
 
 **Option 3: Use the API**
 ```bash
-curl -X POST https://remotejobs-platform.amundsonalexa.workers.dev/api/jobs \
+curl -X POST https://remotejobs-platform.blackroad.workers.dev/api/jobs \
   -H "Content-Type: application/json" \
   -d '{
     "title": "Your Job Title",
@@ -261,8 +261,8 @@ curl -X POST https://remotejobs-platform.amundsonalexa.workers.dev/api/jobs \
 ## URLs (SAVE THESE)
 
 - **Website:** https://cc380da0.remotejobs-platform.pages.dev
-- **API:** https://remotejobs-platform.amundsonalexa.workers.dev
-- **API Health:** https://remotejobs-platform.amundsonalexa.workers.dev/health
+- **API:** https://remotejobs-platform.blackroad.workers.dev
+- **API Health:** https://remotejobs-platform.blackroad.workers.dev/health
 
 ---
 

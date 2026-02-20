@@ -274,7 +274,7 @@ wrangler pages deployment domain add lucidia-core core.lucidia.earth
 # Domain: blackroad.io
 # Forward: hello@blackroad.io → blackroad.systems@gmail.com
 # Forward: support@blackroad.io → blackroad.systems@gmail.com
-# Forward: api@blackroad.io → amundsonalexa@gmail.com
+# Forward: api@blackroad.io → blackroad@gmail.com
 ```
 
 ### 14. Web Analytics 📈
@@ -292,7 +292,7 @@ wrangler pages deployment domain add lucidia-core core.lucidia.earth
 ```bash
 # Create Access policy
 # Protect: admin.blackroad.io
-# Require: Email (amundsonalexa@gmail.com, blackroad.systems@gmail.com)
+# Require: Email (blackroad@gmail.com, blackroad.systems@gmail.com)
 
 # Dashboard: https://dash.cloudflare.com/access
 ```

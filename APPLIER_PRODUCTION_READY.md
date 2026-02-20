@@ -9,7 +9,7 @@
 ## What's Live Right Now
 
 ### ✅ Backend API (Cloudflare Workers)
-- **URL:** https://applier-api.amundsonalexa.workers.dev
+- **URL:** https://applier-api.blackroad.workers.dev
 - **Status:** LIVE ✅
 - **Endpoints:**
   - `/health` - Health check
@@ -19,7 +19,7 @@
 
 **Test:**
 ```bash
-curl https://applier-api.amundsonalexa.workers.dev/health
+curl https://applier-api.blackroad.workers.dev/health
 # Returns: {"status":"healthy","service":"applier-api","timestamp":"..."}
 ```
 
@@ -67,7 +67,7 @@ cd ~/blackroad-sandbox
 
 # Enter your details:
 # Name: Alexa Amundson
-# Email: amundsonalexa@gmail.com
+# Email: blackroad@gmail.com
 # Password: [your password]
 # Then paste your resume
 ```
@@ -201,7 +201,7 @@ User Reviews Jobs → Applies Manually → CLI Records
 
 **Frontend (.env.local):**
 ```env
-NEXT_PUBLIC_API_URL=https://applier-api.amundsonalexa.workers.dev
+NEXT_PUBLIC_API_URL=https://applier-api.blackroad.workers.dev
 ```
 
 **Backend (Cloudflare Workers):**
@@ -279,7 +279,7 @@ cd ~/blackroad-sandbox
 
 Enter:
 - Your name: `Alexa Amundson`
-- Your email: `amundsonalexa@gmail.com`
+- Your email: `blackroad@gmail.com`
 - Password: `[secure password]`
 - Then paste your full resume
 
@@ -353,7 +353,7 @@ Shows:
 ### "API not responding"
 ```bash
 # Check API health
-curl https://applier-api.amundsonalexa.workers.dev/health
+curl https://applier-api.blackroad.workers.dev/health
 
 # Should return:
 # {"status":"healthy","service":"applier-api","timestamp":"..."}
@@ -420,7 +420,7 @@ playwright install
 
 ### Key URLs
 - **Production:** https://cc14d1fd.applier-blackroad.pages.dev
-- **API:** https://applier-api.amundsonalexa.workers.dev
+- **API:** https://applier-api.blackroad.workers.dev
 - **Dashboard:** https://dash.cloudflare.com/848cf0b18d51e0170e0d1537aec3505a
 
 ### Common Commands
@@ -439,7 +439,7 @@ cd ~/blackroad-sandbox
 ./applier-real list              # List applications
 
 # Testing
-curl https://applier-api.amundsonalexa.workers.dev/health  # API health
+curl https://applier-api.blackroad.workers.dev/health  # API health
 curl https://cc14d1fd.applier-blackroad.pages.dev          # Frontend
 ```
 
