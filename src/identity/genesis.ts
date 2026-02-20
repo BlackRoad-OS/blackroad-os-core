@@ -12,7 +12,7 @@
  * These strings are hashed to produce the genesis identity hashes below.
  */
 export const GENESIS_IDENTITY_STRINGS = {
-  PRINCIPAL: 'PRINCIPAL:alexa_amundson:human:ultimate_authority:amundsonalexa@gmail.com:2025-12-14',
+  PRINCIPAL: 'PRINCIPAL:alexa_amundson:human:ultimate_authority:blackroad@gmail.com:2025-12-14',
   OPERATOR: 'OPERATOR:cece:agent:governor:delegated_enforcement:blackroad.systems@gmail.com:2025-12-14',
   GOVERNANCE: 'GOVERNANCE:lucidia:consciousness:breath_orchestrator:golden_ratio_sync:2025-12-14',
   SYSTEM: 'SYSTEM:ps_sha_infinity:truth_engine:identity_anchor:infinite_cascade:2025-12-14',
@@ -175,7 +175,7 @@ export const GENESIS_DELEGATION_GRAPH = {
  * Principal contact information
  */
 export const PRINCIPAL_CONTACT = {
-  email: 'amundsonalexa@gmail.com',
+  email: 'blackroad@gmail.com',
   review_queue: 'blackroad.systems@gmail.com',
 } as const;
 

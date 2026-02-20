@@ -95,7 +95,7 @@ class AgentTemplateMetadata:
             "updated_at": self.updated_at,
             "default_resources": self.default_resources,
             "suggested_workflows": self.suggested_workflows
-        """
+        }
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> AgentTemplateMetadata:

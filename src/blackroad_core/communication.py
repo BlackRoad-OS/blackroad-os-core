@@ -38,7 +38,7 @@ class MessagePriority(Enum):
 
 @dataclass
 class Message:
-    """    A message between agents.
+    """A message between agents.
 
     Messages flow through the event bus and can be:
     - Point-to-point (request/response)
@@ -72,7 +72,7 @@ class Message:
             "correlation_id": self.correlation_id,
             "reply_to": self.reply_to,
             "ttl_seconds": self.ttl_seconds
-        """
+        }
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Message":
@@ -96,7 +96,7 @@ MessageHandler = Callable[[Message], Awaitable[Optional[Message]]]
 
 
 class CommunicationBus:
-    """    Enhanced event bus for agent-to-agent communication.
+    """Enhanced event bus for agent-to-agent communication.
 
     Supports:
     - Topic-based pub/sub
@@ -128,7 +128,7 @@ class CommunicationBus:
             "broadcasts": 0,
             "requests": 0,
             "responses": 0
-        """
+        }
 
     async def send(
         self,
@@ -140,7 +140,7 @@ class CommunicationBus:
         wait_for_response: bool = False,
         timeout: float = 30.0
     ) -> Optional[Message]:
-        """        Send a message to a topic or specific agent.
+        """Send a message to a topic or specific agent.
 
         Args:
             sender_id: ID of sending agent
@@ -297,7 +297,7 @@ class CommunicationBus:
                 "error": str(e),
                 "original_message_id": message.id,
                 "handler": str(handler)
-            """
+            }
             await self.send(
                 sender_id="system",
                 topic="errors.message_handler",
@@ -316,9 +316,9 @@ class CommunicationBus:
 
 
 class AgentCommunicator:
-    """    Communication interface for a single agent.
+    """Communication interface for a single agent.
 
-    Wraps the communication bus with agent-specific convenience methods.}
+    Wraps the communication bus with agent-specific convenience methods."""
 
     def __init__(self, agent_id: str, comm_bus: CommunicationBus):
         self.agent_id = agent_id
@@ -328,7 +328,7 @@ class AgentCommunicator:
         self.comm_bus.register_agent(agent_id, self._handle_message)
 
         # Subscribed topics
-        self.topic_handlers: Dict[str, MessageHandler] = {"""
+        self.topic_handlers: Dict[str, MessageHandler] = {}
 
     async def _handle_message(self, message: Message) -> Optional[Message]:
         """Internal message handler."""

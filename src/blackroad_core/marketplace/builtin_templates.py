@@ -15,8 +15,8 @@ def get_builtin_templates() -> Dict[str, AgentTemplateMetadata]:
     """    Get all built-in agent templates.
 
     Returns:
-        Dictionary mapping template ID to template metadata}
-    templates = {"""
+        Dictionary mapping template ID to template metadata."""
+    templates = {}
 
     # Financial Analyst Agent
     templates["template-financial-analyst"] = AgentTemplateMetadata(

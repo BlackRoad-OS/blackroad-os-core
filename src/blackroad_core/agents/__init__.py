@@ -79,14 +79,14 @@ class AgentManifest:
 
 
 class PSSHA:
-    """    PS-SHA∞ - Append-only memory hash system
+    """PS-SHA∞ - Append-only memory hash system
 
     Each agent has a soul hash that evolves through append-only operations.
     This creates an immutable lineage that proves authenticity."""
 
     @staticmethod
     def compute_hash(data: str, previous_hash: Optional[str] = None) -> str:
-        """        Compute PS-SHA∞ hash with chaining.
+        """Compute PS-SHA∞ hash with chaining.
 
         Args:
             data: New data to hash
@@ -103,7 +103,7 @@ class PSSHA:
 
     @staticmethod
     def verify_chain(entries: List[Dict[str, str]]) -> bool:
-        """        Verify an entire PS-SHA∞ chain.
+        """Verify an entire PS-SHA∞ chain.
 
         Args:
             entries: List of {data, hash} dicts
@@ -120,7 +120,7 @@ class PSSHA:
 
 
 class MemoryJournal:
-    """    Append-only memory journal with PS-SHA∞ hashing.
+    """Append-only memory journal with PS-SHA∞ hashing.
 
     Based on codex_memory.py but enhanced with blockchain-style hashing."""
 
@@ -145,13 +145,13 @@ class MemoryJournal:
                     self.last_hash = last_entry['hash']
 
     def append(self, entry: Dict[str, Any]) -> str:
-        """        Append an entry to the journal with PS-SHA∞ hash.
+        """Append an entry to the journal with PS-SHA∞ hash.
 
         Args:
             entry: Memory entry to append
 
         Returns:
-            Hash of the new entry}
+            Hash of the new entry"""
         timestamp = datetime.now(UTC).isoformat()
         entry['timestamp'] = timestamp
 
@@ -172,7 +172,7 @@ class MemoryJournal:
                 'data': entry_str,
                 'hash': new_hash,
                 'previous_hash': self.last_hash
-            """) + '\n')
+            }) + '\n')
 
         self.last_hash = new_hash
         return new_hash
@@ -204,12 +204,12 @@ class MemoryJournal:
 
 
 class CapabilityRegistry:
-    """    Registry of what each agent can do.
+    """Registry of what each agent can do.
 
-    Enables dynamic capability discovery and routing.}
+    Enables dynamic capability discovery and routing."""
 
     def __init__(self):
-        self.capabilities: Dict[str, Set[str]] = {"""  # agent_id -> set of capabilities
+        self.capabilities: Dict[str, Set[str]] = {}  # agent_id -> set of capabilities
 
     def register(self, agent_id: str, capabilities: List[str]):
         """Register an agent's capabilities."""
@@ -231,12 +231,12 @@ class CapabilityRegistry:
 
 
 class EventBus:
-    """    Pub/sub event bus for agent-to-agent communication.
+    """Pub/sub event bus for agent-to-agent communication.
 
-    In production, this would use NATS JetStream (Apache-2.0).}
+    In production, this would use NATS JetStream (Apache-2.0)."""
 
     def __init__(self):
-        self.subscribers: Dict[str, List[callable]] = {"""
+        self.subscribers: Dict[str, List[callable]] = {}
 
     def subscribe(self, event_type: str, handler: callable):
         """Subscribe to an event type."""
@@ -252,7 +252,7 @@ class EventBus:
 
 
 class BlackRoadAgent:
-    """    Core agent implementation for BlackRoad OS.
+    """Core agent implementation for BlackRoad OS.
 
     Implements Cece Agent Mode v2.0 specification."""
 
@@ -266,19 +266,19 @@ class BlackRoadAgent:
             self.manifest.ps_sha_infinity_id = PSSHA.compute_hash(genesis_data)
 
     async def think(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
-        """        Process input and generate response.
+        """Process input and generate response.
 
         This is where the agent's "brain" runs - could be:
         - LLM inference (vLLM, llama.cpp, Ollama)
         - Workflow execution (LangGraph, CrewAI)
         - Integration bridge (MCP)
-        - Edge computation (Pi/Jetson)}
+        - Edge computation (Pi/Jetson)"""
         # Log thought to memory
         thought_entry = {
             "type": "thought",
             "input": input_data,
             "emotional_state": self.manifest.emotional_state.value
-        """
+        }
 
         hash_id = self.memory.append(thought_entry)
 
@@ -287,7 +287,7 @@ class BlackRoadAgent:
             "response": f"Agent {self.manifest.id} processing...",
             "emotional_state": self.manifest.emotional_state.value,
             "soul_hash": hash_id
-        """
+        }
 
         return output
 
@@ -301,7 +301,7 @@ class BlackRoadAgent:
             "discovery": EmotionalState.WONDER,
             "conflict": EmotionalState.TURBULENCE,
             "resolution": EmotionalState.PEACE
-        """
+        }
 
         new_state = emotion_transitions.get(trigger, self.manifest.emotional_state)
 

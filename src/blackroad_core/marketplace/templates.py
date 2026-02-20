@@ -22,7 +22,7 @@ class TemplateManager:
 
     def load_all(self) -> Dict[str, AgentTemplateMetadata]:
         """Load all templates from disk."""
-        templates = {"""
+        templates = {}
 
         if self.templates_file.exists():
             with open(self.templates_file, 'r') as f:
@@ -54,7 +54,7 @@ async def publish_template(
     manager: TemplateManager,
     templates: Dict[str, AgentTemplateMetadata]
 ) -> str:
-    """    Publish a new agent template to the marketplace.
+    """Publish a new agent template to the marketplace.
 
     Args:
         template: Template metadata to publish
@@ -62,7 +62,8 @@ async def publish_template(
         templates: Current templates dictionary
 
     Returns:
-        Template ID"""
+        Template ID
+    """
     # Validate template
     if not template.id:
         template.id = manager.generate_template_id(template.name)

@@ -26,6 +26,10 @@ setup(
         "pydantic>=2.8.2",
         "pyyaml>=6.0.2",
         "requests>=2.32.3",
+        "fastapi>=0.115.0",
+        "uvicorn>=0.30.0",
+        "aiohttp>=3.10.0",
+        "httpx>=0.27.0",
     ],
     extras_require={
         "dev": [
