@@ -215,6 +215,7 @@ rl("");ci.addEventListener("input",function(){rl(ci.value)});
 document.addEventListener("keydown",function(e){if((e.metaKey||e.ctrlKey)&&e.key==="k"){e.preventDefault();pal.classList.toggle("open");if(pal.classList.contains("open")){ci.value="";rl("");ci.focus()}}if(e.key==="Escape")pal.classList.remove("open")});
 pal.addEventListener("click",function(e){if(e.target===pal)pal.classList.remove("open")});
 var lc=document.getElementById("live-clock");if(lc)setInterval(function(){lc.textContent=new Date().toISOString().substr(11,8)+" UTC"},1000);
+var vc=document.getElementById("view-count");if(vc){var sub=location.hostname.split(".")[0];fetch("/api/views").then(function(r){return r.json()}).then(function(d){if(d&&d.views)vc.textContent=d.views.toLocaleString()+" views"}).catch(function(){})}
 })();</script>`;
 }
 
@@ -251,6 +252,9 @@ function page(title: string, subtitle: string, body: string, activeNav?: string,
   <meta name="twitter:title" content="${safeTitle} | BlackRoad">
   <meta name="twitter:description" content="${safeSub}">
   <link rel="icon" href="${favicon}">
+  <link rel="dns-prefetch" href="https://api.blackroad.io">
+  <link rel="preconnect" href="https://api.blackroad.io" crossorigin>
+  <link rel="dns-prefetch" href="https://pitstop.blackroad.io">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"${safeTitle} | BlackRoad","url":"${canonicalUrl}","description":"${safeSub}","publisher":{"@type":"Organization","name":"BlackRoad OS, Inc.","url":"https://blackroad.io"}}</script>
   ${BRAND}
   <script>if(localStorage.getItem('br-theme')==='light')document.documentElement.setAttribute('data-theme','light')</script>
@@ -273,6 +277,7 @@ function page(title: string, subtitle: string, body: string, activeNav?: string,
     <a href="https://blackroad.io">blackroad.io</a> &middot;
     <a href="https://github.com/BlackRoad-OS">GitHub</a> &middot;
     BlackRoad OS, Inc. &copy; 2026
+    <span id="view-count" style="margin-left:8px;font-size:.75rem;color:var(--muted)"></span>
   </footer>
   ${getSharedJS()}
 </body>
@@ -280,14 +285,23 @@ function page(title: string, subtitle: string, body: string, activeNav?: string,
 }
 
 function htmlResp(content: string, status = 200): Response {
+  // ETag from content hash
+  let hash = 0;
+  for (let i = 0; i < content.length; i++) hash = ((hash << 5) - hash + content.charCodeAt(i)) | 0;
+  const etag = `"br-${(hash >>> 0).toString(36)}"`;
+
   return new Response(content, {
     status,
     headers: {
       'Content-Type': 'text/html;charset=UTF-8',
       'Cache-Control': 'public, max-age=3600, s-maxage=7200',
+      'ETag': etag,
       'X-Content-Type-Options': 'nosniff',
       'X-Frame-Options': 'SAMEORIGIN',
       'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.blackroad.io; font-src 'self'",
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
+      'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
       'Access-Control-Allow-Origin': '*',
     },
   });
@@ -296,7 +310,12 @@ function htmlResp(content: string, status = 200): Response {
 function jsonResp(data: any, status = 200): Response {
   return new Response(JSON.stringify(data, null, 2), {
     status,
-    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'X-Content-Type-Options': 'nosniff',
+      'Content-Security-Policy': "default-src 'none'",
+    },
   });
 }
 
@@ -488,6 +507,14 @@ export default {
       const parts = url.hostname.split('.');
       let subdomain = parts.length >= 3 ? parts[0] : 'www';
 
+      // View count API (for footer badge)
+      if (url.pathname === '/api/views' && env.CACHE) {
+        const views = await env.CACHE.get(`views:${subdomain}`).catch(() => null);
+        return new Response(JSON.stringify({ subdomain, views: parseInt(views || '0') || 0 }), {
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'public, max-age=60', 'X-Request-ID': requestId },
+        });
+      }
+
       // Sitemap and robots.txt on any subdomain
       if (url.pathname === '/robots.txt') {
         return new Response(`User-agent: *\nAllow: /\nSitemap: https://${subdomain}.blackroad.io/sitemap.xml`, {
@@ -505,14 +532,16 @@ export default {
 
       const rateLimitResult = await checkRateLimit(request, env);
       if (!rateLimitResult.allowed) {
-        return new Response('Rate limit exceeded', { status: 429, headers: {
-          'Retry-After': '60', 'X-Request-ID': requestId,
-          'X-RateLimit-Limit': '100', 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': '60',
-        } });
+        return htmlResp(page('429 — Rate Limited', 'Too many requests', `
+          <div style="text-align:center;padding:34px 0">
+            <div style="font-size:3rem;margin-bottom:13px">🚦</div>
+            <p style="color:var(--muted);max-width:400px;margin:0 auto">You've exceeded the rate limit of <strong>100 requests/minute</strong>. Please wait before trying again.</p>
+            <p style="margin-top:21px;font-size:1.2rem;color:var(--amber)" id="retry-countdown"></p>
+            <p style="margin-top:21px;font-size:.75rem;color:var(--muted)">Request ID: <code>${requestId}</code></p>
+          </div>
+          <script>(function(){var s=60,el=document.getElementById('retry-countdown');if(!el)return;function t(){el.textContent='Retry in '+s+'s';if(s-->0)setTimeout(t,1000);else{el.textContent='Ready!';el.style.color='var(--green)'}}t()})();</script>
+        `, undefined, subdomain), 429);
       }
-
-      // Store subdomain in request context for page() calls
-      (globalThis as any).__currentSubdomain = subdomain;
 
       const app = SUBDOMAIN_APPS[subdomain];
       if (!app) {
@@ -539,6 +568,45 @@ export default {
         `, undefined, subdomain), 404);
       }
 
+      // Admin auth check
+      if (subdomain === 'admin') {
+        const authHeader = request.headers.get('Authorization');
+        const cookieHeader = request.headers.get('Cookie') || '';
+        const hasTokenCookie = cookieHeader.includes('br-admin-token=');
+        const tokenParam = url.searchParams.get('token');
+
+        if (!authHeader && !hasTokenCookie && !tokenParam) {
+          // Check if there's an admin key set
+          const adminKey = await env.API_KEYS.get('admin-dashboard-key');
+          if (adminKey) {
+            // Show login form
+            return htmlResp(page('Admin Login', 'Enter your admin key', `
+              <div style="max-width:400px;margin:34px auto;text-align:center">
+                <div style="font-size:3rem;margin-bottom:13px">🔐</div>
+                <form method="GET" action="/">
+                  <input name="token" type="password" placeholder="Admin key..." style="width:100%;padding:13px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--fg);font-size:1rem;margin-bottom:13px;outline:none" autofocus>
+                  <button type="submit" style="width:100%;padding:13px;border-radius:8px;border:none;background:var(--pink);color:#fff;font-size:1rem;cursor:pointer;font-weight:600">Authenticate</button>
+                </form>
+                <p style="color:var(--muted);margin-top:21px;font-size:.85rem">Set key: <code>wrangler kv key put --binding=API_KEYS admin-dashboard-key YOUR_KEY</code></p>
+              </div>
+            `, undefined, 'admin'), 401);
+          }
+          // No key set = open access (dev mode)
+        } else if (authHeader || tokenParam) {
+          const provided = tokenParam || (authHeader?.replace('Bearer ', '') ?? '');
+          const adminKey = await env.API_KEYS.get('admin-dashboard-key');
+          if (adminKey && provided !== adminKey) {
+            return htmlResp(page('Unauthorized', 'Invalid admin key', `
+              <div style="text-align:center;padding:34px 0">
+                <div style="font-size:3rem;margin-bottom:13px">🚫</div>
+                <p style="color:var(--muted)">The provided key is invalid.</p>
+                <a href="https://admin.blackroad.io" style="color:var(--pink);margin-top:13px;display:inline-block">Try again →</a>
+              </div>
+            `, undefined, 'admin'), 403);
+          }
+        }
+      }
+
       const response = await app.handler(request, env);
       const newResp = new Response(response.body, response);
       newResp.headers.set('X-Subdomain', subdomain);
@@ -548,6 +616,23 @@ export default {
       newResp.headers.set('X-RateLimit-Limit', '100');
       newResp.headers.set('X-RateLimit-Remaining', String(Math.max(0, 100 - (rateLimitResult.count || 0))));
       newResp.headers.set('X-RateLimit-Reset', '60');
+
+      // ETag conditional response
+      const etag = newResp.headers.get('ETag');
+      const ifNoneMatch = request.headers.get('If-None-Match');
+      if (etag && ifNoneMatch === etag) {
+        return new Response(null, { status: 304, headers: { 'ETag': etag, 'X-Request-ID': requestId } });
+      }
+
+      // Increment page view counter in KV (non-blocking)
+      if (env.CACHE && url.pathname === '/') {
+        ctx.waitUntil(
+          env.CACHE.get(`views:${subdomain}`).then(v => {
+            const count = (parseInt(v || '0') || 0) + 1;
+            return env.CACHE.put(`views:${subdomain}`, String(count));
+          }).catch(() => {})
+        );
+      }
 
       // Log analytics to D1 (non-blocking)
       if (env.DB) {
@@ -566,9 +651,14 @@ export default {
 
       return newResp;
     } catch (error: any) {
-      return htmlResp(page('Error', 'Something went wrong', `
-        <div class="card" style="border-color:var(--pink)"><p style="color:var(--muted)">${error.message}</p></div>
-        <div style="text-align:center;margin-top:13px;font-size:.75rem;color:var(--muted)">Request ID: <code>${requestId}</code></div>
+      return htmlResp(page('500 — Server Error', 'Something went wrong', `
+        <div style="text-align:center;padding:34px 0">
+          <div style="font-size:3rem;margin-bottom:13px">💥</div>
+          <p style="color:var(--muted);max-width:500px;margin:0 auto">An unexpected error occurred while processing your request.</p>
+          <div class="code" style="margin-top:21px;text-align:left;max-width:500px;margin-left:auto;margin-right:auto"><span class="comment">// Error details</span>\n${error.message}</div>
+          <p style="margin-top:21px;font-size:.75rem;color:var(--muted)">Request ID: <code>${requestId}</code></p>
+          <a href="https://status.blackroad.io" style="color:var(--pink);margin-top:13px;display:inline-block">Check system status →</a>
+        </div>
       `), 500);
     }
   }
@@ -1113,13 +1203,48 @@ async function handleBrand(req: Request, env: Env): Promise<Response> {
 
 async function handleAgents(req: Request, env: Env): Promise<Response> {
   const url = new URL(req.url);
-  if (url.pathname.startsWith('/api')) {
-    return jsonResp({ agents: Object.entries(AGENT_META).map(([id, m]) => ({ id, ...m })), count: Object.keys(AGENT_META).length });
+
+  // API endpoint to set agent status
+  if (url.pathname === '/api/status' && req.method === 'POST') {
+    try {
+      const body = await req.json() as { agent: string; status: string };
+      if (body.agent && body.status) {
+        await env.CACHE.put(`agent-status:${body.agent}`, body.status, { expirationTtl: 300 });
+        return jsonResp({ ok: true, agent: body.agent, status: body.status });
+      }
+    } catch {}
+    return jsonResp({ error: 'Invalid request' }, 400);
   }
+
+  if (url.pathname.startsWith('/api')) {
+    // Read live statuses from KV
+    const agentsWithStatus = await Promise.all(
+      Object.entries(AGENT_META).map(async ([id, m]) => {
+        const kvStatus = await env.CACHE.get(`agent-status:${id}`).catch(() => null);
+        return { id, ...m, live_status: kvStatus || 'idle' };
+      })
+    );
+    return jsonResp({ agents: agentsWithStatus, count: agentsWithStatus.length });
+  }
+
+  // Read live statuses for display
+  const statuses = new Map<string, string>();
+  await Promise.all(
+    Object.keys(AGENT_META).map(async (id) => {
+      const s = await env.CACHE.get(`agent-status:${id}`).catch(() => null);
+      statuses.set(id, s || 'idle');
+    })
+  );
+
   const agentCards = Object.entries(AGENT_META).map(([id, meta]) => {
     const app = SUBDOMAIN_APPS[id];
+    const status = statuses.get(id) || 'idle';
+    const dotColor = status === 'online' ? 'green' : status === 'busy' ? 'amber' : 'muted';
     return `<a class="card" href="https://${id}.blackroad.io" style="color:var(--fg)">
-      <div class="agent-avatar" style="background:${meta.color};width:34px;height:34px;font-size:.8rem;display:inline-flex;font-weight:700">${meta.icon}</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <div class="agent-avatar" style="background:${meta.color};width:34px;height:34px;font-size:.8rem;display:inline-flex;font-weight:700">${meta.icon}</div>
+        <span class="dot dot-${dotColor}" style="width:8px;height:8px" title="${status}"></span>
+      </div>
       <h3>${app?.name || id}</h3>
       <p>${app?.description || ''}</p>
       <div class="meta">${meta.skills.slice(0, 2).map(s => `<span class="badge badge-blue">${s.replace(/_/g, ' ')}</span>`).join(' ')}</div>
