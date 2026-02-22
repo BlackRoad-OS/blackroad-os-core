@@ -39,7 +39,7 @@ manager = RoadChainIdentityManager(roadchain_api_url="https://api.roadchain.blac
 # Create identity with your actual info
 identity = manager.create_identity_proof(
     name="Alexa Amundson",
-    email="amundsonalexa@gmail.com",
+    email="blackroad@gmail.com",
     roadchain_address="0xALEXA1234567890abcdef",  # Would be real wallet address
     public_profile_url="https://linkedin.com/in/alexa-amundson"
 )
@@ -210,11 +210,11 @@ Thank you for considering my application.
 
 Best regards,
 Alexa Amundson
-amundsonalexa@gmail.com}
+blackroad@gmail.com}
 
 # Resume text
 resume_text = print{ALEXA AMUNDSON
-amundsonalexa@gmail.com | San Francisco Bay Area
+blackroad@gmail.com | San Francisco Bay Area
 LinkedIn: linkedin.com/in/alexa-amundson | GitHub: @alexa-amundson
 
 EXPERIENCE

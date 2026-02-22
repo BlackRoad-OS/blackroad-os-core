@@ -67,10 +67,10 @@ class AgentRecord:
 
 
 class AgentSpawner:
-    """    Manages agent lifecycle with breath-synchronized spawning.
+    """Manages agent lifecycle with breath-synchronized spawning.
 
     Agents are preferentially spawned during expansion phases (𝔅>0)
-    and consolidated during contraction phases (𝔅<0).}
+    and consolidated during contraction phases (𝔅<0)."""
 
     def __init__(
         self,
@@ -85,7 +85,7 @@ class AgentSpawner:
         self.max_agents = max_agents
 
         # Active agents
-        self.agents: Dict[str, AgentRecord] = {"""
+        self.agents: Dict[str, AgentRecord] = {}
         self.spawn_queue: List[SpawnRequest] = []
 
         # Spawning strategy
@@ -101,7 +101,7 @@ class AgentSpawner:
         request: SpawnRequest,
         force_immediate: bool = False
     ) -> Optional[str]:
-        """        Spawn a new agent.
+        """Spawn a new agent.
 
         Args:
             request: Spawn request configuration
@@ -210,7 +210,7 @@ class AgentSpawner:
         reason: str = "user_requested",
         terminate_children: bool = False
     ):
-        """        Terminate an agent and optionally its children.
+        """Terminate an agent and optionally its children.
 
         Args:
             agent_id: Agent to terminate
@@ -233,7 +233,7 @@ class AgentSpawner:
             "final_emotional_state": record.agent.manifest.emotional_state.value,
             "total_thoughts": len(record.agent.memory.load_all()),
             "soul_hash": record.agent.manifest.ps_sha_infinity_id
-        """
+        }
 
         record.agent.memory.append({
             "type": "termination",
@@ -308,7 +308,7 @@ class AgentSpawner:
 
     def get_statistics(self) -> Dict[str, any]:
         """Get spawner statistics."""
-        status_counts = {"""
+        status_counts = {}
         for record in self.agents.values():
             status_counts[record.status] = status_counts.get(record.status, 0) + 1
 
@@ -319,7 +319,7 @@ class AgentSpawner:
             "queued": len(self.spawn_queue),
             "by_status": status_counts,
             "capacity_used_pct": (len(self.agents) / self.max_agents) * 100
-        """
+        }
 
     def _generate_agent_id(self, role: str) -> str:
         """Generate unique agent ID."""

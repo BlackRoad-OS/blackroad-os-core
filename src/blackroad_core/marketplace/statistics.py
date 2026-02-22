@@ -10,19 +10,20 @@ from .models import AgentTemplateMetadata, TemplateStatus
 
 
 def get_marketplace_statistics(templates: dict[str, AgentTemplateMetadata]) -> Dict[str, Any]:
-    """    Get marketplace statistics.
+    """Get marketplace statistics.
 
     Args:
         templates: Template registry
 
     Returns:
-        Dictionary with marketplace-wide statistics}
+        Dictionary with marketplace-wide statistics
+    """
     published = [
         t for t in templates.values()
         if t.status == TemplateStatus.PUBLISHED
     ]
 
-    category_counts = {"""
+    category_counts = {}
     for template in published:
         cat = template.category.value
         category_counts[cat] = category_counts.get(cat, 0) + 1
@@ -33,7 +34,7 @@ def get_marketplace_statistics(templates: dict[str, AgentTemplateMetadata]) -> D
         "avg_rating": sum(t.rating for t in published) / len(published) if published else 0,
         "total_reviews": sum(t.review_count for t in published),
         "by_category": category_counts
-    """
+    }
 
 
 __all__ = ["get_marketplace_statistics"]

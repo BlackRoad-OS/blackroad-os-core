@@ -81,7 +81,7 @@ infrastructure:
       name: gdrive-personal
       type: google_drive
       platform: google
-      account: amundsonalexa@gmail.com
+      account: blackroad@gmail.com
       status: active
 
     - id: BR-INF-STR-0004
@@ -281,19 +281,19 @@ applications:
   workers:
     - id: BR-APP-WRK-0001
       name: blackroad-auth
-      url: https://blackroad-auth.amundsonalexa.workers.dev
+      url: https://blackroad-auth.blackroad.workers.dev
       purpose: authentication
       routes:
         - auth.blackroad.io/*
 
     - id: BR-APP-WRK-0002
       name: blackroad-gateway
-      url: https://blackroad-gateway.amundsonalexa.workers.dev
+      url: https://blackroad-gateway.blackroad.workers.dev
       purpose: api_gateway
 
     - id: BR-APP-WRK-0003
       name: blackroad-landing
-      url: https://blackroad-landing.amundsonalexa.workers.dev
+      url: https://blackroad-landing.blackroad.workers.dev
       purpose: landing_page
 
 source_code:

@@ -5,7 +5,7 @@ import requests
 import json
 import time
 
-API_URL = "https://remotejobs-platform.amundsonalexa.workers.dev"
+API_URL = "https://remotejobs-platform.blackroad.workers.dev"
 REMOTEOK_URL = "https://remoteok.com/api"
 
 def get_real_jobs():

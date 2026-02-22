@@ -1,25 +1,43 @@
 version: 2
 updates:
+  # npm dependencies
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
-      time: "09:00"
     open-pull-requests-limit: 10
+    reviewers:
+      - "blackboxprogramming"
     labels:
       - "dependencies"
-      - "automerge"
+      - "automated"
     commit-message:
-      prefix: "chore(deps)"
-    reviewers:
-      - "blackroad-os/backend-team"
+      prefix: "chore"
+      include: "scope"
 
+  # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
     labels:
       - "dependencies"
-      - "ci/cd"
-      - "automerge"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+
+  # pip dependencies
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "python"
+    commit-message:
+      prefix: "chore"

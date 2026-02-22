@@ -9,7 +9,7 @@
 ## 🎯 What's Live Right Now
 
 ### 1. Payment Gateway API (Cloudflare Worker)
-**URL**: https://blackroad-payment-gateway.amundsonalexa.workers.dev
+**URL**: https://blackroad-payment-gateway.blackroad.workers.dev
 
 **Endpoints**:
 - `GET /pricing` - Returns all pricing tiers
@@ -121,7 +121,7 @@ In Stripe Dashboard → Products:
 #### Step 3: Configure Webhook (5 min)
 Stripe Dashboard → Developers → Webhooks:
 
-- **Endpoint URL**: `https://blackroad-payment-gateway.amundsonalexa.workers.dev/webhook`
+- **Endpoint URL**: `https://blackroad-payment-gateway.blackroad.workers.dev/webhook`
 - **Events to listen for**:
   - checkout.session.completed
   - customer.subscription.created
@@ -171,7 +171,7 @@ Add these CNAME records in Cloudflare DNS for `blackroad.io`:
 ```
 Type: CNAME, Name: pay, Target: blackroad-payment-page.pages.dev, Proxy: ON
 Type: CNAME, Name: buy, Target: blackroad-buy-now.pages.dev, Proxy: ON
-Type: CNAME, Name: payments, Target: blackroad-payment-gateway.amundsonalexa.workers.dev, Proxy: ON
+Type: CNAME, Name: payments, Target: blackroad-payment-gateway.blackroad.workers.dev, Proxy: ON
 ```
 
 Then update API URLs in payment pages to use custom domain.
@@ -236,7 +236,7 @@ Update your main `blackroad.io` site with payment CTAs:
 ```javascript
 const userId = 'user_123';
 const response = await fetch(
-  `https://blackroad-payment-gateway.amundsonalexa.workers.dev/subscription-status?userId=${userId}`
+  `https://blackroad-payment-gateway.blackroad.workers.dev/subscription-status?userId=${userId}`
 );
 const subscription = await response.json();
 
@@ -251,7 +251,7 @@ if (subscription.status === 'active') {
 
 ```javascript
 const response = await fetch(
-  'https://blackroad-payment-gateway.amundsonalexa.workers.dev/create-portal-session',
+  'https://blackroad-payment-gateway.blackroad.workers.dev/create-portal-session',
   {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -317,7 +317,7 @@ wrangler deployments list
 wrangler tail blackroad-payment-gateway --format pretty
 
 # Test webhook
-curl -X POST https://blackroad-payment-gateway.amundsonalexa.workers.dev/webhook \
+curl -X POST https://blackroad-payment-gateway.blackroad.workers.dev/webhook \
   -H "Content-Type: application/json" \
   -d '{"type":"checkout.session.completed"}'
 ```

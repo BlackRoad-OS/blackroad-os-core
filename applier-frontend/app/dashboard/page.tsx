@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://applier-api.amundsonalexa.workers.dev'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://applier-api.blackroad.workers.dev'
 
 interface Application {
   id: string
@@ -50,7 +50,7 @@ export default function DashboardPage() {
   const [salaryRecommendation, setSalaryRecommendation] = useState('')
 
   // Mock user email (in real app, get from auth)
-  const email = 'amundsonalexa@gmail.com'
+  const email = 'blackroad@gmail.com'
 
   useEffect(() => {
     loadData()
@@ -114,7 +114,7 @@ Thank you for your consideration.
 Best regards,
 Alexa Louise Amundson
 (507) 828-0842
-amundsonalexa@gmail.com`
+blackroad@gmail.com`
 
     setGeneratedCoverLetter(letter)
   }

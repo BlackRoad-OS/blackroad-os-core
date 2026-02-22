@@ -125,7 +125,7 @@ curl https://agents.blackroad.io/v1/chat/completions \
     "messages": [{"role": "user", "content": "What is your identity?"}],
     "authorized_by": "1031f308ae9ae6d34fe87e83867c1e5869c9fca7e35fdd5d0e8deb798e9c51be",
     "authority_chain": [
-      "principal:alexa:amundsonalexa@gmail.com",
+      "principal:alexa:blackroad@gmail.com",
       "operator:cece:blackroad-os-operator"
     ]
   }'

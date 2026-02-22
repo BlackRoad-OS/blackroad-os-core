@@ -1,9 +1,11 @@
+LICENSE
 README.md
 setup.py
 src/blackroad_core/__init__.py
 src/blackroad_core/cloudflare.py
 src/blackroad_core/communication.py
 src/blackroad_core/identity.py
+src/blackroad_core/infra_mesh.py
 src/blackroad_core/marketplace.py
 src/blackroad_core/model_router.py
 src/blackroad_core/orchestrator.py

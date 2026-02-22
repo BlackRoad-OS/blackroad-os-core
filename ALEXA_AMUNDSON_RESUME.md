@@ -1,7 +1,7 @@
 # Alexa Amundson
 **Full-Stack Engineer | Blockchain Architect | AI Systems Developer**
 
-amundsonalexa@gmail.com | blackroad.systems@gmail.com
+blackroad@gmail.com | blackroad.systems@gmail.com
 GitHub: @blackboxprogramming (15 organizations, 66+ repositories)
 
 ---
@@ -299,11 +299,11 @@ Open to:
 - https://api.blackroad.io - REST API
 - https://api-roadchain.blackroad.io - Blockchain API
 - https://roadchain-explorer.blackroad.io - Block explorer
-- https://remotejobs-platform.amundsonalexa.workers.dev - Job board
+- https://remotejobs-platform.blackroad.workers.dev - Job board
 
 **GitHub:** @blackboxprogramming (66+ repositories)
 
-**Contact:** amundsonalexa@gmail.com | blackroad.systems@gmail.com
+**Contact:** blackroad@gmail.com | blackroad.systems@gmail.com
 
 ---
 

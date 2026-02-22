@@ -9,12 +9,12 @@ Your entire payment infrastructure is **LIVE** and ready to accept money!
 ## 🎯 What You Have Right Now
 
 ### 1. Payment Gateway API ✅
-**URL**: https://blackroad-payment-gateway.amundsonalexa.workers.dev
+**URL**: https://blackroad-payment-gateway.blackroad.workers.dev
 
 **Status**: 🟢 LIVE AND HEALTHY
 
 ```bash
-curl https://blackroad-payment-gateway.amundsonalexa.workers.dev/health
+curl https://blackroad-payment-gateway.blackroad.workers.dev/health
 # Response: {"status":"healthy"}
 ```
 
@@ -68,7 +68,7 @@ This will:
 ### Step 2: Create Stripe Account (if you don't have one)
 
 1. Go to: https://dashboard.stripe.com/register
-2. Sign up with: `blackroad.systems@gmail.com` or `amundsonalexa@gmail.com`
+2. Sign up with: `blackroad.systems@gmail.com` or `blackroad@gmail.com`
 3. Complete verification
 4. Start in Test mode
 
@@ -96,7 +96,7 @@ Copy all 6 Price IDs (price_xxx...)
 
 **Dashboard → Developers → Webhooks → Add Endpoint**
 
-- **URL**: `https://blackroad-payment-gateway.amundsonalexa.workers.dev/webhook`
+- **URL**: `https://blackroad-payment-gateway.blackroad.workers.dev/webhook`
 - **Events**:
   - checkout.session.completed
   - customer.subscription.created
@@ -204,7 +204,7 @@ Then access via:
 
 ```javascript
 const response = await fetch(
-  `https://blackroad-payment-gateway.amundsonalexa.workers.dev/subscription-status?userId=${userId}`
+  `https://blackroad-payment-gateway.blackroad.workers.dev/subscription-status?userId=${userId}`
 );
 const subscription = await response.json();
 
@@ -292,10 +292,10 @@ cd workers/payment-gateway && wrangler deploy
 cd domains/pay-blackroad-io && wrangler pages deploy . --project-name=blackroad-payment-page
 
 # Check health
-curl https://blackroad-payment-gateway.amundsonalexa.workers.dev/health
+curl https://blackroad-payment-gateway.blackroad.workers.dev/health
 
 # View pricing
-curl https://blackroad-payment-gateway.amundsonalexa.workers.dev/pricing | jq
+curl https://blackroad-payment-gateway.blackroad.workers.dev/pricing | jq
 
 # Monitor logs
 wrangler tail blackroad-payment-gateway

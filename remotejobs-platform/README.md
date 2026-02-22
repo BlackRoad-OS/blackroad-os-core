@@ -46,7 +46,7 @@ Replace the `TO_BE_CREATED` placeholders with your actual KV namespace IDs.
 wrangler deploy
 ```
 
-Your API will be live at: `https://remotejobs-platform.amundsonalexa.workers.dev`
+Your API will be live at: `https://remotejobs-platform.blackroad.workers.dev`
 
 ### 4. Deploy Frontend to Cloudflare Pages
 

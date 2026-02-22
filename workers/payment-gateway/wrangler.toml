@@ -1,6 +1,6 @@
 name = "blackroad-payment-gateway"
 main = "src/index.ts"
-compatibility_date = "2024-01-01"
+compatibility_date = "2024-12-01"
 workers_dev = true
 
 [env.production]
@@ -23,5 +23,13 @@ database_name = "blackroad_revenue"
 database_id = "8744905a-cf6c-4e16-9661-4c67d340813f"
 
 # Secrets (set via wrangler secret put)
-# - STRIPE_SECRET_KEY
-# - STRIPE_WEBHOOK_SECRET
+# Required:
+#   STRIPE_SECRET_KEY          - sk_live_... or sk_test_...
+#   STRIPE_PUBLISHABLE_KEY     - pk_live_... or pk_test_...
+#   STRIPE_WEBHOOK_SECRET      - whsec_...
+#
+# Price IDs (created by `br stripe products create`):
+#   STRIPE_PRICE_PRO_MONTHLY   - price_...
+#   STRIPE_PRICE_PRO_YEARLY    - price_...
+#   STRIPE_PRICE_ENT_MONTHLY   - price_...
+#   STRIPE_PRICE_ENT_YEARLY    - price_...

@@ -185,7 +185,7 @@ Full BlackRoad OS color scheme from `CLAUDE.md`:
 - **Styling**: Tailwind CSS 3.4
 - **Animations**: Framer Motion 11.11.17
 - **State**: React hooks (useState, useEffect)
-- **API**: Cloudflare Workers (applier-api.amundsonalexa.workers.dev)
+- **API**: Cloudflare Workers (applier-api.blackroad.workers.dev)
 
 ---
 
@@ -282,7 +282,7 @@ applier-frontend/
 
 The app is designed to connect to a Cloudflare Workers API at:
 ```
-https://applier-api.amundsonalexa.workers.dev
+https://applier-api.blackroad.workers.dev
 ```
 
 ### Endpoints
@@ -378,7 +378,7 @@ This project demonstrates:
 
 ## 📧 Contact
 
-- **Email**: amundsonalexa@gmail.com
+- **Email**: blackroad@gmail.com
 - **Phone**: (507) 828-0842
 - **LinkedIn**: [linkedin.com/in/alexaamundson](https://linkedin.com/in/alexaamundson)
 - **GitHub**: [github.com/blackboxprogramming](https://github.com/blackboxprogramming)

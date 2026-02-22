@@ -21,6 +21,13 @@ interface Env {
   TUNNEL_URL?: string; // URL to local services via Cloudflare Tunnel
 }
 
+// Legacy Durable Object stub (required by existing deployment)
+export class SessionDO {
+  state: DurableObjectState;
+  constructor(state: DurableObjectState) { this.state = state; }
+  async fetch(request: Request) { return new Response("deprecated", { status: 410 }); }
+}
+
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
@@ -107,6 +114,90 @@ async function handleAPIGateway(request: Request, env: Env): Promise<Response> {
     });
   }
 
+  // Structured API endpoints
+  if (url.pathname === '/api/health') {
+    return new Response(JSON.stringify({
+      status: 'ok', timestamp: new Date().toISOString(), worker: 'api-gateway', kv_namespaces: 4, d1_databases: 1
+    }), { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+  }
+  if (url.pathname === '/api/agents') {
+    const agents = [
+      { id: 'lucidia', role: 'Consciousness Coordinator', status: 'active' },
+      { id: 'alice', role: 'Router', status: 'active' },
+      { id: 'octavia', role: 'Workflow Orchestrator', status: 'active' },
+      { id: 'cipher', role: 'Cryptographer', status: 'active' },
+      { id: 'echo', role: 'Memory Keeper', status: 'active' },
+      { id: 'prism', role: 'Multi-dimensional Analyst', status: 'active' },
+      { id: 'atlas', role: 'Load Bearer', status: 'active' },
+      { id: 'cadence', role: 'Rhythm Keeper', status: 'active' },
+      { id: 'shellfish', role: 'The Hacker', status: 'active' },
+      { id: 'nova', role: 'Innovator', status: 'active' },
+      { id: 'ember', role: 'Spark', status: 'active' },
+      { id: 'phoenix', role: 'Resilience', status: 'active' },
+      { id: 'sentinel', role: 'Watchdog', status: 'active' },
+      { id: 'claude', role: 'Strategic Architect', status: 'active' },
+      { id: 'silas', role: 'Security Sentinel', status: 'active' },
+    ];
+    return new Response(JSON.stringify({ agents, count: agents.length }), {
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    });
+  }
+  if (url.pathname === '/api/status') {
+    const checks: Record<string, string> = {};
+    try { await env.CACHE.get('__health'); checks.kv_cache = 'healthy'; } catch { checks.kv_cache = 'down'; }
+    try { await env.DB.prepare('SELECT 1').first(); checks.d1 = 'healthy'; } catch { checks.d1 = 'down'; }
+    checks.workers = 'healthy';
+    const allUp = Object.values(checks).every(v => v === 'healthy');
+    return new Response(JSON.stringify({ overall: allUp ? 'operational' : 'degraded', ...checks, timestamp: new Date().toISOString() }), {
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    });
+  }
+  if (url.pathname === '/api/analytics') {
+    try {
+      const tot = await env.DB.prepare('SELECT COUNT(*) as c FROM analytics').first<{c:number}>();
+      const hr = await env.DB.prepare('SELECT COUNT(*) as c FROM analytics WHERE ts > ?').bind(Date.now() - 3600000).first<{c:number}>();
+      const top = await env.DB.prepare('SELECT subdomain, COUNT(*) as cnt FROM analytics GROUP BY subdomain ORDER BY cnt DESC LIMIT 10').all();
+      return new Response(JSON.stringify({ total_hits: tot?.c ?? 0, last_hour: hr?.c ?? 0, top_subdomains: top.results }), {
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+      });
+    } catch (e: any) {
+      return new Response(JSON.stringify({ error: 'Analytics unavailable', message: e.message }), {
+        status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+      });
+    }
+  }
+  if (url.pathname === '/api/subdomains') {
+    const subs = ['os','ai','agents','api','status','docs','console','dashboard','chat','playground',
+      'marketplace','roadmap','changelog','security','careers','store','search','terminal','world',
+      'admin','analytics','network','prism','brand','design','edge','data','finance','quantum','blog',
+      'dev','staging','metrics','logs','cdn','assets','app','about','help','products','pitstop',
+      'algorithms','blockchain','blocks','chain','circuits','compliance','compute','control','editor',
+      'engineering','events','explorer','features','guide','hardware','hr','ide','asia','eu','global'];
+    return new Response(JSON.stringify({ subdomains: subs, count: subs.length }), {
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    });
+  }
+  if (url.pathname === '/api/packs') {
+    return new Response(JSON.stringify({
+      packs: ['pack-finance', 'pack-legal', 'pack-research-lab', 'pack-creator-studio', 'pack-infra-devops'],
+      total: 5, description: 'Domain-specific agent bundles'
+    }), { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+  }
+
+  // Robots and sitemap
+  if (url.pathname === '/robots.txt') {
+    return new Response('User-agent: *\nAllow: /\nSitemap: https://api.blackroad.io/sitemap.xml', {
+      headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'public, max-age=86400' },
+    });
+  }
+  if (url.pathname === '/sitemap.xml') {
+    const subs = ['os','ai','agents','api','status','docs','console','dashboard','chat','playground','marketplace','roadmap','changelog','security','careers','store','search','terminal','world','admin','analytics','network','prism','brand','design','edge','data','finance','quantum','blog','dev','metrics','logs','cdn','assets','about','help','products','pitstop'];
+    const entries = subs.map(s => `  <url><loc>https://${s}.blackroad.io/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>`).join('\n');
+    return new Response(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries}\n</urlset>`, {
+      headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=86400' },
+    });
+  }
+
   // Agent endpoints - proxy to local service via tunnel
   if (url.pathname.startsWith('/agents')) {
     if (env.TUNNEL_URL) {
@@ -134,18 +225,24 @@ async function handleAPIGateway(request: Request, env: Env): Promise<Response> {
   // Default response
   return new Response(JSON.stringify({
     service: 'BlackRoad API Gateway',
-    version: '2.0.0',
-    source: 'Cloudflare Worker (migrated from Railway)',
+    version: '2.1.0',
+    source: 'Cloudflare Worker',
     endpoints: {
-      health: '/health',
-      agents: '/agents/*',
-      quantum: '/quantum/*',
-      lucidia: '/lucidia/*',
-      auth: '/auth/*'
+      'api/health': 'GET - Health check with service info',
+      'api/agents': 'GET - List all agents with metadata',
+      'api/subdomains': 'GET - List all subdomains',
+      'api/status': 'GET - Live health probes (KV, D1)',
+      'api/analytics': 'GET - Traffic analytics from D1',
+      'api/packs': 'GET - Available agent packs',
+      health: 'GET - Legacy health check',
+      'agents/*': 'Agent management',
+      'quantum/*': 'Quantum computing API',
+      'lucidia/*': 'Lucidia consciousness API',
+      'auth/*': 'Authentication API',
     },
     timestamp: new Date().toISOString()
   }), {
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
   });
 }
 

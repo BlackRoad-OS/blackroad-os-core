@@ -42,7 +42,7 @@
 
 2. **Test Workers**
    ```bash
-   curl https://blackroad-payment-gateway.amundsonalexa.workers.dev/health
+   curl https://blackroad-payment-gateway.blackroad.workers.dev/health
    # Should return payment gateway status
    ```
 

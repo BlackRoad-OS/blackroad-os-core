@@ -396,7 +396,7 @@ Month 6: Polish, docs, launch
 - `BlackRoad-Engine/blackroad-sim` (Custom simulation)
 
 **Community:**
-- Email: amundsonalexa@gmail.com
+- Email: blackroad@gmail.com
 - Review Queue: blackroad.systems@gmail.com
 - Domain (to be set up): blackroad-engine.io
 

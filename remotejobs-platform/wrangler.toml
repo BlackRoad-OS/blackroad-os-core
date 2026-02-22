@@ -10,3 +10,7 @@ id = "2557a2b503654590ab7b1da84c7e8b20"
 [[kv_namespaces]]
 binding = "APPLICATIONS"
 id = "90407b533ddc44508f1ce0841c77082d"
+
+[[routes]]
+pattern = "jobs.blackroad.io/*"
+zone_name = "blackroad.io"

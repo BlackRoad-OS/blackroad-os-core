@@ -119,7 +119,7 @@ Thank you for considering!
 Best regards,
 Alexa Amundson
 (507) 828-0842
-amundsonalexa@gmail.com`,
+blackroad@gmail.com`,
         tone: 'professional'
       },
       'follow-up': {

@@ -28,7 +28,7 @@ from blackroad_core.packs.job_hunter.onboarding import (
 profile = OnboardingProfile(
     id="onboarding-alexa-test",
     user_id="alexa-amundson",
-    email="amundsonalexa@gmail.com",
+    email="blackroad@gmail.com",
     current_step=OnboardingStep.WELCOME
 )
 
@@ -79,7 +79,7 @@ work_doc = WorkHistoryDocument(
     file_url="/uploads/alexa_resume.txt",
     file_type="txt",
     raw_text="""ALEXA AMUNDSON
-amundsonalexa@gmail.com | San Francisco Bay Area
+blackroad@gmail.com | San Francisco Bay Area
 
 EXPERIENCE
 
@@ -311,7 +311,7 @@ Thank you for considering my application. I look forward to speaking with you.
 
 Best regards,
 Alexa Amundson
-amundsonalexa@gmail.com""",
+blackroad@gmail.com""",
     applied_at=None,  # Not yet submitted
     custom_answers={
         "why_anthropic": "Anthropic's commitment to AI safety and constitutional AI aligns perfectly with my values. I want to work on systems that benefit humanity.",

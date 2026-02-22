@@ -159,7 +159,7 @@ See `app/globals.css` for full design system.
 Copy `.env.local.example` to `.env.local` and fill in:
 
 ```env
-NEXT_PUBLIC_API_URL=https://roadwork-hub.amundsonalexa.workers.dev
+NEXT_PUBLIC_API_URL=https://roadwork-hub.blackroad.workers.dev
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
 NEXT_PUBLIC_GA_ID=G-...
 ```

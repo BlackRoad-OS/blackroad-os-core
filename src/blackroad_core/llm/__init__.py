@@ -6,7 +6,7 @@ Provides unified interface for multiple LLM backends:
 - Ollama (MIT) - Local development
 
 Supports agent "thinking" via language models while maintaining
-compatibility with edge devices (Pi/Jetson) and cloud GPUs.}
+compatibility with edge devices (Pi/Jetson) and cloud GPUs."""
 
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Any, AsyncIterator
@@ -21,6 +21,7 @@ class LLMBackend(Enum):
     LLAMACPP = "llamacpp"  # CPU/edge
     OLLAMA = "ollama"  # Local dev
     OPENAI_COMPAT = "openai_compat"  # OpenAI-compatible APIs
+    HUGGINGFACE = "huggingface"  # HF Inference API
 
 
 @dataclass
@@ -101,7 +102,7 @@ class LLMProvider:
             **kwargs: Additional parameters
 
         Yields:
-            Text chunks as they're generated"""
+            Text chunks as they are generated."""
         raise NotImplementedError
 
 
@@ -140,8 +141,8 @@ class OllamaProvider(LLMProvider):
                 "temperature": self.config.temperature,
                 "top_p": self.config.top_p,
                 "num_predict": self.config.max_tokens
-            """
-        """
+            }
+        }
 
         start_time = time.time()
 
@@ -189,8 +190,8 @@ class OllamaProvider(LLMProvider):
                 "temperature": self.config.temperature,
                 "top_p": self.config.top_p,
                 "num_predict": self.config.max_tokens
-            """
-        """
+            }
+        }
 
         async with aiohttp.ClientSession() as session:
             async with session.post(url, json=payload) as resp:
@@ -235,7 +236,7 @@ class LlamaCppProvider(LLMProvider):
             "max_tokens": self.config.max_tokens,
             "top_p": self.config.top_p,
             "stream": False
-        """
+        }
 
         start_time = time.time()
 
@@ -289,9 +290,9 @@ class VLLMProvider(LLMProvider):
             "max_tokens": self.config.max_tokens,
             "top_p": self.config.top_p,
             "stream": False
-        """
+        }
 
-        headers = {"""
+        headers = {}
         if self.config.api_key:
             headers["Authorization"] = f"Bearer {self.config.api_key}"
 
@@ -316,14 +317,98 @@ class VLLMProvider(LLMProvider):
         )
 
 
+class HuggingFaceProvider(LLMProvider):
+    """
+    Hugging Face Inference API backend.
+
+    Supports any model hosted on the HF Hub with the Inference API,
+    including serverless inference and dedicated Inference Endpoints.
+    """
+
+    async def generate(
+        self,
+        messages: List[LLMMessage],
+        stream: bool = False,
+        **kwargs
+    ) -> LLMResponse:
+        """Generate using HF Inference API (OpenAI-compatible chat route)."""
+        import aiohttp
+        import time
+
+        base_url = self.config.base_url or "https://api-inference.huggingface.co"
+        api_key = self.config.api_key or ""
+
+        # Try chat completions endpoint first (works for conversational models)
+        url = f"{base_url}/models/{self.config.model_name}/v1/chat/completions"
+
+        headers = {}
+        if api_key:
+            headers["Authorization"] = f"Bearer {api_key}"
+
+        payload = {
+            "model": self.config.model_name,
+            "messages": [
+                {"role": msg.role, "content": msg.content}
+                for msg in messages
+            ],
+            "temperature": self.config.temperature,
+            "max_tokens": self.config.max_tokens,
+            "top_p": self.config.top_p,
+            "stream": False,
+        }
+
+        start_time = time.time()
+
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, json=payload, headers=headers) as resp:
+                if resp.status == 200:
+                    result = await resp.json()
+                    latency = (time.time() - start_time) * 1000
+                    choice = result["choices"][0]
+                    return LLMResponse(
+                        content=choice["message"]["content"],
+                        model=result.get("model", self.config.model_name),
+                        finish_reason=choice.get("finish_reason", "stop"),
+                        usage=result.get("usage", {}),
+                        latency_ms=latency,
+                        backend="huggingface",
+                    )
+
+                # Fallback: use the simple text generation endpoint
+                fallback_url = f"{base_url}/models/{self.config.model_name}"
+                # Combine messages into a single prompt
+                prompt = "\n".join(f"{m.role}: {m.content}" for m in messages)
+                async with session.post(
+                    fallback_url,
+                    json={"inputs": prompt, "parameters": {"max_new_tokens": self.config.max_tokens}},
+                    headers=headers,
+                ) as fallback_resp:
+                    fallback_resp.raise_for_status()
+                    result = await fallback_resp.json()
+
+        latency = (time.time() - start_time) * 1000
+
+        # Handle list response format
+        content = result[0].get("generated_text", "") if isinstance(result, list) else str(result)
+
+        return LLMResponse(
+            content=content,
+            model=self.config.model_name,
+            finish_reason="stop",
+            usage={"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
+            latency_ms=latency,
+            backend="huggingface",
+        )
+
+
 class LLMRouter:
     """    Routes LLM requests to appropriate backend based on:
     - Model requirements
     - Available resources
-    - Performance needs}
+    - Performance needs"""
 
     def __init__(self):
-        self.providers: Dict[str, LLMProvider] = {"""
+        self.providers: Dict[str, LLMProvider] = {}
         self.default_provider: Optional[str] = None
 
     def register_provider(self, name: str, provider: LLMProvider, set_default: bool = False):
@@ -357,6 +442,7 @@ __all__ = [
     "OllamaProvider",
     "LlamaCppProvider",
     "VLLMProvider",
+    "HuggingFaceProvider",
     "LLMRouter",
-    "LLMBackend"
+    "LLMBackend",
 ]

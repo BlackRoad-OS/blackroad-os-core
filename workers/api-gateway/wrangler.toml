@@ -3,27 +3,50 @@ main = "src/index.ts"
 compatibility_date = "2024-12-01"
 workers_dev = true
 
-[env.production]
-name = "blackroad-api-gateway"
-routes = [
-  { pattern = "api.blackroad.io/*", zone_name = "blackroad.io" },
-  { pattern = "core.blackroad.io/*", zone_name = "blackroad.io" },
-  { pattern = "operator.blackroad.io/*", zone_name = "blackroad.io" }
-]
+[[routes]]
+pattern = "api.blackroad.io/*"
+zone_name = "blackroad.io"
+
+[[routes]]
+pattern = "core.blackroad.io/*"
+zone_name = "blackroad.io"
+
+[[routes]]
+pattern = "operator.blackroad.io/*"
+zone_name = "blackroad.io"
 
 # KV Namespaces
-kv_namespaces = [
-  { binding = "CACHE", id = "c878fbcc1faf4eddbc98dcfd7485048d" },
-  { binding = "IDENTITIES", id = "10bf69b8bc664a5a832e348f1d0745cf" },
-  { binding = "API_KEYS", id = "57e48a017d4248a39df32661c3377908" },
-  { binding = "RATE_LIMIT", id = "245a00ee1ffe417fbcf519b2dbb141c6" }
-]
+[[kv_namespaces]]
+binding = "CACHE"
+id = "c878fbcc1faf4eddbc98dcfd7485048d"
+
+[[kv_namespaces]]
+binding = "IDENTITIES"
+id = "10bf69b8bc664a5a832e348f1d0745cf"
+
+[[kv_namespaces]]
+binding = "API_KEYS"
+id = "57e48a017d4248a39df32661c3377908"
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "245a00ee1ffe417fbcf519b2dbb141c6"
 
 # D1 Database
 [[d1_databases]]
 binding = "DB"
 database_name = "blackroad-os-main"
 database_id = "e2c6dcd9-c21a-48ac-8807-7b3a6881c4f7"
+
+# Legacy Durable Object (stub - will be removed in future migration)
+[durable_objects]
+bindings = [
+  { name = "SESSION_DO", class_name = "SessionDO" }
+]
+
+[[migrations]]
+tag = "v1"
+new_classes = ["SessionDO"]
 
 # Secrets (set via wrangler secret put)
 # - ANTHROPIC_API_KEY

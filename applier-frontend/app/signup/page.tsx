@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://applier-api.amundsonalexa.workers.dev'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://applier-api.blackroad.workers.dev'
 
 export default function SignupPage() {
   const router = useRouter()

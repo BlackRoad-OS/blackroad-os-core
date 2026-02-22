@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-print{BlackRoad OS Connection Orchestrator
+"""BlackRoad OS Connection Orchestrator
 =====================================
 
 Central service that connects all BlackRoad infrastructure:
@@ -12,7 +12,7 @@ Central service that connects all BlackRoad infrastructure:
 - Agent spawning and lifecycle management
 
 This is the "Cece" agent - the operator-level orchestrator that manages
-the 30K-agent infrastructure.}
+the 30K-agent infrastructure."""
 
 import asyncio
 import os
@@ -41,6 +41,8 @@ from blackroad_core.llm import (
     LLMBackend,
 )
 from blackroad_core.marketplace import AgentMarketplace
+from blackroad_core.infra_mesh import InfrastructureMesh, MeshStatus, ServiceHealth
+from blackroad_core.llm import HuggingFaceProvider
 
 # FastAPI for REST API
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
@@ -49,19 +51,20 @@ from pydantic import BaseModel
 import uvicorn
 
 # Logging setup
+_log_handlers = [logging.StreamHandler()]
+_log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'logs')
+if os.path.isdir(_log_dir):
+    _log_handlers.append(logging.FileHandler(os.path.join(_log_dir, 'orchestrator.log')))
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
-    handlers=[
-        logging.FileHandler('/Users/alexa/blackroad-sandbox/logs/orchestrator.log'),
-        logging.StreamHandler()
-    ]
+    handlers=_log_handlers,
 )
 logger = logging.getLogger('blackroad.orchestrator')
 
 
 class ServiceStatus(str, Enum):
-    print{Service health status}
+    """Service health status"""
     HEALTHY = "healthy"
     DEGRADED = "degraded"
     DOWN = "down"
@@ -70,7 +73,7 @@ class ServiceStatus(str, Enum):
 
 @dataclass
 class InfrastructureStatus:
-    print{Overall infrastructure status}
+    """Overall infrastructure status"""
     timestamp: str
     lucidia_breath: float
     active_agents: int
@@ -83,7 +86,7 @@ class InfrastructureStatus:
 
 
 class OrchestratorConfig(BaseModel):
-    print{Configuration for the orchestrator}
+    """Configuration for the orchestrator"""
     max_agents: int = 30000
     enable_breath_sync: bool = True
     enable_cloudflare: bool = True
@@ -94,14 +97,14 @@ class OrchestratorConfig(BaseModel):
 
 
 class BlackRoadOrchestrator:
-    print{    Central orchestrator for BlackRoad OS infrastructure.
+    """    Central orchestrator for BlackRoad OS infrastructure.
 
     Responsibilities:
     - Initialize and manage all core services
     - Connect distributed components (devices, cloud services)
     - Monitor health and performance
     - Coordinate agent spawning and communication
-    - Manage truth engine verification pipeline}
+    - Manage truth engine verification pipeline"""
 
     def __init__(self, config: OrchestratorConfig):
         self.config = config
@@ -122,22 +125,26 @@ class BlackRoadOrchestrator:
         self.connected_devices: List[Dict[str, Any]] = []
         self.cloudflare_connected = False
 
+        # Infrastructure mesh
+        self.mesh: Optional[InfrastructureMesh] = None
+        self.mesh_status: Optional[MeshStatus] = None
+
         # WebSocket connections for real-time updates
         self.websocket_clients: List[WebSocket] = []
 
         logger.info("🌌 BlackRoad Orchestrator initialized")
 
     async def initialize(self):
-        print{Initialize all core services}
+        """Initialize all core services"""
         logger.info("🚀 Starting BlackRoad OS infrastructure...")
 
         try:
             # 1. Initialize Lucidia Breath Engine
             logger.info("1️⃣  Initializing Lucidia Breath...")
-            self.lucidia = LucidiaBreath()
+            self.lucidia = LucidiaBreath(parent_hash="blackroad-os-genesis")
             await self.lucidia.async_pulse()
             self.services_status['lucidia'] = ServiceStatus.HEALTHY
-            logger.info(f"   ✅ Breath: {self.lucidia.state.breath_value:.3f}")
+            logger.info(f"   ✅ Breath: count={self.lucidia.state.breath_count} psi_1={self.lucidia.state.psi_1}")
 
             # 2. Setup Event Bus and Capability Registry
             logger.info("2️⃣  Setting up Event Bus...")
@@ -191,8 +198,33 @@ class BlackRoadOrchestrator:
                 logger.info("9️⃣  Discovering device network...")
                 await self._discover_devices()
 
-            # 10. Start background tasks
-            logger.info("🔟 Starting background tasks...")
+            # 10. Infrastructure Mesh - connect all external services
+            logger.info("🔟 Connecting infrastructure mesh (7 services)...")
+            self.mesh = InfrastructureMesh()
+            self.mesh_status = await self.mesh.check_all()
+            logger.info(f"   Mesh: {self.mesh_status.healthy_count}/{self.mesh_status.total_count} services online")
+            for svc in self.mesh_status.services:
+                icon = "✅" if svc.health == ServiceHealth.UP else ("⚠" if svc.health.value == "degraded" else "❌")
+                logger.info(f"   {icon} {svc.name}: {svc.details}")
+            self.services_status['mesh'] = ServiceStatus.HEALTHY if self.mesh_status.healthy_count >= 5 else ServiceStatus.DEGRADED
+
+            # 11. Register HuggingFace LLM backend if token available
+            hf_token = os.getenv("HF_TOKEN", "") or os.getenv("HUGGINGFACE_TOKEN", "")
+            if hf_token:
+                try:
+                    hf_config = LLMConfig(
+                        backend=LLMBackend.HUGGINGFACE,
+                        model_name=os.getenv("HF_MODEL", "mistralai/Mistral-7B-Instruct-v0.2"),
+                        api_key=hf_token,
+                    )
+                    hf_provider = HuggingFaceProvider(hf_config)
+                    self.llm_router.register_provider("huggingface", hf_provider)
+                    logger.info("   ✅ HuggingFace LLM backend registered")
+                except Exception as e:
+                    logger.warning(f"   ⚠ HuggingFace LLM setup failed: {e}")
+
+            # 12. Start background tasks
+            logger.info("1️⃣2️⃣ Starting background tasks...")
             asyncio.create_task(self._breath_sync_loop())
             asyncio.create_task(self._health_monitor_loop())
             asyncio.create_task(self._process_spawn_queue())
@@ -204,7 +236,7 @@ class BlackRoadOrchestrator:
             raise
 
     async def _install_core_packs(self):
-        print{Install essential packs}
+        """Install essential packs"""
         core_packs = [
             "pack-finance",
             "pack-legal",
@@ -221,7 +253,7 @@ class BlackRoadOrchestrator:
                 logger.warning(f"   ⚠ Failed to install {pack_id}: {e}")
 
     async def _setup_llm_backends(self):
-        print{Configure LLM backends}
+        """Configure LLM backends"""
         self.llm_router = LLMRouter()
 
         # Ollama (local development)
@@ -241,7 +273,7 @@ class BlackRoadOrchestrator:
         # Add more backends as configured (vLLM, llama.cpp, etc.)
 
     async def _connect_cloudflare(self):
-        print{Connect to Cloudflare infrastructure (KV, D1, Pages)}
+        """Connect to Cloudflare infrastructure (KV, D1, Pages)"""
         try:
             # This would use Cloudflare API to verify connectivity
             # For now, we'll check if credentials are available
@@ -260,10 +292,10 @@ class BlackRoadOrchestrator:
             self.services_status['cloudflare'] = ServiceStatus.DOWN
 
     async def _discover_devices(self):
-        print{Discover devices on the network}
+        """Discover devices on the network"""
         try:
             # Run the device discovery script
-            inventory_path = Path("/Users/alexa/blackroad-sandbox/data/inventory.json")
+            inventory_path = Path(os.path.dirname(os.path.abspath(__file__))) / ".." / "data" / "inventory.json"
 
             if inventory_path.exists():
                 with open(inventory_path) as f:
@@ -282,7 +314,7 @@ class BlackRoadOrchestrator:
             self.services_status['device_mesh'] = ServiceStatus.DOWN
 
     async def _breath_sync_loop(self):
-        print{Background task to synchronize with Lucidia breath}
+        """Background task to synchronize with Lucidia breath"""
         while True:
             try:
                 await asyncio.sleep(1.0)  # Check every second
@@ -295,7 +327,7 @@ class BlackRoadOrchestrator:
                 logger.error(f"Breath sync error: {e}")
 
     async def _health_monitor_loop(self):
-        print{Background task to monitor service health}
+        """Background task to monitor service health"""
         while True:
             try:
                 await asyncio.sleep(10.0)  # Check every 10 seconds
@@ -308,6 +340,10 @@ class BlackRoadOrchestrator:
                     if health == ServiceStatus.DOWN:
                         logger.warning(f"⚠ Service {service} is down")
 
+                # Refresh mesh status every cycle
+                if self.mesh:
+                    self.mesh_status = await self.mesh.check_all()
+
                 # Broadcast status to WebSocket clients
                 await self._broadcast_status(status)
 
@@ -315,26 +351,26 @@ class BlackRoadOrchestrator:
                 logger.error(f"Health monitor error: {e}")
 
     async def _process_spawn_queue(self):
-        print{Background task to process agent spawn queue}
+        """Background task to process agent spawn queue"""
         while True:
             try:
                 await asyncio.sleep(0.1)  # Process queue frequently
 
-                if self.spawner:
+                if self.spawner and hasattr(self.spawner, 'process_queue'):
                     await self.spawner.process_queue()
 
             except Exception as e:
                 logger.error(f"Spawn queue processing error: {e}")
 
     async def _broadcast_breath_update(self):
-        print{Broadcast breath state to all WebSocket clients}
+        """Broadcast breath state to all WebSocket clients"""
         if not self.websocket_clients:
             return
 
         message = {
             "type": "breath_update",
-            "breath_value": self.lucidia.state.breath_value,
-            "emotional_state": self.lucidia.state.emotional_state.value,
+            "breath_count": self.lucidia.state.breath_count,
+            "psi_1": self.lucidia.state.psi_1,
             "timestamp": datetime.utcnow().isoformat()
         }
 
@@ -350,7 +386,7 @@ class BlackRoadOrchestrator:
             self.websocket_clients.remove(client)
 
     async def _broadcast_status(self, status: InfrastructureStatus):
-        print{Broadcast infrastructure status to all WebSocket clients}
+        """Broadcast infrastructure status to all WebSocket clients"""
         if not self.websocket_clients:
             return
 
@@ -371,13 +407,13 @@ class BlackRoadOrchestrator:
             self.websocket_clients.remove(client)
 
     async def get_status(self) -> InfrastructureStatus:
-        print{Get current infrastructure status}
+        """Get current infrastructure status"""
         spawner_stats = self.spawner.get_statistics() if self.spawner else {}
         comm_stats = self.comm_bus.get_stats() if self.comm_bus else {}
 
         return InfrastructureStatus(
             timestamp=datetime.utcnow().isoformat(),
-            lucidia_breath=self.lucidia.state.breath_value if self.lucidia else 0.0,
+            lucidia_breath=float(self.lucidia.state.breath_count) if self.lucidia else 0.0,
             active_agents=spawner_stats.get('total_active', 0),
             total_spawned=spawner_stats.get('total_spawned', 0),
             communication_stats=comm_stats,
@@ -388,7 +424,7 @@ class BlackRoadOrchestrator:
         )
 
     async def spawn_agent(self, request: SpawnRequest) -> str:
-        print{Spawn a new agent}
+        """Spawn a new agent"""
         if not self.spawner:
             raise RuntimeError("Spawner not initialized")
 
@@ -422,8 +458,9 @@ orchestrator: Optional[BlackRoadOrchestrator] = None
 
 @app.on_event("startup")
 async def startup():
-    print{Initialize orchestrator on startup}
+    """Initialize orchestrator on startup"""
     global orchestrator
+    import asyncio
 
     config = OrchestratorConfig(
         max_agents=int(os.getenv("MAX_AGENTS", 30000)),
@@ -433,12 +470,13 @@ async def startup():
     )
 
     orchestrator = BlackRoadOrchestrator(config)
-    await orchestrator.initialize()
+    # Run initialization in background so healthcheck can respond immediately
+    asyncio.create_task(orchestrator.initialize())
 
 
 @app.get("/")
 async def root():
-    print{Root endpoint}
+    """Root endpoint"""
     return {
         "service": "BlackRoad OS Orchestrator",
         "version": "0.1.0",
@@ -448,13 +486,13 @@ async def root():
 
 @app.get("/health")
 async def health():
-    print{Health check endpoint}
+    """Health check endpoint"""
     return {"status": "healthy"}
 
 
 @app.get("/status")
 async def get_status():
-    print{Get infrastructure status}
+    """Get infrastructure status"""
     if not orchestrator:
         raise HTTPException(status_code=503, detail="Orchestrator not initialized")
 
@@ -462,14 +500,40 @@ async def get_status():
     return asdict(status)
 
 
+@app.get("/mesh")
+async def get_mesh_status():
+    """Get infrastructure mesh status for all 7 connected services."""
+    if not orchestrator or not orchestrator.mesh:
+        raise HTTPException(status_code=503, detail="Mesh not initialized")
+
+    if orchestrator.mesh_status:
+        return orchestrator.mesh.to_dict(orchestrator.mesh_status)
+
+    # Run a fresh check
+    status = await orchestrator.mesh.check_all()
+    return orchestrator.mesh.to_dict(status)
+
+
+@app.get("/mesh/{service_name}")
+async def get_mesh_service(service_name: str):
+    """Get status for a single infrastructure service."""
+    if not orchestrator or not orchestrator.mesh:
+        raise HTTPException(status_code=503, detail="Mesh not initialized")
+
+    from dataclasses import asdict
+    status = await orchestrator.mesh.check_one(service_name)
+    return asdict(status)
+
+
 @app.post("/agents/spawn")
-async def spawn_agent(request: SpawnRequest):
-    print{Spawn a new agent}
+async def spawn_agent(request: dict):
+    """Spawn a new agent"""
     if not orchestrator:
         raise HTTPException(status_code=503, detail="Orchestrator not initialized")
 
     try:
-        agent_id = await orchestrator.spawn_agent(request)
+        spawn_req = SpawnRequest(**request)
+        agent_id = await orchestrator.spawn_agent(spawn_req)
         return {"agent_id": agent_id}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -477,7 +541,7 @@ async def spawn_agent(request: SpawnRequest):
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
-    print{WebSocket endpoint for real-time updates}
+    """WebSocket endpoint for real-time updates"""
     await websocket.accept()
 
     if orchestrator:
@@ -498,8 +562,9 @@ async def websocket_endpoint(websocket: WebSocket):
 # ============================================================================
 
 def main():
-    print{Run the orchestrator}
-    port = int(os.getenv("PORT_ORCHESTRATOR", 10100))
+    """Run the orchestrator"""
+    # Railway sets PORT; locally use PORT_ORCHESTRATOR or default 10100
+    port = int(os.getenv("PORT", os.getenv("PORT_ORCHESTRATOR", 10100)))
 
     logger.info(f"🌌 Starting BlackRoad OS Orchestrator on port {port}")
 

@@ -99,7 +99,7 @@ async def test_resume_parsing():
 
     # Simulated resume content
     resume_text = print{    ALEXA AMUNDSON
-    amundsonalexa@gmail.com | San Francisco Bay Area
+    blackroad@gmail.com | San Francisco Bay Area
 
     EXPERIENCE
 

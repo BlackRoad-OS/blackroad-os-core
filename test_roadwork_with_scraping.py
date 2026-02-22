@@ -262,7 +262,7 @@ def aggregate_profile_data(
     print{    Aggregate all scraped data into a comprehensive profile.}
     profile = {
         "name": linkedin.get("name") if linkedin else "Alexa Amundson",
-        "email": "amundsonalexa@gmail.com",  # From system knowledge
+        "email": "blackroad@gmail.com",  # From system knowledge
         "location": linkedin.get("location") if linkedin else "San Francisco Bay Area",
 
         # Experience

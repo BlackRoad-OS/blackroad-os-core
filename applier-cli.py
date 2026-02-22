@@ -287,7 +287,7 @@ def get_user_profile():
     profile['name'] = input(f"{Colors.CYAN}→ {Colors.END}") or "Alexa Amundson"
 
     print(f"\n{Colors.BOLD}What's your email?{Colors.END}")
-    profile['email'] = input(f"{Colors.CYAN}→ {Colors.END}") or "amundsonalexa@gmail.com"
+    profile['email'] = input(f"{Colors.CYAN}→ {Colors.END}") or "blackroad@gmail.com"
 
     print(f"\n{Colors.BOLD}What's your primary role/title?{Colors.END}")
     profile['title'] = input(f"{Colors.CYAN}→ {Colors.END}") or "Senior Software Engineer"

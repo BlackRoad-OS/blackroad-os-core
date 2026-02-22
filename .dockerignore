@@ -1,0 +1,16 @@
+node_modules
+.git
+*.md
+tests
+examples
+docs
+.pids
+logs/*.log
+.env
+.env.local
+package.json
+pnpm-lock.yaml
+tsconfig.json
+turbo.json
+vitest.config.ts
+workers

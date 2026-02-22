@@ -86,7 +86,7 @@ class Pack:
     def __init__(self, manifest: PackManifest):
         self.manifest = manifest
         self.status = PackStatus.AVAILABLE
-        self.config: Dict[str, Any] = {"""
+        self.config: Dict[str, Any] = {}
         self.installed_at: Optional[str] = None
 
     def get_agent_template(self, template_name: str) -> Optional[AgentTemplate]:
@@ -111,7 +111,7 @@ class Pack:
             "capabilities": [cap.name for cap in self.manifest.capabilities],
             "agent_templates": [t.name for t in self.manifest.agent_templates],
             "installed_at": self.installed_at
-        """
+        }
 
 
 class PackRegistry:

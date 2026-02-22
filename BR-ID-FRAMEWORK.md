@@ -155,7 +155,7 @@ Third-party integrations and APIs
 |----|------|------|----------|--------------|
 | BR-INF-STR-0001 | railway-postgres | PostgreSQL | Railway | 602cb63b-6c98 |
 | BR-INF-STR-0002 | blackroad-api-claims | Cloudflare KV | Cloudflare | ac869d3a3ae54cd4 |
-| BR-INF-STR-0003 | gdrive-personal | Google Drive | Google | amundsonalexa@gmail.com |
+| BR-INF-STR-0003 | gdrive-personal | Google Drive | Google | blackroad@gmail.com |
 | BR-INF-STR-0004 | gdrive-blackroad | Google Drive | Google | blackroad.systems@gmail.com |
 
 ---
@@ -221,9 +221,9 @@ Third-party integrations and APIs
 #### Workers (APP-WRK)
 | ID | Name | URL | Purpose |
 |----|------|-----|---------|
-| BR-APP-WRK-0001 | blackroad-auth | blackroad-auth.amundsonalexa.workers.dev | Authentication |
-| BR-APP-WRK-0002 | blackroad-gateway | blackroad-gateway.amundsonalexa.workers.dev | API Gateway |
-| BR-APP-WRK-0003 | blackroad-landing | blackroad-landing.amundsonalexa.workers.dev | Landing Page |
+| BR-APP-WRK-0001 | blackroad-auth | blackroad-auth.blackroad.workers.dev | Authentication |
+| BR-APP-WRK-0002 | blackroad-gateway | blackroad-gateway.blackroad.workers.dev | API Gateway |
+| BR-APP-WRK-0003 | blackroad-landing | blackroad-landing.blackroad.workers.dev | Landing Page |
 
 ---
 
@@ -457,7 +457,7 @@ When a resource is decommissioned:
 
 ### Contact
 For ID assignment questions or conflicts:
-- **Primary**: amundsonalexa@gmail.com
+- **Primary**: blackroad@gmail.com
 - **Company**: blackroad.systems@gmail.com
 
 ---

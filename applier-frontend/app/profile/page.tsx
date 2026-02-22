@@ -30,7 +30,7 @@ export default function ProfilePage() {
               ALEXA LOUISE AMUNDSON
             </h1>
             <p className="text-xl text-gray-300 mb-6">
-              Lakeville, MN • <a href="mailto:amundsonalexa@gmail.com" className="text-gradient hover:underline">amundsonalexa@gmail.com</a> • (507) 828-0842
+              Lakeville, MN • <a href="mailto:blackroad@gmail.com" className="text-gradient hover:underline">blackroad@gmail.com</a> • (507) 828-0842
             </p>
             <div className="flex gap-4 justify-center text-gray-300">
               <a href="https://linkedin.com/in/alexaamundson" target="_blank" rel="noopener noreferrer" className="hover:text-applier-pink transition">

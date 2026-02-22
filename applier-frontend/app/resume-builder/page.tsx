@@ -34,7 +34,7 @@ interface ResumeData {
 const DEFAULT_RESUME: ResumeData = {
   personalInfo: {
     name: 'Alexa Louise Amundson',
-    email: 'amundsonalexa@gmail.com',
+    email: 'blackroad@gmail.com',
     phone: '(507) 828-0842',
     location: 'Lakeville, MN',
     linkedin: 'linkedin.com/in/alexaamundson',

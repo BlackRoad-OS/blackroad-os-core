@@ -2,7 +2,7 @@
 
 **Deployment Date:** December 13, 2025
 **Status:** ✅ LIVE AND OPERATIONAL
-**Account:** amundsonalexa@gmail.com
+**Account:** blackroad@gmail.com
 
 ---
 
@@ -11,7 +11,7 @@
 ### Master Subdomain Router
 - **Worker Name:** blackroad-subdomain-router
 - **Status:** ✅ Deployed to production
-- **URL:** https://blackroad-subdomain-router.amundsonalexa.workers.dev
+- **URL:** https://blackroad-subdomain-router.blackroad.workers.dev
 - **Version:** da0b6671-9b8b-4c20-b543-48e5a27c4ccb
 - **KV Namespaces:** 4 (CACHE, IDENTITIES, API_KEYS, RATE_LIMIT)
 - **D1 Database:** blackroad-os-main
@@ -273,7 +273,7 @@ wrangler tail blackroad-subdomain-router
 ### Test Endpoints
 ```bash
 # Test main worker
-curl https://blackroad-subdomain-router.amundsonalexa.workers.dev
+curl https://blackroad-subdomain-router.blackroad.workers.dev
 
 # Test agent personality
 curl https://claude.blackroad.io  # When DNS configured
@@ -317,7 +317,7 @@ wrangler d1 execute blackroad-os-main --command "SELECT * FROM agents LIMIT 10"
 
 - **Dashboard:** https://dash.cloudflare.com
 - **Wrangler Docs:** https://developers.cloudflare.com/workers/wrangler
-- **Worker URL:** https://blackroad-subdomain-router.amundsonalexa.workers.dev
+- **Worker URL:** https://blackroad-subdomain-router.blackroad.workers.dev
 - **GitHub:** https://github.com/BlackRoad-OS
 
 ---

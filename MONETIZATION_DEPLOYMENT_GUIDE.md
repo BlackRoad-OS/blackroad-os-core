@@ -2,7 +2,7 @@
 ## Complete Setup in 60 Minutes
 
 **Status**: ✅ Infrastructure Deployed
-**Payment Gateway**: https://blackroad-payment-gateway.amundsonalexa.workers.dev
+**Payment Gateway**: https://blackroad-payment-gateway.blackroad.workers.dev
 **Payment Page**: https://c9134ee5.blackroad-payment-page.pages.dev
 
 ---
@@ -14,7 +14,7 @@
    - KV Namespace for subscriptions: `0cf493d5d19141df8912e3dc2df10464`
    - KV Namespace for users: `67a82ad7824d4b89809e7ae2221aba66`
    - D1 Database for revenue tracking: `8744905a-cf6c-4e16-9661-4c67d340813f`
-   - Worker URL: https://blackroad-payment-gateway.amundsonalexa.workers.dev
+   - Worker URL: https://blackroad-payment-gateway.blackroad.workers.dev
 
 2. **Payment Landing Page** - Deployed to Cloudflare Pages
    - Pages URL: https://c9134ee5.blackroad-payment-page.pages.dev
@@ -32,7 +32,7 @@
 ### Step 1: Create Stripe Account (5 minutes)
 
 1. Go to https://dashboard.stripe.com/register
-2. Sign up with `blackroad.systems@gmail.com` or `amundsonalexa@gmail.com`
+2. Sign up with `blackroad.systems@gmail.com` or `blackroad@gmail.com`
 3. Complete business verification (use BlackRoad Inc. details)
 4. Enable test mode for initial testing
 
@@ -64,7 +64,7 @@ In Stripe Dashboard → Products → Add Product:
 ### Step 3: Configure Stripe Webhook (5 minutes)
 
 1. Stripe Dashboard → Developers → Webhooks → Add endpoint
-2. URL: `https://blackroad-payment-gateway.amundsonalexa.workers.dev/webhook`
+2. URL: `https://blackroad-payment-gateway.blackroad.workers.dev/webhook`
 3. Events to listen to:
    - `checkout.session.completed`
    - `customer.subscription.created`
@@ -130,7 +130,7 @@ Also add for the worker:
 ```
 Type: CNAME
 Name: payments
-Target: blackroad-payment-gateway.amundsonalexa.workers.dev
+Target: blackroad-payment-gateway.blackroad.workers.dev
 Proxy: Yes (orange cloud)
 ```
 
