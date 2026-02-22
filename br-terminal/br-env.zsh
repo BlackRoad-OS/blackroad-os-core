@@ -66,11 +66,11 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 
-# ── BlackRoad Branding (for scripts to use) ──
-export BR_ORANGE="#FF9D00"
-export BR_PINK="#FF0066"
-export BR_PURPLE="#7700FF"
-export BR_BLUE="#0066FF"
+# ── BlackRoad Branding — official brand palette (BlackRoad OS, Inc.) ──
+export BR_AMBER="#F5A623"
+export BR_HOT_PINK="#FF1D6C"
+export BR_ELECTRIC_BLUE="#2979FF"
+export BR_VIOLET="#9C27B0"
 
 # ══════════════════════════════════════════════════════════════════════════════
 # End BlackRoad Environment

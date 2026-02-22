@@ -1,5 +1,5 @@
 # ══════════════════════════════════════════════════════════════════════════════
-# BlackRoad Terminal OS — Aliases & Functions
+# BlackRoad Terminal OS — Aliases & Functions v0.5
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ── Navigation ──
@@ -7,9 +7,15 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias ~="cd ~"
-alias br="cd ~/blackroad-sandbox"
+alias blackroad="cd ~/blackroad"
 alias bro="cd ~/blackroad-os-operator"
 alias brd="cd ~/blackroad-os-docs"
+
+# ── BlackRoad Hub & Tools ──
+hub() { bash ~/blackroad/hub.sh "$@"; }
+brr() { zsh ~/blackroad/br "$@"; }                        # run any br tool
+agent() { zsh ~/blackroad/br agent "$@"; }
+cece() { zsh ~/blackroad/br cece "$@"; }
 
 # ── Git (BlackRoad style) ──
 alias gs="git status"
@@ -60,13 +66,17 @@ alias cfl="npx wrangler login"
 alias cfd="npx wrangler pages deploy"
 alias cfp="npx wrangler pages project list"
 
-# ── Docker ──
+# ── Docker (wired to br docker commands) ──
 alias d="docker"
-alias dc="docker-compose"
-alias dps="docker ps"
-alias dimg="docker images"
-alias dex="docker exec -it"
-alias dlog="docker logs -f"
+alias dc="docker compose"
+alias dps="zsh ~/blackroad/br docker ps -a"
+alias dimg="zsh ~/blackroad/br docker images"
+alias dup="zsh ~/blackroad/br docker compose up"
+alias ddown="zsh ~/blackroad/br docker compose down"
+alias dstats="zsh ~/blackroad/br docker stats"
+alias dclean="zsh ~/blackroad/br docker clean"
+dlog() { zsh ~/blackroad/br docker logs "${1}" "${2:-100}"; }
+dex()  { zsh ~/blackroad/br docker exec "${1}" "${@:2}"; }
 
 # ── System ──
 alias reload="source ~/.zshrc"

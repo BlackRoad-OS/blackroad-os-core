@@ -1,16 +1,14 @@
 # ══════════════════════════════════════════════════════════════════════════════
-# BlackRoad λ-Prompt v0.4 "Emoji Edition"
+# BlackRoad λ-Prompt v0.5 "Next Level"
 # An OS within the OS – Neon-branded shell prompt for BlackRoad OS
 # ══════════════════════════════════════════════════════════════════════════════
 
-# ── Neon Palette ──
-BR_ORANGE="#FF9D00"
-BR_ORANGE_LIGHT="#FF6B00"
-BR_PINK="#FF0066"
-BR_PINK_ALT="#FF006B"
-BR_PURPLE_DARK="#D600AA"
-BR_PURPLE="#7700FF"
-BR_BLUE="#0066FF"
+# ── Brand Palette (official BlackRoad OS, Inc.) ──
+BR_AMBER="#F5A623"        # amber
+BR_HOT_PINK="#FF1D6C"     # hot-pink (primary)
+BR_ELECTRIC_BLUE="#2979FF"
+BR_VIOLET="#9C27B0"
+BR_WHITE="#FFFFFF"
 BR_RESET="\e[0m"
 
 # ── Helper: 24-bit RGB color ──
@@ -22,18 +20,33 @@ _br_rgb() {
 _br_prompt_status() {
   local code="$?"
   if [[ $code -eq 0 ]]; then
-    printf "%s💚%s" "$(_br_rgb 0x${BR_BLUE#\#})" "$BR_RESET"
+    printf "%s💚%s" "$(_br_rgb 0x${BR_ELECTRIC_BLUE#\#})" "$BR_RESET"
   else
-    printf "%s🔥%s" "$(_br_rgb 0x${BR_PINK#\#})" "$BR_RESET"
+    printf "%s🔥%s" "$(_br_rgb 0x${BR_HOT_PINK#\#})" "$BR_RESET"
   fi
 }
 
-# ── Git Branch (🌿 branch-name) ──
+# ── Git Branch + dirty state + ahead/behind ──
 _br_git_branch() {
   command -v git >/dev/null || return
   local branch
   branch=$(git symbolic-ref --short HEAD 2>/dev/null) || return
-  printf " %s🌿 %s%s" "$(_br_rgb 0x${BR_PURPLE#\#})" "$branch" "$BR_RESET"
+
+  # Dirty state
+  local dirty=""
+  git diff --quiet 2>/dev/null || dirty=" ${BR_RESET}\e[38;2;255;100;50m✗${BR_RESET}"
+
+  # Ahead / behind (only if remote tracking exists)
+  local ab=""
+  local counts
+  counts=$(git rev-list --left-right --count @{u}...HEAD 2>/dev/null) && {
+    local behind=${counts%$'\t'*}
+    local ahead=${counts##*$'\t'}
+    [[ "$ahead" -gt 0 ]]  && ab+=" \e[38;2;80;200;80m↑${ahead}${BR_RESET}"
+    [[ "$behind" -gt 0 ]] && ab+=" \e[38;2;255;100;50m↓${behind}${BR_RESET}"
+  }
+
+  printf " %s🌿 %s%s%s%s" "$(_br_rgb 0x${BR_VIOLET#\#})" "$branch" "$dirty" "$ab" "$BR_RESET"
 }
 
 # ── Timestamp (🕒 HH:MM) ──
@@ -44,21 +57,19 @@ _br_timestamp() {
 # ── Current Directory (with ~ shortening) ──
 _br_cwd() {
   local cwd="${PWD/#$HOME/\~}"
-  printf "%s%s%s" "$(_br_rgb 0x${BR_ORANGE_LIGHT#\#})" "$cwd" "$BR_RESET"
+  printf "%s%s%s" "$(_br_rgb 0x${BR_AMBER#\#})" "$cwd" "$BR_RESET"
 }
 
 # ── Python Virtual Env ──
 _br_venv() {
   [[ -n "$VIRTUAL_ENV" ]] || return
   local venv_name=$(basename "$VIRTUAL_ENV")
-  printf " %s(venv:%s)%s" "$(_br_rgb 0x${BR_PURPLE_DARK#\#})" "$venv_name" "$BR_RESET"
+  printf " %s(venv:%s)%s" "$(_br_rgb 0x${BR_VIOLET#\#})" "$venv_name" "$BR_RESET"
 }
 
-# ── Trinary Sigil (optional) ──
+# ── Trinary Sigil ──
 _br_trinary() {
-  # Uncomment to show "-1 0 1" instead of λ
-  # printf "%s-1 0 1%s" "$(_br_rgb 0x${BR_ORANGE#\#})" "$BR_RESET"
-  printf "%sλ%s" "$(_br_rgb 0x${BR_ORANGE#\#})" "$BR_RESET"
+  printf "%sλ%s" "$(_br_rgb 0x${BR_AMBER#\#})" "$BR_RESET"
 }
 
 # ── Build PS1 ──
@@ -77,10 +88,10 @@ precmd_functions+=(_blackroad_ps1)
 
 # ── Welcome Message ──
 echo ""
-echo "$(_br_rgb 0x${BR_ORANGE#\#})╔════════════════════════════════════════════╗${BR_RESET}"
-echo "$(_br_rgb 0x${BR_ORANGE#\#})║${BR_RESET}  🚗 BlackRoad Terminal OS v0.4          $(_br_rgb 0x${BR_ORANGE#\#})║${BR_RESET}"
-echo "$(_br_rgb 0x${BR_ORANGE#\#})║${BR_RESET}  OS within the OS — Neon Edition        $(_br_rgb 0x${BR_ORANGE#\#})║${BR_RESET}"
-echo "$(_br_rgb 0x${BR_ORANGE#\#})╚════════════════════════════════════════════╝${BR_RESET}"
+echo "$(_br_rgb 0x${BR_AMBER#\#})╔════════════════════════════════════════════╗${BR_RESET}"
+echo "$(_br_rgb 0x${BR_AMBER#\#})║${BR_RESET}  🚗 BlackRoad Terminal OS v0.5          $(_br_rgb 0x${BR_AMBER#\#})║${BR_RESET}"
+echo "$(_br_rgb 0x${BR_AMBER#\#})║${BR_RESET}  OS within the OS — Next Level          $(_br_rgb 0x${BR_AMBER#\#})║${BR_RESET}"
+echo "$(_br_rgb 0x${BR_AMBER#\#})╚════════════════════════════════════════════╝${BR_RESET}"
 echo ""
 
 # ══════════════════════════════════════════════════════════════════════════════
