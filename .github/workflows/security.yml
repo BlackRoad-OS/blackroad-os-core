@@ -29,7 +29,7 @@ jobs:
   # ─────────────────────────────────────────────────────────────────────────
   codeql:
     name: CodeQL Analysis
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, blackroad-fleet]
     permissions:
       actions: read
       contents: read
@@ -63,7 +63,7 @@ jobs:
   # ─────────────────────────────────────────────────────────────────────────
   dependency-scan:
     name: Dependency Scan
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, blackroad-fleet]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -98,7 +98,7 @@ jobs:
   # ─────────────────────────────────────────────────────────────────────────
   secret-scan:
     name: Secret Scan
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, blackroad-fleet]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -153,7 +153,7 @@ jobs:
   # ─────────────────────────────────────────────────────────────────────────
   sast:
     name: SAST Scan
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, blackroad-fleet]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
