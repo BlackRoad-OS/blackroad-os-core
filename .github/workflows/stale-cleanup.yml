@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   stale:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, blackroad-fleet]
     steps:
       - name: Mark and close stale issues
         uses: actions/stale@v9
