@@ -11,7 +11,7 @@ env:
 jobs:
   detect-service:
     name: Detect Service Type
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, blackroad-fleet]
     outputs:
       service_type: ${{ steps.detect.outputs.service_type }}
       deploy_target: ${{ steps.detect.outputs.deploy_target }}
@@ -44,7 +44,7 @@ jobs:
     name: Deploy to Cloudflare Pages
     needs: detect-service
     if: needs.detect-service.outputs.deploy_target == 'cloudflare'
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, blackroad-fleet]
     
     steps:
       - name: Checkout
@@ -75,7 +75,7 @@ jobs:
     name: Deploy to Railway
     needs: detect-service
     if: needs.detect-service.outputs.deploy_target == 'railway'
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, blackroad-fleet]
     
     steps:
       - name: Checkout
@@ -93,7 +93,7 @@ jobs:
     name: Health Check
     needs: [deploy-cloudflare, deploy-railway]
     if: always() && (needs.deploy-cloudflare.result == 'success' || needs.deploy-railway.result == 'success')
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, blackroad-fleet]
     
     steps:
       - name: Wait for Deployment
