@@ -17,7 +17,7 @@ permissions:
 jobs:
   auto-merge:
     name: Auto-Merge Compliant PRs
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, blackroad-fleet]
 
     # Only run for bot-created PRs
     if: |
