@@ -11,7 +11,7 @@ permissions:
 jobs:
   test-coverage:
     name: Test Coverage Agent
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, blackroad-fleet]
 
     steps:
       - name: Checkout repository
