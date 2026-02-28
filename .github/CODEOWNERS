@@ -1,13 +1,16 @@
 # BlackRoad OS Code Owners
-* @alexa
+* @BlackRoad-OS-Inc/core @alexa
 
 # Python services
-*.py @alexa
+*.py @BlackRoad-OS-Inc/core @alexa
 
 # Railway configurations
-railway*.json @alexa
-railway*.toml @alexa
+railway*.json @BlackRoad-OS-Inc/core @alexa
+railway*.toml @BlackRoad-OS-Inc/core @alexa
 
 # Security-sensitive files
-.env* @alexa
-*secret* @alexa
+.env* @BlackRoad-OS-Inc/core @alexa
+*secret* @BlackRoad-OS-Inc/core @alexa
+
+# CI/CD Workflows
+.github/workflows/ @BlackRoad-OS-Inc/core @alexa

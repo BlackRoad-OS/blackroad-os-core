@@ -12,7 +12,9 @@ export type ServiceId =
   | "pack-education"
   | "pack-infra-devops"
   | "pack-finance"
-  | "pack-legal";
+  | "pack-legal"
+  | "stripe"
+  | "clerk";
 
 export type ServiceKind =
   | "core"
@@ -21,7 +23,9 @@ export type ServiceKind =
   | "web"
   | "console"
   | "pack"
-  | "infra";
+  | "infra"
+  | "payment"
+  | "auth";
 
 export type BaseEnv = "local" | "staging" | "prod";
 

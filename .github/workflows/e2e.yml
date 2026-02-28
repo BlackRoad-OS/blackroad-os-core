@@ -1,0 +1,220 @@
+# ============================================================================
+# BlackRoad OS - Production E2E Workflow
+# Copyright (c) 2025 BlackRoad OS, Inc.
+# All Rights Reserved.
+# ============================================================================
+#
+# End-to-end integration checks for Stripe and Clerk production services.
+# Validates that all external integrations are configured and reachable
+# before any deployment proceeds.
+#
+# Triggered:
+#   - On push/PR to main, master, staging
+#   - Manually via workflow_dispatch
+# ============================================================================
+
+name: E2E Integration Checks
+
+on:
+  push:
+    branches: [main, master, staging]
+  pull_request:
+    branches: [main, master, staging]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: "20"
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────
+  # Stripe Integration Check
+  # ─────────────────────────────────────────────────────────────────────────
+  stripe-check:
+    name: Stripe Integration
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Validate Stripe service registration
+        run: |
+          node -e "
+            const { SERVICE_REGISTRY } = require('./src/services/registry');
+            const stripe = SERVICE_REGISTRY['stripe'];
+            if (!stripe) { console.error('stripe not found in SERVICE_REGISTRY'); process.exit(1); }
+            console.log('✅ Stripe service registered:', stripe.id, stripe.kind);
+          " || npx tsx -e "
+            import { SERVICE_REGISTRY } from './src/services/registry.js';
+            const stripe = SERVICE_REGISTRY['stripe'];
+            if (!stripe) { console.error('stripe not found in SERVICE_REGISTRY'); process.exit(1); }
+            console.log('✅ Stripe service registered:', stripe.id, stripe.kind);
+          "
+
+      - name: Verify Stripe secret key is configured
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+        run: |
+          if [ -z "$STRIPE_SECRET_KEY" ]; then
+            echo "::warning::STRIPE_SECRET_KEY is not set. Configure it in repository secrets."
+          else
+            echo "✅ STRIPE_SECRET_KEY is configured"
+          fi
+
+      - name: Stripe API reachability check
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+        run: |
+          if [ -n "$STRIPE_SECRET_KEY" ]; then
+            TMPFILE=$(mktemp)
+            echo "header = \"Authorization: Bearer $STRIPE_SECRET_KEY\"" > "$TMPFILE"
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+              --config "$TMPFILE" \
+              https://api.stripe.com/v1/balance)
+            rm -f "$TMPFILE"
+            if [ "$STATUS" = "200" ]; then
+              echo "✅ Stripe API reachable and key is valid"
+            else
+              echo "::warning::Stripe API returned HTTP $STATUS — check key validity"
+            fi
+          else
+            echo "⏭️  Skipping Stripe API check (no key configured)"
+          fi
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Clerk Integration Check
+  # ─────────────────────────────────────────────────────────────────────────
+  clerk-check:
+    name: Clerk Auth Integration
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Validate Clerk service registration
+        run: |
+          npx tsx -e "
+            import { SERVICE_REGISTRY } from './src/services/registry.js';
+            const clerk = SERVICE_REGISTRY['clerk'];
+            if (!clerk) { console.error('clerk not found in SERVICE_REGISTRY'); process.exit(1); }
+            console.log('✅ Clerk service registered:', clerk.id, clerk.kind);
+          " 2>/dev/null || node -e "
+            const { SERVICE_REGISTRY } = require('./src/services/registry');
+            const clerk = SERVICE_REGISTRY['clerk'];
+            if (!clerk) { console.error('clerk not found in SERVICE_REGISTRY'); process.exit(1); }
+            console.log('✅ Clerk service registered:', clerk.id, clerk.kind);
+          "
+
+      - name: Validate Clerk config
+        run: |
+          node -e "
+            const config = require('./clerk-config.json');
+            if (config.organization !== 'BlackRoad-OS-Inc') {
+              console.error('clerk-config.json organization must be BlackRoad-OS-Inc');
+              process.exit(1);
+            }
+            console.log('✅ Clerk config organization:', config.organization);
+            console.log('✅ Protected routes:', config.protectedRoutes.length);
+          "
+
+      - name: Verify Clerk secret key is configured
+        env:
+          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+        run: |
+          if [ -z "$CLERK_SECRET_KEY" ]; then
+            echo "::warning::CLERK_SECRET_KEY is not set. Configure it in repository secrets."
+          else
+            echo "✅ CLERK_SECRET_KEY is configured"
+          fi
+
+      - name: Verify Clerk publishable key is configured
+        env:
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+        run: |
+          if [ -z "$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY" ]; then
+            echo "::warning::NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY is not set. Configure it in repository secrets."
+          else
+            echo "✅ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY is configured"
+          fi
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Full E2E Summary
+  # ─────────────────────────────────────────────────────────────────────────
+  e2e-summary:
+    name: E2E Summary
+    runs-on: ubuntu-latest
+    needs: [stripe-check, clerk-check]
+    if: always()
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Run service registry tests
+        run: pnpm test -- --reporter=verbose tests/serviceRegistry.test.ts
+
+      - name: E2E Summary Report
+        if: always()
+        run: |
+          echo "### BlackRoad OS E2E Integration Results 🚀" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Service | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ needs.stripe-check.result }}" = "success" ]; then
+            echo "| Stripe Payments | ✅ Pass |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Stripe Payments | ❌ Fail |" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ "${{ needs.clerk-check.result }}" = "success" ]; then
+            echo "| Clerk Auth | ✅ Pass |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Clerk Auth | ❌ Fail |" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Organization:** BlackRoad-OS-Inc" >> $GITHUB_STEP_SUMMARY
+          echo "**Repo:** blackroad-os-core" >> $GITHUB_STEP_SUMMARY

@@ -25,6 +25,8 @@ describe("Service Registry", () => {
       "pack-infra-devops",
       "pack-finance",
       "pack-legal",
+      "stripe",
+      "clerk",
     ];
 
     requiredServices.forEach((id) => {
@@ -101,5 +103,33 @@ describe("Service Registry", () => {
     const ids = services.map((s) => s.id);
     const uniqueIds = new Set(ids);
     expect(ids.length).toBe(uniqueIds.size);
+  });
+
+  test("stripe service should have payment kind", () => {
+    const stripe = getServiceById("stripe");
+    expect(stripe).toBeDefined();
+    expect(stripe?.id).toBe("stripe");
+    expect(stripe?.kind).toBe("payment");
+    expect(stripe?.name).toBe("Stripe Payments");
+  });
+
+  test("clerk service should have auth kind", () => {
+    const clerk = getServiceById("clerk");
+    expect(clerk).toBeDefined();
+    expect(clerk?.id).toBe("clerk");
+    expect(clerk?.kind).toBe("auth");
+    expect(clerk?.name).toBe("Clerk Auth");
+  });
+
+  test("should list payment services", () => {
+    const paymentServices = listServicesByKind("payment");
+    expect(paymentServices.length).toBeGreaterThanOrEqual(1);
+    expect(paymentServices.some((s) => s.id === "stripe")).toBe(true);
+  });
+
+  test("should list auth services", () => {
+    const authServices = listServicesByKind("auth");
+    expect(authServices.length).toBeGreaterThanOrEqual(1);
+    expect(authServices.some((s) => s.id === "clerk")).toBe(true);
   });
 });

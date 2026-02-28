@@ -1,5 +1,6 @@
 {
-  "repo": "BlackRoad-OS/blackroad-os-core",
+  "repo": "BlackRoad-OS-Inc/blackroad-os-core",
+  "organization": "BlackRoad-OS-Inc",
   "authEndpoints": [
     "/api/auth/signin",
     "/api/auth/signup",
