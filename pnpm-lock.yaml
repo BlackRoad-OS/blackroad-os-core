@@ -15,8 +15,8 @@ importers:
         specifier: ^1.19.10
         version: 1.19.10(hono@4.12.4)
       '@prisma/client':
-        specifier: ^5.22.0
-        version: 5.22.0(prisma@5.22.0)
+        specifier: ^7.4.2
+        version: 7.4.2(prisma@5.22.0)(typescript@5.9.3)
       hono:
         specifier: ^4.12.4
         version: 4.12.4
@@ -2160,17 +2160,25 @@ packages:
     dev: true
     optional: true
 
-  /@prisma/client@5.22.0(prisma@5.22.0):
-    resolution: {integrity: sha512-M0SVXfyHnQREBKxCgyo7sffrKttwE6R8PMq330MIUF0pTwjUhLbW84pFDlf06B27XyCR++VtjugEnIHdr07SVA==}
-    engines: {node: '>=16.13'}
-    requiresBuild: true
+  /@prisma/client-runtime-utils@7.4.2:
+    resolution: {integrity: sha512-cID+rzOEb38VyMsx5LwJMEY4NGIrWCNpKu/0ImbeooQ2Px7TI+kOt7cm0NelxUzF2V41UVVXAmYjANZQtCu1/Q==}
+    dev: false
+
+  /@prisma/client@7.4.2(prisma@5.22.0)(typescript@5.9.3):
+    resolution: {integrity: sha512-ts2mu+cQHriAhSxngO3StcYubBGTWDtu/4juZhXCUKOwgh26l+s4KD3vT2kMUzFyrYnll9u/3qWrtzRv9CGWzA==}
+    engines: {node: ^20.19 || ^22.12 || >=24.0}
     peerDependencies:
       prisma: '*'
+      typescript: '>=5.4.0'
     peerDependenciesMeta:
       prisma:
         optional: true
+      typescript:
+        optional: true
     dependencies:
+      '@prisma/client-runtime-utils': 7.4.2
       prisma: 5.22.0
+      typescript: 5.9.3
     dev: false
 
   /@prisma/debug@5.22.0:
