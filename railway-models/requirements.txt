@@ -2,7 +2,7 @@
 
 # Core inference
 vllm==0.6.0
-torch==2.1.2
+torch==2.10.0
 transformers==4.37.0
 
 # API server
