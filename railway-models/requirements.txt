@@ -11,7 +11,7 @@ uvicorn[standard]==0.41.0
 pydantic==2.5.0
 
 # Model management
-huggingface-hub==0.20.0
+huggingface-hub==1.6.0
 safetensors==0.7.0
 
 # Utilities
