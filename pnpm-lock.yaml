@@ -104,16 +104,16 @@ importers:
         version: 5.90.10(react@18.3.1)
       '@trpc/client':
         specifier: ^11.0.0-rc.588
-        version: 11.7.2(@trpc/server@11.7.2)(typescript@5.9.3)
+        version: 11.7.2(@trpc/server@11.12.0)(typescript@5.9.3)
       '@trpc/next':
         specifier: ^11.0.0-rc.588
-        version: 11.7.2(@tanstack/react-query@5.90.10)(@trpc/client@11.7.2)(@trpc/react-query@11.7.2)(@trpc/server@11.7.2)(next@15.5.10)(react-dom@18.3.1)(react@18.3.1)(typescript@5.9.3)
+        version: 11.7.2(@tanstack/react-query@5.90.10)(@trpc/client@11.7.2)(@trpc/react-query@11.7.2)(@trpc/server@11.12.0)(next@15.5.10)(react-dom@18.3.1)(react@18.3.1)(typescript@5.9.3)
       '@trpc/react-query':
         specifier: ^11.0.0-rc.588
-        version: 11.7.2(@tanstack/react-query@5.90.10)(@trpc/client@11.7.2)(@trpc/server@11.7.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.9.3)
+        version: 11.7.2(@tanstack/react-query@5.90.10)(@trpc/client@11.7.2)(@trpc/server@11.12.0)(react-dom@18.3.1)(react@18.3.1)(typescript@5.9.3)
       '@trpc/server':
-        specifier: ^11.0.0-rc.588
-        version: 11.7.2(typescript@5.9.3)
+        specifier: ^11.12.0
+        version: 11.12.0(typescript@5.9.3)
       next:
         specifier: 15.5.10
         version: 15.5.10(@babel/core@7.29.0)(react-dom@18.3.1)(react@18.3.1)
@@ -2616,17 +2616,17 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
     dev: true
 
-  /@trpc/client@11.7.2(@trpc/server@11.7.2)(typescript@5.9.3):
+  /@trpc/client@11.7.2(@trpc/server@11.12.0)(typescript@5.9.3):
     resolution: {integrity: sha512-OQxqUMfpDvjcszo9dbnqWQXnW2L5IbrKSz2H7l8s+mVM3EvYw7ztQ/gjFIN3iy0NcamiQfd4eE6qjcb9Lm+63A==}
     peerDependencies:
       '@trpc/server': 11.7.2
       typescript: '>=5.7.2'
     dependencies:
-      '@trpc/server': 11.7.2(typescript@5.9.3)
+      '@trpc/server': 11.12.0(typescript@5.9.3)
       typescript: 5.9.3
     dev: false
 
-  /@trpc/next@11.7.2(@tanstack/react-query@5.90.10)(@trpc/client@11.7.2)(@trpc/react-query@11.7.2)(@trpc/server@11.7.2)(next@15.5.10)(react-dom@18.3.1)(react@18.3.1)(typescript@5.9.3):
+  /@trpc/next@11.7.2(@tanstack/react-query@5.90.10)(@trpc/client@11.7.2)(@trpc/react-query@11.7.2)(@trpc/server@11.12.0)(next@15.5.10)(react-dom@18.3.1)(react@18.3.1)(typescript@5.9.3):
     resolution: {integrity: sha512-eZQeZag+/aJMxV6ucfyVdcgE7I6o88tldyBi+AFVCD8fPUjssRT7qOqR/THSaTLHjDl20Ok9gN0Sn1bmMEa+1w==}
     peerDependencies:
       '@tanstack/react-query': ^5.59.15
@@ -2644,16 +2644,16 @@ packages:
         optional: true
     dependencies:
       '@tanstack/react-query': 5.90.10(react@18.3.1)
-      '@trpc/client': 11.7.2(@trpc/server@11.7.2)(typescript@5.9.3)
-      '@trpc/react-query': 11.7.2(@tanstack/react-query@5.90.10)(@trpc/client@11.7.2)(@trpc/server@11.7.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.9.3)
-      '@trpc/server': 11.7.2(typescript@5.9.3)
+      '@trpc/client': 11.7.2(@trpc/server@11.12.0)(typescript@5.9.3)
+      '@trpc/react-query': 11.7.2(@tanstack/react-query@5.90.10)(@trpc/client@11.7.2)(@trpc/server@11.12.0)(react-dom@18.3.1)(react@18.3.1)(typescript@5.9.3)
+      '@trpc/server': 11.12.0(typescript@5.9.3)
       next: 15.5.10(@babel/core@7.29.0)(react-dom@18.3.1)(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       typescript: 5.9.3
     dev: false
 
-  /@trpc/react-query@11.7.2(@tanstack/react-query@5.90.10)(@trpc/client@11.7.2)(@trpc/server@11.7.2)(react-dom@18.3.1)(react@18.3.1)(typescript@5.9.3):
+  /@trpc/react-query@11.7.2(@tanstack/react-query@5.90.10)(@trpc/client@11.7.2)(@trpc/server@11.12.0)(react-dom@18.3.1)(react@18.3.1)(typescript@5.9.3):
     resolution: {integrity: sha512-IcLDMqx2mvlGRxkr0/m37TtPvRQ8nonITH3EwYv436x0Igx8eduR9z4tdgGBsjJY9e5W1G7cZ4zKCwrizSimFQ==}
     peerDependencies:
       '@tanstack/react-query': ^5.80.3
@@ -2664,15 +2664,15 @@ packages:
       typescript: '>=5.7.2'
     dependencies:
       '@tanstack/react-query': 5.90.10(react@18.3.1)
-      '@trpc/client': 11.7.2(@trpc/server@11.7.2)(typescript@5.9.3)
-      '@trpc/server': 11.7.2(typescript@5.9.3)
+      '@trpc/client': 11.7.2(@trpc/server@11.12.0)(typescript@5.9.3)
+      '@trpc/server': 11.12.0(typescript@5.9.3)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       typescript: 5.9.3
     dev: false
 
-  /@trpc/server@11.7.2(typescript@5.9.3):
-    resolution: {integrity: sha512-AgB26PXY69sckherIhCacKLY49rxE2XP5h38vr/KMZTbLCL1p8IuIoKPjALTcugC2kbyQ7Lbqo2JDVfRSmPmfQ==}
+  /@trpc/server@11.12.0(typescript@5.9.3):
+    resolution: {integrity: sha512-rpZnf5FUjNndE/AjGIy+FvEHR52iBd0u0wySqWCwXj67wraj3qCuBr5Opcf0Te/g67C/YztqceFkLoG0r4mp4Q==}
     peerDependencies:
       typescript: '>=5.7.2'
     dependencies:
