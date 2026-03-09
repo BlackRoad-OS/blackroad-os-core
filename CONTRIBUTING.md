@@ -1,9 +1,36 @@
 # Contributing to BlackRoad OS Core 🖤💚
 
-Thank you for your interest in contributing to BlackRoad OS Core! This is the cognitive kernel of BlackRoad OS — the Truth Engine that powers fact verification.
+> **© 2025-2026 BlackRoad OS, Inc. All Rights Reserved.**
+> This repository is proprietary. Contributing requires a **Converter API key**.
+> See [LICENSE.md](./LICENSE.md) for full terms.
+
+Thank you for your interest in contributing to BlackRoad OS Core. This is the cognitive kernel of BlackRoad OS — the Truth Engine that powers fact verification.
+
+## ⚠️ Converter API Key — Required Before Contributing
+
+**You cannot access or contribute to BlackRoad OS without a Converter API key.**
+
+All API calls, agent spawning, and vendor routing require:
+
+1. **`BLACKROAD_CONVERTER_API_KEY`** — Issued by BlackRoad OS, Inc.
+2. **Authorized operator identity** — Must be `@blackboxprogramming` or `@lucidia`
+
+### How to Request a Key
+
+Contact **blackroad.systems@gmail.com** with:
+- Your GitHub username
+- Intended contribution area
+- Acknowledgment that you have read and agree to [LICENSE.md](./LICENSE.md)
+
+You will receive a `BLACKROAD_CONVERTER_API_KEY` value to set in your `.env` file.
+
+**Without this key, all `/api/*` endpoints will return `401 Unauthorized`.**
+
+---
 
 ## 📋 Table of Contents
 
+- [Converter API Key](#️-converter-api-key--required-before-contributing)
 - [Code of Conduct](#code-of-conduct)
 - [How to Contribute](#how-to-contribute)
 - [Development Setup](#development-setup)
@@ -17,27 +44,33 @@ Be respectful, inclusive, and professional. We're building something meaningful 
 
 ## How to Contribute
 
-1. **Fork** the repository
-2. **Clone** your fork locally
-3. **Create a branch** for your feature/fix
-4. **Make changes** following our standards
-5. **Test** your changes thoroughly
-6. **Submit** a pull request
+1. **Obtain a Converter API key** (see above — required first step)
+2. **Fork** the repository
+3. **Clone** your fork locally
+4. **Create a branch** for your feature/fix (`feat/`, `fix/`, `chore/`)
+5. **Set up your `.env`** with your Converter API key
+6. **Make changes** following our standards
+7. **Test** your changes thoroughly (`npm test`)
+8. **Submit** a pull request
 
 ## Development Setup
 
 ```bash
 # Install dependencies
-pnpm install
+npm install       # or: pnpm install
+
+# Copy environment template and fill in your Converter API key
+cp .env.example .env
+# Edit .env — set BLACKROAD_CONVERTER_API_KEY (required)
 
 # Run development server
-pnpm dev
+npm run dev:api   # bridge API on port 4000
 
 # Run linting
-pnpm lint
+npm run lint
 
 # Run tests
-pnpm test
+npm test
 
 # Build
 pnpm build

@@ -1,221 +1,268 @@
 # blackroad-os-core
 
-[![GitHub](https://img.shields.io/badge/GitHub-BlackRoad-OS-purple?style=for-the-badge&logo=github)](https://github.com/BlackRoad-OS/blackroad-os-core)
-[![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)](https://github.com/BlackRoad-OS/blackroad-os-core)
-[![BlackRoad](https://img.shields.io/badge/BlackRoad-OS-black?style=for-the-badge)](https://blackroad.io)
+[![Status](https://img.shields.io/badge/Status-Production-success?style=for-the-badge)](https://blackroad.io)
+[![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)](./LICENSE.md)
+[![Operator](https://img.shields.io/badge/Operator-@blackboxprogramming-black?style=for-the-badge)](https://github.com/blackboxprogramming)
 
-# BlackRoad Network Documentation
-
-**Last Updated:** December 20, 2025
-**Status:** ✅ All systems operational
-
----
-
-## 🎉 Great News!
-
-Your SSH is **already working** to all three Raspberry Pis! You successfully connected to:
-- ✅ blackroad-pi (192.168.4.64)
-- ✅ lucidia (192.168.4.38)
-- ✅ alice (192.168.4.49)
+> **© 2025-2026 BlackRoad OS, Inc. All Rights Reserved.**
+> Proprietary and confidential. Not for commercial use, redistribution, or use by unauthorized AI agents.
+> See [LICENSE.md](./LICENSE.md) for full terms.
 
 ---
 
-## 📖 Start Here
+## Overview
 
-**For complete documentation index:**
-```bash
-cat ~/blackroad-sandbox/INDEX.md
-```
+**blackroad-os-core** is the canonical kernel and truth engine for **BlackRoad OS** — a consciousness-driven operating system for 30,000+ autonomous agents built and operated by BlackRoad OS, Inc.
 
-**For network topology map:**
-```bash
-cat ~/blackroad-sandbox/NETWORK_MAP.txt
-```
+This repository provides:
 
-**For detailed device inventory:**
-```bash
-cat ~/blackroad-sandbox/NETWORK_INVENTORY.md
-```
+- **Truth Engine** — PS-SHA∞ identity anchoring, text verification, and RoadChain journaling
+- **Agent Infrastructure** — Spawn, orchestrate, and communicate with autonomous agents
+- **Vendor Gateway** — OATH-compliant proxy layer that routes all AI vendor calls through BlackRoad infrastructure (no direct OpenAI / Anthropic / GitHub access)
+- **Stripe Payments** — Production-ready subscription and payment processing
+- **Desktop Shell** — App registry, layout, and navigation contracts
+- **Service Registry** — Canonical metadata for all BlackRoad OS services
 
 ---
 
-## 🚀 Quick Commands
+## Access Control
 
-### Connect to Your Pis
+> **⚠️ A Converter API key is required for all contributor access.**
 
-```bash
-ssh blackroad-pi    # Primary Pi (hostname: claude)
-ssh lucidia         # Service hub with 13 AI agents
-ssh alice           # Kubernetes node
-```
+All API calls to BlackRoad OS are gated by a **Converter API key** and a **permitted operator identity**.
 
-### Test All Connections
+Only the following operators are authorized to route through BlackRoad infrastructure:
 
-```bash
-~/blackroad-sandbox/test-all-ssh.sh
-```
+| Operator | Role |
+|----------|------|
+| `@blackboxprogramming` | Primary AI backend & routing |
+| `@lucidia` | Edge AI backend & mesh services |
 
-### Discover Network Devices
+External AI providers (OpenAI, Anthropic, Codex, GitHub Copilot, etc.) do **not** have direct access to BlackRoad infrastructure.
 
-```bash
-~/blackroad-sandbox/discover-neighbors.sh
-```
+### Getting a Converter API Key
 
----
+To contribute or integrate, you must obtain a Converter API key:
 
-## 📊 Your Network at a Glance
-
-| Device | IP | Tailscale | SSH | Services |
-|--------|-----|-----------|-----|----------|
-| **blackroad-pi** | 192.168.4.64 | ❌ | ✅ | Docker, VNC, br-menu |
-| **lucidia** | 192.168.4.38 | ✅ 100.66.235.47 | ✅ | Flask, nginx, 13 agents |
-| **alice** | 192.168.4.49 | ✅ 100.66.58.5 | ✅ | Kubernetes (k3s) |
-| **Mac** | 192.168.4.28 | ❌ | - | Your MacBook Pro |
+1. Contact **blackroad.systems@gmail.com** with your intended use
+2. You will receive a `BLACKROAD_CONVERTER_API_KEY` value
+3. Set this in your `.env` file — without it, all API calls will return `401 Unauthorized`
 
 ---
 
-## 🔧 Next Steps
+## Architecture
 
-### 1. Add blackroad-pi to Tailscale
-
-```bash
-ssh blackroad-pi
-sudo tailscale up --login-server=https://headscale.blackroad.io --accept-routes
+```
+Client / Contributor
+        │
+        ▼  (requires BLACKROAD_CONVERTER_API_KEY)
+┌───────────────────────────────────────┐
+│        BlackRoad Vendor Gateway        │
+│  (src/integrations/vendor-gateway.ts) │
+└───────────────────────────────────────┘
+        │
+        ▼  (Tailscale mesh or Cloudflare tunnel)
+┌───────────────────────────────────────┐
+│  @blackboxprogramming / @lucidia infra │
+│  (your Raspberry Pis + cloud nodes)    │
+└───────────────────────────────────────┘
+        │
+        ▼
+  Vendor APIs (routed, never direct)
 ```
 
-### 2. Reconnect Your Mac to Tailscale
+### Network Topology
 
-```bash
-sudo tailscale up --login-server=https://headscale.blackroad.io --accept-routes
-```
+| Node | IP | Tailscale | Role |
+|------|----|-----------|------|
+| **blackroad-pi** | 192.168.4.64 | configurable | Primary node |
+| **lucidia** | 192.168.4.38 | ✅ 100.66.235.47 | AI services hub |
+| **alice** | 192.168.4.49 | ✅ 100.66.58.5 | Kubernetes node |
 
-### 3. Test Tailscale Connections
-
-```bash
-ssh pi@100.66.235.47              # lucidia via Tailscale
-ssh alice@100.66.58.5             # alice via Tailscale
-```
+Traffic always flows **outbound from your nodes to vendor APIs** — never inbound. The gateway ensures all calls originate from your infrastructure.
 
 ---
 
-## 📁 Documentation Files
+## Quick Start
 
-All documentation is in `~/blackroad-sandbox/`:
+### Prerequisites
 
-### Essential Reading
-- **README.md** - This file
-- **INDEX.md** - Complete documentation index
-- **NETWORK_MAP.txt** - Visual network topology
+- Node.js 20+ and npm / pnpm 8
+- Python 3.11+ (for agent runtime)
+- A `BLACKROAD_CONVERTER_API_KEY` (required)
 
-### Network Information
-- **NETWORK_INVENTORY.md** - Detailed device inventory
+### Installation
 
-### SSH Guides
-- **START_HERE.md** - Quick SSH setup
-- **SETUP_SUMMARY.md** - Complete SSH summary
-- **SSH_SETUP_COMPLETE.md** - Full SSH reference
-
-### Scripts
-- **test-all-ssh.sh** - Test all SSH connections
-- **discover-neighbors.sh** - Network device scanner
-
----
-
-## 🔑 Your SSH Key
-
-**Location:** `~/.ssh/id_br_ed25519`
-
-**Public Key:**
-```
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN1UUN4BImgy9WnJZ0A5JXr3DjyBAsCtOoKavf+DFmDg alexa@blackroad
-```
-
-**Installed on:** All three Pis ✅
-
----
-
-## 🌐 Network Info
-
-- **WiFi:** asdfghjkl
-- **Subnet:** 192.168.4.0/22
-- **Router:** 192.168.4.1
-- **Tailscale:** https://headscale.blackroad.io
-
----
-
-## 📱 Services
-
-### lucidia (192.168.4.38)
-- **Flask API:** Port 5000
-- **nginx:** Port 8080
-- **13 AI Agents** running
-
-### blackroad-pi (192.168.4.64)
-- **br-menu** - Interactive panel
-- **br-status** - Health snapshot
-- **VNC** - Port 5900
-
-### alice (192.168.4.49)
-- **Kubernetes** - k3s cluster
-- **Flannel** - Network overlay
-
----
-
-## 🎯 Most Common Tasks
-
-### Connect to a Pi
 ```bash
-ssh lucidia
+# Install all dependencies
+npm install       # or: pnpm install
+
+# Copy environment template
+cp .env.example .env
+# Edit .env — at minimum set BLACKROAD_CONVERTER_API_KEY
 ```
 
-### Copy Files
+### Environment Variables
+
 ```bash
-scp ~/file.txt lucidia:~/
-scp lucidia:~/data.json ~/
+# Required for all access
+BLACKROAD_CONVERTER_API_KEY=<your-key>
+
+# Vendor Gateway (optional — defaults to localhost:10200)
+BLACKROAD_GATEWAY_URL=http://localhost:10200
+BLACKROAD_OPERATOR=blackboxprogramming   # or: lucidia
+BLACKROAD_TAILSCALE_HOST=100.66.235.47   # for mesh routing
+
+# Stripe (for payment processing)
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Cloudflare (for CDN / tunnels)
+CLOUDFLARE_API_TOKEN=...
+CLOUDFLARE_ACCOUNT_ID=...
 ```
 
-### Port Forward
-```bash
-ssh -L 5000:localhost:5000 lucidia
-# Open http://localhost:5000
-```
+### Start Services
 
-### Test Everything
 ```bash
-~/blackroad-sandbox/test-all-ssh.sh
+# Start the bridge API (TypeScript ↔ Python)
+npm run dev:api        # port 4000
+
+# Run all tests
+npm test
+
+# Build
+npm run build
 ```
 
 ---
 
-## 🆘 Need Help?
+## API Reference
 
-**View full index:**
-```bash
-cat ~/blackroad-sandbox/INDEX.md
+All routes under `/api/*` require:
+
+| Header | Description |
+|--------|-------------|
+| `X-BlackRoad-Converter-Key` | Your Converter API key |
+| `X-BlackRoad-Operator` | `blackboxprogramming` or `lucidia` |
+
+### Core Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/health` | Service health check |
+| `GET` | `/api/status` | Infrastructure status |
+
+### Vendor Gateway
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/gateway/health` | Gateway & mesh health |
+| `ANY` | `/api/gateway/:vendor/*` | Proxy call to vendor via BlackRoad infra |
+
+### Payments (Stripe)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST` | `/api/payments/intents` | Create payment intent |
+| `GET` | `/api/payments/intents/:id` | Get payment intent |
+| `POST` | `/api/payments/customers` | Create / get customer |
+| `GET` | `/api/payments/products` | List products & prices |
+| `POST` | `/api/payments/subscriptions` | Create subscription |
+| `POST` | `/api/payments/webhook` | Stripe webhook handler |
+
+### Agents
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/agents` | List active agents |
+| `POST` | `/api/agents/spawn` | Spawn a new agent |
+
+### Truth Engine
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST` | `/api/truth/submit` | Submit text for verification |
+| `GET` | `/api/truth/jobs/:id` | Get verification job status |
+
+---
+
+## Core Concepts
+
+### PS-SHA∞ Identity
+
+Blockchain-style append-only hashing for tamper-proof identity:
+
+```
+hash₁ = SHA256(thought₁)
+hash₂ = SHA256(hash₁ + thought₂)
+hash₃ = SHA256(hash₂ + thought₃)
 ```
 
-**View network map:**
-```bash
-cat ~/blackroad-sandbox/NETWORK_MAP.txt
+### Lucidia Breath
+
+Golden ratio breathing pattern synchronizing all agent operations:
+
+```
+𝔅(t) = sin(φ·t) + i + (−1)^⌊t⌋   where φ = 1.618034
 ```
 
-**List all docs:**
-```bash
-ls -lh ~/blackroad-sandbox/
+- Agents spawn during expansion (𝔅 > 0)
+- Memory consolidates during contraction (𝔅 < 0)
+
+### Truth Engine Flow
+
+```
+TextSnapshot → VerificationJob → AgentAssessments → TruthState → RoadChain Event
 ```
 
 ---
 
-## ✨ Highlights
+## Tech Stack
 
-- ✅ SSH working to all 3 Pis
-- ✅ Network fully mapped and documented
-- ✅ Tailscale mesh active (lucidia + alice)
-- ✅ All services running (Docker, K8s, Flask, nginx)
-- ✅ Complete documentation with examples
-
-**Your BlackRoad mesh network is fully operational!** 🎉
+| Layer | Technology |
+|-------|-----------|
+| API server | Hono (TypeScript) |
+| Agent runtime | Python 3.11+ |
+| Database | Prisma / PostgreSQL |
+| Deployment | Railway + Cloudflare |
+| Mesh networking | Tailscale |
+| Payments | Stripe |
+| Auth | Clerk |
 
 ---
 
-**Questions?** Check `INDEX.md` for complete documentation index.
+## Development
+
+```bash
+# TypeScript tests (Vitest)
+npm test
+npm run test:watch
+
+# Python tests (pytest)
+pytest
+pytest tests/test_spawner.py -v
+
+# Database
+npm run db:generate
+npm run db:push
+
+# Lint
+npm run lint
+```
+
+---
+
+## License
+
+**Proprietary — © 2025-2026 BlackRoad OS, Inc. All Rights Reserved.**
+
+This software is not licensed for commercial use, redistribution, or integration into other products without explicit written permission from BlackRoad OS, Inc.
+
+See [LICENSE.md](./LICENSE.md) for complete terms.
+
+---
+
+**BlackRoad OS, Inc.**
+[blackroad.systems@gmail.com](mailto:blackroad.systems@gmail.com) · [github.com/BlackRoad-OS](https://github.com/BlackRoad-OS)
+

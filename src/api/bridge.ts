@@ -30,6 +30,17 @@ import type {
   TextSnapshot,
 } from '../index';
 
+// Gateway & Stripe integrations
+import {
+  validateConverterKey,
+  validateOperator,
+  VendorGatewayClient,
+  PERMITTED_OPERATORS,
+  type VendorId,
+  type VendorRequest,
+} from '../integrations/vendor-gateway';
+import { createStripeClient } from '../integrations/stripe';
+
 // ============================================================================
 // Configuration
 // ============================================================================
@@ -172,6 +183,47 @@ app.use('*', cors());
 
 // Global orchestrator client
 let orchestratorClient: OrchestratorClient;
+
+// ============================================================================
+// Converter API Key Middleware
+// Gating middleware — all /api/* routes (except /api/payments/webhook)
+// require a valid Converter API key and an authorized operator.
+// ============================================================================
+
+app.use('/api/*', async (c, next) => {
+  // Stripe webhook must bypass key auth so Stripe can post without a key
+  if (c.req.path === '/api/payments/webhook') {
+    await next();
+    return;
+  }
+
+  const converterKey = c.req.header('X-BlackRoad-Converter-Key');
+  const operator = c.req.header('X-BlackRoad-Operator');
+
+  if (!validateConverterKey(converterKey)) {
+    return c.json(
+      {
+        error: 'Unauthorized',
+        message:
+          'A valid Converter API key is required. ' +
+          'Obtain BLACKROAD_CONVERTER_API_KEY to access BlackRoad OS.',
+      },
+      401
+    );
+  }
+
+  if (operator && !validateOperator(operator)) {
+    return c.json(
+      {
+        error: 'Forbidden',
+        message: `Operator '${operator}' is not permitted. Only ${PERMITTED_OPERATORS.join(', ')} may access this gateway.`,
+      },
+      403
+    );
+  }
+
+  await next();
+});
 
 // ============================================================================
 // REST API Routes
@@ -318,6 +370,220 @@ app.get('/api/desktop/apps', (c) => {
     apps: [],
     message: 'Desktop shell integration in progress',
   });
+});
+
+// ============================================================================
+// Vendor Gateway Routes
+// All AI/vendor calls are proxied through BlackRoad infrastructure.
+// Direct calls to OpenAI / Anthropic / GitHub APIs are not made here.
+// ============================================================================
+
+/**
+ * Proxy a vendor API call through the BlackRoad gateway.
+ *
+ * POST /api/gateway/:vendor/*
+ * Headers: X-BlackRoad-Converter-Key, X-BlackRoad-Operator (required)
+ */
+app.all('/api/gateway/:vendor/*', async (c) => {
+  const converterApiKey = process.env.BLACKROAD_CONVERTER_API_KEY;
+  if (!converterApiKey) {
+    return c.json({ error: 'Gateway not configured: BLACKROAD_CONVERTER_API_KEY missing' }, 503);
+  }
+
+  const vendor = c.req.param('vendor') as VendorId;
+  const rawOperator = c.req.header('X-BlackRoad-Operator') ?? 'blackboxprogramming';
+  const operator = validateOperator(rawOperator) ? rawOperator : 'blackboxprogramming';
+  const path = '/' + c.req.path.split(`/api/gateway/${vendor}`)[1]?.replace(/^\//, '');
+
+  try {
+    const gw = new VendorGatewayClient({
+      converterApiKey,
+      operator,
+      gatewayBaseUrl: process.env.BLACKROAD_GATEWAY_URL,
+      tailscaleHost: process.env.BLACKROAD_TAILSCALE_HOST,
+    });
+
+    let body: unknown;
+    if (['POST', 'PUT', 'PATCH'].includes(c.req.method)) {
+      body = await c.req.json().catch(() => undefined);
+    }
+
+    const method = c.req.method as VendorRequest['method'];
+    const result = await gw.call({ vendor, path, method, body });
+    const statusCode = result.status >= 100 && result.status <= 599 ? result.status : 502;
+    return c.json(result, statusCode as Parameters<typeof c.json>[1]);
+  } catch (error) {
+    return c.json({ error: String(error) }, 502);
+  }
+});
+
+/**
+ * Gateway health check
+ */
+app.get('/api/gateway/health', async (c) => {
+  const converterApiKey = process.env.BLACKROAD_CONVERTER_API_KEY;
+  if (!converterApiKey) {
+    return c.json({
+      gateway: 'not_configured',
+      message: 'Set BLACKROAD_CONVERTER_API_KEY to enable the vendor gateway',
+    }, 503);
+  }
+
+  const gw = new VendorGatewayClient({
+    converterApiKey,
+    operator: 'blackboxprogramming',
+    gatewayBaseUrl: process.env.BLACKROAD_GATEWAY_URL,
+    tailscaleHost: process.env.BLACKROAD_TAILSCALE_HOST,
+  });
+
+  const status = await gw.health();
+  return c.json(status, status.gateway === 'healthy' ? 200 : 503);
+});
+
+// ============================================================================
+// Stripe Routes
+// ============================================================================
+
+/**
+ * Create Stripe payment intent
+ * POST /api/payments/intents
+ */
+app.post('/api/payments/intents', async (c) => {
+  try {
+    const stripe = createStripeClient();
+    const body = await c.req.json<{ amount: number; currency?: string; customerId?: string; metadata?: Record<string, string> }>();
+
+    if (!body.amount || body.amount <= 0) {
+      return c.json({ error: 'amount is required and must be positive (in cents)' }, 400);
+    }
+
+    const intent = await stripe.createPaymentIntent({
+      amount: body.amount,
+      currency: body.currency ?? 'usd',
+      customerId: body.customerId,
+      metadata: body.metadata,
+    });
+
+    return c.json(intent, 201);
+  } catch (error) {
+    return c.json({ error: String(error) }, 500);
+  }
+});
+
+/**
+ * Get Stripe payment intent
+ * GET /api/payments/intents/:id
+ */
+app.get('/api/payments/intents/:id', async (c) => {
+  try {
+    const stripe = createStripeClient();
+    const intent = await stripe.getPaymentIntent(c.req.param('id'));
+    return c.json(intent);
+  } catch (error) {
+    return c.json({ error: String(error) }, 500);
+  }
+});
+
+/**
+ * Create or get Stripe customer
+ * POST /api/payments/customers
+ */
+app.post('/api/payments/customers', async (c) => {
+  try {
+    const stripe = createStripeClient();
+    const body = await c.req.json<{ email: string; name?: string; metadata?: Record<string, string> }>();
+
+    if (!body.email) {
+      return c.json({ error: 'email is required' }, 400);
+    }
+
+    // Return existing customer if one exists
+    const existing = await stripe.getCustomerByEmail(body.email);
+    if (existing) return c.json(existing);
+
+    const customer = await stripe.createCustomer(body);
+    return c.json(customer, 201);
+  } catch (error) {
+    return c.json({ error: String(error) }, 500);
+  }
+});
+
+/**
+ * List Stripe products and prices
+ * GET /api/payments/products
+ */
+app.get('/api/payments/products', async (c) => {
+  try {
+    const stripe = createStripeClient();
+    const products = await stripe.listProducts();
+    const prices = await stripe.listPrices();
+    return c.json({ products, prices });
+  } catch (error) {
+    return c.json({ error: String(error) }, 500);
+  }
+});
+
+/**
+ * Create Stripe subscription
+ * POST /api/payments/subscriptions
+ */
+app.post('/api/payments/subscriptions', async (c) => {
+  try {
+    const stripe = createStripeClient();
+    const body = await c.req.json<{ customerId: string; priceId: string; trialPeriodDays?: number }>();
+
+    if (!body.customerId || !body.priceId) {
+      return c.json({ error: 'customerId and priceId are required' }, 400);
+    }
+
+    const subscription = await stripe.createSubscription(body);
+    return c.json(subscription, 201);
+  } catch (error) {
+    return c.json({ error: String(error) }, 500);
+  }
+});
+
+/**
+ * Stripe webhook handler
+ * POST /api/payments/webhook
+ * Note: This route is intentionally outside the Converter key middleware
+ * so Stripe can POST without needing a key.
+ */
+app.post('/api/payments/webhook', async (c) => {
+  try {
+    const stripeSecret = process.env.STRIPE_SECRET_KEY;
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    if (!stripeSecret || !webhookSecret) {
+      return c.json({ error: 'Stripe not configured' }, 503);
+    }
+
+    const rawBody = await c.req.text();
+    const signature = c.req.header('stripe-signature') ?? '';
+
+    const { StripeClient } = await import('../integrations/stripe');
+    const stripe = new StripeClient({ secretKey: stripeSecret, webhookSecret });
+    const event = stripe.verifyWebhook(rawBody, signature);
+
+    // Handle events
+    switch (event.type) {
+      case 'payment_intent.succeeded':
+        console.log('✅ Payment succeeded:', event.data.object);
+        break;
+      case 'customer.subscription.created':
+      case 'customer.subscription.updated':
+        console.log('📋 Subscription update:', event.data.object);
+        break;
+      case 'customer.subscription.deleted':
+        console.log('❌ Subscription cancelled:', event.data.object);
+        break;
+      default:
+        console.log('Stripe event:', event.type);
+    }
+
+    return c.json({ received: true });
+  } catch (error) {
+    return c.json({ error: String(error) }, 400);
+  }
 });
 
 // ============================================================================
