@@ -34,8 +34,8 @@ importers:
         specifier: ^22.1.0
         version: 22.19.1
       '@types/supertest':
-        specifier: ^6.0.3
-        version: 6.0.3
+        specifier: ^7.2.0
+        version: 7.2.0
       '@vitest/coverage-v8':
         specifier: ^2.0.5
         version: 2.1.9(vitest@2.1.9)
@@ -2874,8 +2874,8 @@ packages:
       form-data: 4.0.5
     dev: true
 
-  /@types/supertest@6.0.3:
-    resolution: {integrity: sha512-8WzXq62EXFhJ7QsH3Ocb/iKQ/Ty9ZVWnVzoTKc9tyyFRRF3a74Tk2+TLFgaFFw364Ere+npzHKEJ6ga2LzIL7w==}
+  /@types/supertest@7.2.0:
+    resolution: {integrity: sha512-uh2Lv57xvggst6lCqNdFAmDSvoMG7M/HDtX4iUCquxQ5EGPtaPM5PL5Hmi7LCvOG8db7YaCPNJEeoI8s/WzIQw==}
     dependencies:
       '@types/methods': 1.1.4
       '@types/superagent': 8.1.9
