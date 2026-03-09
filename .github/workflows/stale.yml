@@ -21,7 +21,7 @@ permissions:
 jobs:
   stale:
     name: Mark Stale Issues and PRs
-    runs-on: [self-hosted, blackroad-fleet]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/stale@v9
         with:

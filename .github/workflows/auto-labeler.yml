@@ -7,7 +7,7 @@ on:
 jobs:
   label:
     name: Auto-label PR
-    runs-on: [self-hosted, blackroad-fleet]
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/labeler@v5

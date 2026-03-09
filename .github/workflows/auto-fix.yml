@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   auto-fix:
-    runs-on: [self-hosted, blackroad-fleet]
+    runs-on: ubuntu-latest
     if: |
       github.event.pull_request.head.repo.full_name == github.repository &&
       contains(github.event.pull_request.labels.*.name, 'autofix')

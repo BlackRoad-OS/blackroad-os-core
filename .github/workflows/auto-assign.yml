@@ -19,7 +19,7 @@ permissions:
 jobs:
   auto-assign:
     name: Auto Assign Reviewers
-    runs-on: [self-hosted, blackroad-fleet]
+    runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     steps:
       - name: Checkout

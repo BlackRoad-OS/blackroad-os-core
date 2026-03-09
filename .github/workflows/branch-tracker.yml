@@ -21,7 +21,7 @@ permissions:
 
 jobs:
   track-branch:
-    runs-on: [self-hosted, blackroad-fleet]
+    runs-on: ubuntu-latest
     steps:
       - name: Extract issue number from branch name
         id: extract

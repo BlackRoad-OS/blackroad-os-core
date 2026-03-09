@@ -11,7 +11,7 @@ on:
 jobs:
   monitor:
     name: Monitor Deployments
-    runs-on: [self-hosted, blackroad-fleet]
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout
@@ -61,7 +61,7 @@ jobs:
 
   dependency-updates:
     name: Auto Update Dependencies
-    runs-on: [self-hosted, blackroad-fleet]
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout

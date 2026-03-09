@@ -17,7 +17,7 @@ permissions:
 jobs:
   codeql:
     name: CodeQL Analysis
-    runs-on: [self-hosted, blackroad-fleet]
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -40,7 +40,7 @@ jobs:
 
   dependency-scan:
     name: Dependency Scan
-    runs-on: [self-hosted, blackroad-fleet]
+    runs-on: ubuntu-latest
     
     steps:
       - name: Checkout

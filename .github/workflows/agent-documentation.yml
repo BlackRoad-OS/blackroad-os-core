@@ -11,7 +11,7 @@ permissions:
 jobs:
   documentation:
     name: Documentation Agent
-    runs-on: [self-hosted, blackroad-fleet]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository

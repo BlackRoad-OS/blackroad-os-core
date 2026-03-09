@@ -12,7 +12,7 @@ permissions:
 jobs:
   security-audit:
     name: Security Audit Agent
-    runs-on: [self-hosted, blackroad-fleet]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository

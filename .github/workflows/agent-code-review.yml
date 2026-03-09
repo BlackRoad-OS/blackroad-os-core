@@ -11,7 +11,7 @@ permissions:
 jobs:
   code-review:
     name: Code Review Agent
-    runs-on: [self-hosted, blackroad-fleet]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
