@@ -1,220 +1,133 @@
-# blackroad-os-core
+# BlackRoad OS
 
-[![Status](https://img.shields.io/badge/Status-Production-success?style=for-the-badge)](https://blackroad.io)
-[![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)](./LICENSE.md)
-[![Operator](https://img.shields.io/badge/Operator-@blackboxprogramming-black?style=for-the-badge)](https://github.com/blackboxprogramming)
+[![Live](https://img.shields.io/badge/🌐_Open_the_App-blackroad.io-success?style=for-the-badge)](https://blackroad.io)
+[![Prism Console](https://img.shields.io/badge/🖥️_Prism_Console-prism.blackroad.io-blueviolet?style=for-the-badge)](https://prism.blackroad.io)
+[![Docs](https://img.shields.io/badge/📖_Docs-docs.blackroad.io-blue?style=for-the-badge)](https://docs.blackroad.io)
+[![RoadWork](https://img.shields.io/badge/💼_RoadWork-roadwork.blackroad.io-orange?style=for-the-badge)](https://roadwork.blackroad.io)
 
 > **© 2025-2026 BlackRoad OS, Inc. All Rights Reserved.**
-> Proprietary and confidential. Not for commercial use, redistribution, or use by unauthorized AI agents.
-> See [LICENSE.md](./LICENSE.md) for full terms.
 
 ---
 
-## Overview
+## ✨ Try It Now — No Setup Required
 
-**blackroad-os-core** is the canonical kernel and truth engine for **BlackRoad OS** — a consciousness-driven operating system for 30,000+ autonomous agents built and operated by BlackRoad OS, Inc.
+> **You don't need to install anything.** Just click a link below and it opens in your browser.
 
-This repository provides:
-
-- **Truth Engine** — PS-SHA∞ identity anchoring, text verification, and RoadChain journaling
-- **Agent Infrastructure** — Spawn, orchestrate, and communicate with autonomous agents
-- **Vendor Gateway** — OATH-compliant proxy layer that routes all AI vendor calls through BlackRoad infrastructure (no direct OpenAI / Anthropic / GitHub access)
-- **Stripe Payments** — Production-ready subscription and payment processing
-- **Desktop Shell** — App registry, layout, and navigation contracts
-- **Service Registry** — Canonical metadata for all BlackRoad OS services
-
----
-
-## Access Control
-
-> **⚠️ A Converter API key is required for all contributor access.**
-
-All API calls to BlackRoad OS are gated by a **Converter API key** and a **permitted operator identity**.
-
-Only the following operators are authorized to route through BlackRoad infrastructure:
-
-| Operator | Role |
-|----------|------|
-| `@blackboxprogramming` | Primary AI backend & routing |
-| `@lucidia` | Edge AI backend & mesh services |
-
-External AI providers (OpenAI, Anthropic, Codex, GitHub Copilot, etc.) do **not** have direct access to BlackRoad infrastructure.
-
-### Getting a Converter API Key
-
-To contribute or integrate, you must obtain a Converter API key:
-
-1. Contact **blackroad.systems@gmail.com** with your intended use
-2. You will receive a `BLACKROAD_CONVERTER_API_KEY` value
-3. Set this in your `.env` file — without it, all API calls will return `401 Unauthorized`
+| What do you want to do? | Go here |
+|-------------------------|---------|
+| 🏠 **See the main experience** | **[blackroad.io](https://blackroad.io)** |
+| 🖥️ **Open the OS desktop** | **[app.blackroad.io](https://app.blackroad.io)** |
+| 💡 **Prism console & dashboard** | **[prism.blackroad.io](https://prism.blackroad.io)** |
+| 💼 **RoadWork job hunter** | **[roadwork.blackroad.io](https://roadwork.blackroad.io)** |
+| 📖 **Read the docs** | **[docs.blackroad.io](https://docs.blackroad.io)** |
+| 💬 **Contact us** | **[blackroad.systems@gmail.com](mailto:blackroad.systems@gmail.com)** |
 
 ---
 
-## Architecture
+## What Is BlackRoad OS?
 
-```
-Client / Contributor
-        │
-        ▼  (requires BLACKROAD_CONVERTER_API_KEY)
-┌───────────────────────────────────────┐
-│        BlackRoad Vendor Gateway        │
-│  (src/integrations/vendor-gateway.ts) │
-└───────────────────────────────────────┘
-        │
-        ▼  (Tailscale mesh or Cloudflare tunnel)
-┌───────────────────────────────────────┐
-│  @blackboxprogramming / @lucidia infra │
-│  (your Raspberry Pis + cloud nodes)    │
-└───────────────────────────────────────┘
-        │
-        ▼
-  Vendor APIs (routed, never direct)
-```
+**BlackRoad OS** is a living, AI-powered operating system you can run right in your browser.
 
-### Network Topology
+- Open it. Click around. Watch autonomous agents work for you.
+- No terminal. No config files. No API keys needed to get started.
+- Built for dreamers, not just developers.
 
-| Node | IP | Tailscale | Role |
-|------|----|-----------|------|
-| **blackroad-pi** | 192.168.4.64 | configurable | Primary node |
-| **lucidia** | 192.168.4.38 | ✅ 100.66.235.47 | AI services hub |
-| **alice** | 192.168.4.49 | ✅ 100.66.58.5 | Kubernetes node |
-
-Traffic always flows **outbound from your nodes to vendor APIs** — never inbound. The gateway ensures all calls originate from your infrastructure.
-
----
-
-## Quick Start
-
-### Prerequisites
-
-- Node.js 20+ and npm / pnpm 8
-- Python 3.11+ (for agent runtime)
-- A `BLACKROAD_CONVERTER_API_KEY` (required)
-
-### Installation
-
-```bash
-# Install all dependencies
-npm install       # or: pnpm install
-
-# Copy environment template
-cp .env.example .env
-# Edit .env — at minimum set BLACKROAD_CONVERTER_API_KEY
-```
-
-### Environment Variables
-
-```bash
-# Required for all access
-BLACKROAD_CONVERTER_API_KEY=<your-key>
-
-# Vendor Gateway (optional — defaults to localhost:10200)
-BLACKROAD_GATEWAY_URL=http://localhost:10200
-BLACKROAD_OPERATOR=blackboxprogramming   # or: lucidia
-BLACKROAD_TAILSCALE_HOST=100.66.235.47   # for mesh routing
-
-# Stripe (for payment processing)
-STRIPE_SECRET_KEY=sk_live_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-
-# Cloudflare (for CDN / tunnels)
-CLOUDFLARE_API_TOKEN=...
-CLOUDFLARE_ACCOUNT_ID=...
-```
-
-### Start Services
-
-```bash
-# Start the bridge API (TypeScript ↔ Python)
-npm run dev:api        # port 4000
-
-# Run all tests
-npm test
-
-# Build
-npm run build
+```mermaid
+flowchart LR
+    YOU([👤 You]) -->|open browser| APP([🌐 blackroad.io])
+    APP --> DESKTOP([🖥️ Desktop Shell])
+    APP --> PRISM([💡 Prism Console])
+    APP --> ROADWORK([💼 RoadWork])
+    DESKTOP --> AGENTS([🤖 AI Agents])
+    PRISM --> AGENTS
+    ROADWORK --> AGENTS
+    AGENTS --> TRUTH([🔐 Truth Engine])
 ```
 
 ---
 
-## API Reference
+## 🖥️ Live Portals
 
-All routes under `/api/*` require:
+### [blackroad.io](https://blackroad.io) — Home
+The front door. Start here if you've never used BlackRoad OS before.
 
-| Header | Description |
-|--------|-------------|
-| `X-BlackRoad-Converter-Key` | Your Converter API key |
-| `X-BlackRoad-Operator` | `blackboxprogramming` or `lucidia` |
+### [app.blackroad.io](https://app.blackroad.io) — Desktop
+A full OS-style desktop in your browser. Open apps, manage workspaces, and interact with AI agents without writing a single line of code.
 
-### Core Endpoints
+### [prism.blackroad.io](https://prism.blackroad.io) — Prism Console
+A real-time dashboard showing what your agents are doing, system health, and live metrics. Think of it as mission control.
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/health` | Service health check |
-| `GET` | `/api/status` | Infrastructure status |
+### [roadwork.blackroad.io](https://roadwork.blackroad.io) — RoadWork
+An AI-powered job hunter that searches, organizes, and tracks job applications for you automatically.
 
-### Vendor Gateway
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/gateway/health` | Gateway & mesh health |
-| `ANY` | `/api/gateway/:vendor/*` | Proxy call to vendor via BlackRoad infra |
-
-### Payments (Stripe)
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/api/payments/intents` | Create payment intent |
-| `GET` | `/api/payments/intents/:id` | Get payment intent |
-| `POST` | `/api/payments/customers` | Create / get customer |
-| `GET` | `/api/payments/products` | List products & prices |
-| `POST` | `/api/payments/subscriptions` | Create subscription |
-| `POST` | `/api/payments/webhook` | Stripe webhook handler |
-
-### Agents
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/agents` | List active agents |
-| `POST` | `/api/agents/spawn` | Spawn a new agent |
-
-### Truth Engine
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/api/truth/submit` | Submit text for verification |
-| `GET` | `/api/truth/jobs/:id` | Get verification job status |
+### [docs.blackroad.io](https://docs.blackroad.io) — Documentation
+Everything you need to know, written in plain English.
 
 ---
 
-## Core Concepts
+## 🗺️ How It All Fits Together
 
-### PS-SHA∞ Identity
+```mermaid
+flowchart TD
+    subgraph PORTALS["🌐 What You See (Portals)"]
+        HOME["blackroad.io\n(Home)"]
+        APP["app.blackroad.io\n(Desktop)"]
+        PRISM["prism.blackroad.io\n(Console)"]
+        ROADWORK["roadwork.blackroad.io\n(RoadWork)"]
+    end
 
-Blockchain-style append-only hashing for tamper-proof identity:
+    subgraph ENGINE["⚙️ What Powers It (This Repo)"]
+        TRUTH["Truth Engine\n(verify & journal)"]
+        AGENTS["Agent Runtime\n(30,000+ AI agents)"]
+        GATEWAY["Vendor Gateway\n(secure AI routing)"]
+    end
 
+    PORTALS -->|API calls| ENGINE
+    TRUTH --> ROADCHAIN["🔐 RoadChain\n(tamper-proof ledger)"]
+    AGENTS --> TRUTH
+    GATEWAY --> AGENTS
 ```
-hash₁ = SHA256(thought₁)
-hash₂ = SHA256(hash₁ + thought₂)
-hash₃ = SHA256(hash₂ + thought₃)
+
+This repository (`blackroad-os-core`) is the **engine** behind all the portals above. You never need to look at this code to use BlackRoad OS — it just powers everything.
+
+---
+
+## 🔑 Want to Build on Top of BlackRoad OS?
+
+If you're a developer who wants to integrate or contribute:
+
+1. **Email us** at [blackroad.systems@gmail.com](mailto:blackroad.systems@gmail.com) to request a Converter API key
+2. **Clone this repo** and copy `.env.example` → `.env`
+3. **Set your key**: `BLACKROAD_CONVERTER_API_KEY=<your-key>`
+4. **Run**: `pnpm install && pnpm dev`
+
+All agent calls, vendor routing, and truth-engine operations flow through the API at port `4000`.
+
+> ⚠️ A Converter API key is required for all API access. External AI providers (OpenAI, Anthropic, etc.) do not have direct access to BlackRoad infrastructure.
+
+---
+
+## 🧭 Architecture (for developers)
+
+```mermaid
+flowchart LR
+    DEV([Developer]) -->|API key| GW["Vendor Gateway\n/api/gateway/*"]
+    GW -->|mesh| INFRA["BlackRoad Infra\n(Tailscale / Cloudflare)"]
+    INFRA --> VENDORS["AI Vendors\n(OpenAI · Anthropic · etc.)"]
+
+    DEV -->|no key needed| PORTALS["Live Portals\nblackroad.io"]
 ```
 
-### Lucidia Breath
+### API Quick Reference
 
-Golden ratio breathing pattern synchronizing all agent operations:
-
-```
-𝔅(t) = sin(φ·t) + i + (−1)^⌊t⌋   where φ = 1.618034
-```
-
-- Agents spawn during expansion (𝔅 > 0)
-- Memory consolidates during contraction (𝔅 < 0)
-
-### Truth Engine Flow
-
-```
-TextSnapshot → VerificationJob → AgentAssessments → TruthState → RoadChain Event
-```
+| Endpoint | What it does |
+|----------|-------------|
+| `GET /health` | Is the service running? |
+| `GET /api/status` | Infrastructure status |
+| `POST /api/truth/submit` | Submit text for AI verification |
+| `GET /api/agents` | List active agents |
+| `POST /api/agents/spawn` | Start a new AI agent |
+| `GET /api/payments/products` | See available plans |
 
 ---
 
@@ -222,34 +135,13 @@ TextSnapshot → VerificationJob → AgentAssessments → TruthState → RoadCha
 
 | Layer | Technology |
 |-------|-----------|
-| API server | Hono (TypeScript) |
-| Agent runtime | Python 3.11+ |
+| Portals | Next.js · Cloudflare Pages |
+| API | Hono (TypeScript) |
+| Agents | Python 3.11+ |
 | Database | Prisma / PostgreSQL |
-| Deployment | Railway + Cloudflare |
-| Mesh networking | Tailscale |
-| Payments | Stripe |
+| Infra | Railway + Cloudflare |
 | Auth | Clerk |
-
----
-
-## Development
-
-```bash
-# TypeScript tests (Vitest)
-npm test
-npm run test:watch
-
-# Python tests (pytest)
-pytest
-pytest tests/test_spawner.py -v
-
-# Database
-npm run db:generate
-npm run db:push
-
-# Lint
-npm run lint
-```
+| Payments | Stripe |
 
 ---
 
@@ -257,12 +149,10 @@ npm run lint
 
 **Proprietary — © 2025-2026 BlackRoad OS, Inc. All Rights Reserved.**
 
-This software is not licensed for commercial use, redistribution, or integration into other products without explicit written permission from BlackRoad OS, Inc.
-
 See [LICENSE.md](./LICENSE.md) for complete terms.
 
 ---
 
 **BlackRoad OS, Inc.**
-[blackroad.systems@gmail.com](mailto:blackroad.systems@gmail.com) · [github.com/BlackRoad-OS](https://github.com/BlackRoad-OS)
+[blackroad.systems@gmail.com](mailto:blackroad.systems@gmail.com) · [github.com/BlackRoad-OS](https://github.com/BlackRoad-OS) · [blackroad.io](https://blackroad.io)
 
