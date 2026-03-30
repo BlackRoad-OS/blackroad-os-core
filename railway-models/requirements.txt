@@ -3,7 +3,7 @@
 # Core inference
 vllm==0.17.0
 torch==2.10.0
-transformers==5.3.0
+transformers==5.4.0
 
 # API server
 fastapi==0.109.0
