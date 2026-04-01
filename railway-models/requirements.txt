@@ -16,7 +16,7 @@ safetensors==0.7.0
 
 # Utilities
 python-dotenv==1.0.0
-aiohttp==3.13.3
+aiohttp==3.13.4
 httpx==0.28.1
 
 # R2/S3 access
