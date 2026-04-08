@@ -15,7 +15,7 @@ huggingface-hub==1.6.0
 safetensors==0.7.0
 
 # Utilities
-python-dotenv==1.0.0
+python-dotenv==1.2.2
 aiohttp==3.13.3
 httpx==0.28.1
 
